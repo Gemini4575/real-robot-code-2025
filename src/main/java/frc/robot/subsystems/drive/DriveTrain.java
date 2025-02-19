@@ -139,7 +139,7 @@ private double rot_cur;
             this::getPose, // Robot pose supplier
             this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds, feedforwards) -> driveDirect(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
                     new PIDConstants(1, 0.0, 0.0), // Translation PID constants
                     new PIDConstants(16.5, 0.0, 0.0) // Rotation PID constants
@@ -211,6 +211,13 @@ private double rot_cur;
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(-1*xSpeed, ySpeed, rot, m_gyro.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+
+    SmartDashboard.putString("gyro", m_gyro.getRotation2d().toString());
+    SmartDashboard.putString("module 0", swerveModuleStates[0].toString());
+    SmartDashboard.putString("module 1", swerveModuleStates[1].toString());
+    SmartDashboard.putString("module 2", swerveModuleStates[2].toString());
+    SmartDashboard.putString("module 3", swerveModuleStates[3].toString());
+
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
@@ -219,12 +226,7 @@ private double rot_cur;
     Logger.recordOutput("SwerveStates", swerveModuleStates);
 
     //if(RobotState.isTest()) {
-      SmartDashboard.putString("gyro", m_gyro.getRotation2d().toString());
 
-      SmartDashboard.putString("module 0", swerveModuleStates[0].toString());
-      SmartDashboard.putString("module 1", swerveModuleStates[1].toString());
-      SmartDashboard.putString("module 2", swerveModuleStates[2].toString());
-      SmartDashboard.putString("module 3", swerveModuleStates[3].toString());
 
    // }
     xSpeed_cur = xSpeed;

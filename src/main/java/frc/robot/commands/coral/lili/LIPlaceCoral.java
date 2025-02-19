@@ -8,8 +8,8 @@ public class LIPlaceCoral extends SequentialCommandGroup{
     public LIPlaceCoral(LiliCoralSubystem c) {
         addCommands(
             new EXODropGate(c),
-            new WaitCommand(.5),
-            new EXOCloseGateSlow(c).withTimeout(5.5)
+            new WaitCommand(1.25),
+            new EXOCloseGateSlow(c).withTimeout(6)
         );
     }
 }

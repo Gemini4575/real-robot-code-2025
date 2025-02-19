@@ -10,7 +10,12 @@ public class MotionDirective {
         DROP_CORAL,
         WAIT,
         STOP,
-        GET_CORAL
+        GET_CORAL,
+        APRILTAG_DRIVE,
+        CAMERA_DRIVE,
+        CAMERA_STRAFE,
+        CAMERA_ROTATE,
+        CAMERA_ALL
     }
     
     private final MotionType type;
@@ -42,6 +47,9 @@ public class MotionDirective {
     }
     public static MotionDirective GetCoral() {
         return new MotionDirective(MotionType.GET_CORAL, 0);
+    }
+    public static MotionDirective apriltag() {
+        return new MotionDirective(MotionType.CAMERA_ALL, 0);
     }
 
     public MotionType getType() {

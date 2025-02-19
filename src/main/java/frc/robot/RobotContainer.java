@@ -39,16 +39,15 @@ import frc.robot.commands.coral.nora.L1;
 import frc.robot.commands.coral.nora.L2;
 import frc.robot.commands.coral.nora.L3;
 import frc.robot.commands.drive.DriveStraight;
+import frc.robot.commands.drive.DriveTwoardsAprillTag;
 // import frc.robot.commands.drive.TestTurnCommand;
 import frc.robot.datamodel.MotionDirective;
 import frc.robot.service.MotionService;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.DriveTrain;
 
+import static frc.robot.datamodel.MotionDirective.apriltag;
 import static frc.robot.datamodel.MotionDirective.drive;
-import static frc.robot.datamodel.MotionDirective.dropCoral;
-import static frc.robot.datamodel.MotionDirective.strafe;
-import static frc.robot.datamodel.MotionDirective.turn;
 
 // @Component
 public class RobotContainer {
@@ -64,13 +63,13 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, JoystickConstants.BACK_BUTTON);
 
   /* Subsystems */
-    // private final VisionSubsystem VS = new VisionSubsystem(vision);
     private final NickClimbingSubsystem nc = new NickClimbingSubsystem();
     private final OzzyGrabberSubsystem g = new OzzyGrabberSubsystem();
     private final LiliCoralSubystem c = new LiliCoralSubystem();
     private final NoraArmSubsystem n = new NoraArmSubsystem();
     private final DriveTrain D = new DriveTrain();
     private final Vision V = new Vision();
+    private final VisionSubsystem VS = new VisionSubsystem(V);
 
   /* Pathplanner stuff */
     private final SendableChooser<Command> PathplannerautoChoosers;
@@ -82,7 +81,7 @@ public class RobotContainer {
 
   private Field2d autoField;
 
-  private final MotionService motionService = new MotionService(D, c);
+  private final MotionService motionService = new MotionService(D, c, VS);
 
 
 
@@ -137,8 +136,8 @@ public class RobotContainer {
     D.setDefaultCommand(
         new TelopSwerve(
             D,
-            () -> driver.getRawAxis(Constants.JoystickConstants.LEFT_Y_AXIS),
             () -> -driver.getRawAxis(Constants.JoystickConstants.LEFT_X_AXIS),
+            () -> driver.getRawAxis(Constants.JoystickConstants.LEFT_Y_AXIS),
             () -> -driver.getTwist(),
             () -> operator.getRawButton(JoystickConstants.START_BUTTON)));
   }
@@ -229,11 +228,11 @@ public class RobotContainer {
       new JoystickButton(operator, JoystickConstants.RED_BUTTON)
         .onTrue(new Climb(nc));
       
-      new JoystickButton(operator, JoystickConstants.POV_LEFT)
-        .onTrue(new CoralStation(n)/*new INtakeFromHuman(n, visionSubsystem)*/);
+      new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
+        .onTrue(new DriveTwoardsAprillTag(V, D)/*new INtakeFromHuman(n, visionSubsystem)*/);
 
       new JoystickButton(operator, JoystickConstants.BACK_BUTTON)
-        .onTrue(new DriveStraight(D, 1));
+        .onTrue(new DriveTwoardsAprillTag(V, D));
       //new JoystickButton(operator, JoystickConstants.BACK_BUTTON).onTrue(new Turn(s_swerve));
 
       // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
@@ -242,10 +241,7 @@ public class RobotContainer {
       //     drive(1), turn(90), drive(1), turn(90), 
       //     drive(1), turn(90), drive(1), turn(90)));
       
-      new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-         .onTrue(new 
-           StartMotionSequence(motionService, Autos.AUTO_CORAL2));
-
+      //
           // new JoystickButton(driver, 10)
           // .onTrue(new 
           //   StartMotionSequence(motionService, turn(90)));
@@ -258,8 +254,17 @@ public class RobotContainer {
           .onTrue(new 
             StartMotionSequence(motionService, drive(1)));
 
-   
-      
+      new JoystickButton(operator, JoystickConstants.POV_DOWN)
+        .onTrue(new StartMotionSequence(motionService, apriltag()));
+
+      // new JoystickButton(operator, JoystickConstants.POV_LEFT)
+      //   .onTrue(new StartMotionSequence(motionService, new MotionDirective(MotionType.CAMERA_STRAFE)));
+
+      // new JoystickButton(operator, JoystickConstants.POV_RIGHT)
+      //   .onTrue(new StartMotionSequence(motionService, new MotionDirective(MotionType.CAMERA_ROTATE)));
+
+      // new JoystickButton(operator, JoystickConstants.POV_UP)
+      //   .onTrue(new StartMotionSequence(motionService, new MotionDirective(MotionType.CAMERA_ALL)));
 
     // Supplier<Pose2d> bestTargetSupplier = () -> {
     //   var target = vision.getTargets();

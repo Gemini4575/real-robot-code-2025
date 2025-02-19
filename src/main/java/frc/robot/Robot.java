@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 // import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.stereotype.Component;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.TelopSwerve;
 
 // @Component
 public class Robot extends TimedRobot {
@@ -24,6 +26,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private Timer m_gcTimer = new Timer();
+  private Timer timer = new Timer();
   // @Autowired
   private RobotContainer m_robotContainer;
 
@@ -43,6 +46,7 @@ public class Robot extends TimedRobot {
         FollowPathCommand.warmupCommand().schedule();
 
     m_gcTimer.start();
+    timer = new Timer();
     // No longer needed since we use Spring to wire components
   }
 
@@ -96,6 +100,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    timer.start();
+    ii = false;
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -105,12 +111,16 @@ public class Robot extends TimedRobot {
     }
     this.m_robotContainer.teleopInit();
   }
-
+  boolean ii = false;
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
     this.m_robotContainer.teleopPeriodic();
-
+    if(timer.advanceIfElapsed(155) || ii) {
+      System.out.println("CHECK THE SWERVE");
+      ii = true;
+      //CommandScheduler.getInstance().cancel(new TelopSwerve(null, null, null, null, null));
+    }
   }
 
   @Override

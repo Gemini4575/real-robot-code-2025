@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.Pose2dToSpeeds;
 import frc.lib.util.PoseTools;
 import frc.robot.Constants;
 
@@ -18,9 +19,12 @@ public class VisionSubsystem extends SubsystemBase {
     Rotation2d targetYaw;
     double targetRange = 0.0;
     private PoseTools translation3dToTranslation2d;
+    private Pose2dToSpeeds p;
 
     public VisionSubsystem(Vision vision) {
         this.vision = vision;
+        p = new Pose2dToSpeeds();
+        translation3dToTranslation2d = new PoseTools();
     }
 
     @Override
@@ -31,6 +35,15 @@ public class VisionSubsystem extends SubsystemBase {
             SmartDashboard.putString("Algae X translation", algae.getBestCameraToTarget().getMeasureX().toString());
             SmartDashboard.putString("Algae Y translation", algae.getBestCameraToTarget().getMeasureY().toString());
         }
+
+        
+
+        if (vision.getTagCamera().getLatestResult() == null) {
+            var targetX = vision.getTagCamera().getLatestResult().getBestTarget().getAlternateCameraToTarget().getMeasureX();
+            ChassisSpeeds c = new ChassisSpeeds(0, targetX.magnitude() / 10, 0);
+            SmartDashboard.putNumber("Range", targetX.baseUnitMagnitude());
+        }
+
     }
 
     public boolean InRange() {
@@ -38,8 +51,7 @@ public class VisionSubsystem extends SubsystemBase {
 
         if (!results.isEmpty()) {
             if (translation3dToTranslation2d
-                    .calculate(
-                            vision.getTagCamera().getLatestResult().getBestTarget().bestCameraToTarget.getTranslation())
+                    .calculate(vision.getTagCamera().getLatestResult().getBestTarget().bestCameraToTarget.getTranslation())
                     .getDistance(new Translation2d(0.127, 0.127)) > 0.2) {
                 InRange = true;
             } else {
@@ -79,6 +91,17 @@ public class VisionSubsystem extends SubsystemBase {
 
     public int getFiducialId() {
         return vision.getTagCamera().getLatestResult().getBestTarget().fiducialId;
+    }
+
+    public ChassisSpeeds GoToAprilTag(int apriltag) {
+
+        if (vision.getTagCamera().getLatestResult().getBestTarget() != null) {
+            var targetX = vision.getTagCamera().getLatestResult().getBestTarget().getAlternateCameraToTarget();
+            ChassisSpeeds c;
+            c = Pose2dToSpeeds.fromTranslation3d(translation3dToTranslation2d.calculate(targetX));
+            return c;
+        }
+        return null;
     }
 
     public ChassisSpeeds processImage(int Side) {
@@ -125,5 +148,47 @@ public class VisionSubsystem extends SubsystemBase {
             //field.setRobotPose(algaePose);
             //SmartDashboard.putData("Algae Pose", field);
         }
+    }
+
+    public double getDistanceToDrive() {
+        var result = vision.getTagCamera().getLatestResult();
+        if (result != null && result.hasTargets()) {
+            var target = result.getBestTarget();
+            var translation = target.getAlternateCameraToTarget().getTranslation();
+            return translation.getX(); // Assuming X is the forward distance
+        }
+        return 0.0;
+    }
+
+    public double getStrafeDistance() {
+        var result = vision.getTagCamera().getLatestResult();
+        if (result != null && result.hasTargets()) {
+            var target = result.getBestTarget();
+            var translation = target.getAlternateCameraToTarget().getTranslation();
+            return translation.getY(); // Assuming Y is the strafe distance
+        }
+        return 0.0;
+    }
+
+    public double getRotationAngle() {
+        var result = vision.getTagCamera().getLatestResult();
+        if (result != null && result.hasTargets()) {
+            var target = result.getBestTarget();
+            return target.getYaw(); // Assuming yaw is the rotation angle
+        }
+        return 0.0;
+    }
+
+    public double[] getAllMotionParameters() {
+        var result = vision.getTagCamera().getLatestResult();
+        if (result != null && result.hasTargets()) {
+            var target = result.getBestTarget();
+            var translation = target.getAlternateCameraToTarget().getTranslation();
+            double driveDistance = translation.getX(); // Assuming X is the forward distance
+            double strafeDistance = translation.getY(); // Assuming Y is the strafe distance
+            double rotationAngle = target.getYaw(); // Assuming yaw is the rotation angle
+            return new double[]{driveDistance, strafeDistance, rotationAngle};
+        }
+        return new double[]{0.0, 0.0, 0.0};
     }
 }

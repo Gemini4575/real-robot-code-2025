@@ -239,8 +239,13 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
       m_turningMotor.setVoltage(turnOutput + turnFeedforward);
     }
     
-    
+    SmartDashboard.putNumber("m_driveMotor set " + moduleNumber, (driveOutput + driveFeedforward) /2.1);
+    SmartDashboard.putNumber("m_turningMotor setVoltage " + moduleNumber, turnOutput + turnFeedforward);
   
+    SmartDashboard.putNumber("m_driveMotor actual" + moduleNumber, m_driveMotor.get());
+    SmartDashboard.putNumber("m_turningMotor actual" + moduleNumber, m_turningMotor.getBusVoltage());
+
+
     if(RobotState.isTest()) {
       SmartDashboard.putNumber("turnOutput",turnOutput);
       SmartDashboard.putNumber("Drive", ((driveOutput + driveFeedforward) /2.1) /2);
