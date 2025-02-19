@@ -500,4 +500,6 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         
     }
 
+    public static final double kMaxSpeed = 12; // was 4.47 meters per second
+
 }

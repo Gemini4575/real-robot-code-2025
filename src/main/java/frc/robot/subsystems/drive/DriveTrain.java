@@ -30,6 +30,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
@@ -52,7 +53,6 @@ public class DriveTrain extends SubsystemBase {
   public boolean first;
   Field2d field = new Field2d();
   int ii = 0;
-  public static final double kMaxSpeed = 12; // was 4.47 meters per second
   public static final double kMaxAngularSpeed = 4.41 * 2 * Math.PI; // was Math.PI for 1/2 rotation per second
   
   double Ptranslate = 10.0;
@@ -92,18 +92,18 @@ private double rot_cur;
       new SwerveDriveKinematics(
           m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-  // private final SwerveDriveOdometry m_odometry =
-  //     new SwerveDriveOdometry(
-  //         m_kinematics,
-  //         m_gyro.getRotation2d(),
-  //         new SwerveModulePosition[] {
-  //           m_frontLeft.getPosition(),
-  //           m_frontRight.getPosition(),
-  //           m_backLeft.getPosition(),
-  //           m_backRight.getPosition()
-  //         },
-  //         new Pose2d(new Translation2d(),new Rotation2d(Units.degreesToRadians(180)))
-  //         );
+  private final SwerveDriveOdometry m_odometry =
+      new SwerveDriveOdometry(
+          m_kinematics,
+          m_gyro.getRotation2d(),
+          new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backLeft.getPosition(),
+            m_backRight.getPosition()
+          },
+          new Pose2d(new Translation2d(),new Rotation2d(Units.degreesToRadians(180)))
+          );
 
   private final SwerveDrivePoseEstimator poseEstimator;
 
@@ -196,7 +196,7 @@ private double rot_cur;
       var speeds = ChassisSpeeds.discretize(chassisSpeedsIn, LoggedRobot.defaultPeriodSecs);
       var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(speeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.kMaxSpeed);
         m_frontLeft.setStateDirectly(swerveModuleStates[0]);
         m_frontRight.setStateDirectly(swerveModuleStates[1]);
         m_backLeft.setStateDirectly(swerveModuleStates[2]);
@@ -210,7 +210,7 @@ private double rot_cur;
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(-1*xSpeed, ySpeed, rot, m_gyro.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.kMaxSpeed);
 
     SmartDashboard.putString("gyro", m_gyro.getRotation2d().toString());
     SmartDashboard.putString("module 0", swerveModuleStates[0].toString());
@@ -256,11 +256,11 @@ private double rot_cur;
   }
 
   /** Updates the field relative position of the robot. */
-  // public void updateOdometry() {
-  //   m_odometry.update(
-  //       m_gyro.getRotation2d(),
-  //       getModulePositions());
-  // }
+  public void updateOdometry() {
+    m_odometry.update(
+        m_gyro.getRotation2d(),
+        getModulePositions());
+  }
 
   public SwerveModulePosition[] getModulePositions() {
     return new SwerveModulePosition[] {
@@ -276,8 +276,8 @@ private double rot_cur;
   } 
 
   public void resetPose(Pose2d aPose2d) {
-//    m_odometry.resetPosition(m_gyro.getRotation2d(),
-//         getModulePositions(), aPose2d );
+   m_odometry.resetPosition(m_gyro.getRotation2d(),
+        getModulePositions(), aPose2d );
     poseEstimator.resetPosition(m_gyro.getRotation2d(), getModulePositions(), aPose2d);
   }
   

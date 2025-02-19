@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.util.GeometryHelper;
+import frc.robot.Constants;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drive.DriveTrain;
 
@@ -45,7 +46,7 @@ public class DriveToAlgae extends Command {
             targetDistance = GeometryHelper.distanceToAlgae(target.getArea());
 
             var turn = (VISION_DES_ANGLE_deg - targetYaw) * VISION_TURN_kP * DriveTrain.kMaxAngularSpeed;
-            var forward = -targetDistance* VISION_STRAFE_kP * DriveTrain.kMaxSpeed;
+            var forward = -targetDistance* VISION_STRAFE_kP * Constants.kMaxSpeed;
 
             SmartDashboard.putBoolean("Algae Target is visible", true);
             SmartDashboard.putNumber("Algae Target Yaw", targetYaw);

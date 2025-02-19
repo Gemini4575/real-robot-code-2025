@@ -69,7 +69,7 @@ public class SwerveModule extends Command {
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 1.5); // this was 3, changed to 1.5 because it was driving too far
-  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
+  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0,1);//(1, 0.5);
 
   /**
    * Constructs a SwerveModule with a drive motor, turning motor and turning encoder.
@@ -231,15 +231,15 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
         m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
     SmartDashboard.putNumber("turnFeedforward",turnFeedforward);
     if(RobotState.isAutonomous()) {
-      m_driveMotor.set(((driveOutput + driveFeedforward) /2.1) );
+      m_driveMotor.set(((driveOutput + driveFeedforward) /Constants.kMaxSpeed) );
       System.out.println("Output: " + driveOutput + " Feedforward: " + driveFeedforward);
       m_turningMotor.setVoltage(turnOutput + turnFeedforward);
     } else if (RobotState.isTeleop()) {
-      m_driveMotor.set(((driveOutput + driveFeedforward) /2.1) );
+      m_driveMotor.set(((driveOutput + driveFeedforward) /Constants.kMaxSpeed) );
       m_turningMotor.setVoltage(turnOutput + turnFeedforward);
     }
     
-    SmartDashboard.putNumber("m_driveMotor set " + moduleNumber, (driveOutput + driveFeedforward) /2.1);
+    SmartDashboard.putNumber("m_driveMotor set " + moduleNumber, (driveOutput + driveFeedforward) /Constants.kMaxSpeed);
     SmartDashboard.putNumber("m_turningMotor setVoltage " + moduleNumber, turnOutput + turnFeedforward);
   
     SmartDashboard.putNumber("m_driveMotor actual" + moduleNumber, m_driveMotor.get());
