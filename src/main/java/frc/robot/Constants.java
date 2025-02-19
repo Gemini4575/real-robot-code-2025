@@ -493,6 +493,7 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
     }
 
     public final static class  Autos {
+        public static final MotionDirective[] AUTO_WITH_CAM = new MotionDirective[]{strafe(82), dropCoral(), stop(), GetCoral(), drive(-200), strafe(196)};
         public static final MotionDirective[] AUTO_CORAL1 = new MotionDirective[]{drive(68.0), turn(80), dropCoral(), stop()};
         public static final MotionDirective[] AUTO_CORAL2 = new MotionDirective[]{drive(79.0), turn(80), dropCoral(), stop(),
         GetCoral(), drive(-95), turn(-85), drive(170), strafe(-30), turn(-25), turn(75), strafe(35), 

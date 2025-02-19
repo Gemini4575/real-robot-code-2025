@@ -229,7 +229,7 @@ public class RobotContainer {
         .onTrue(new Climb(nc));
       
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-        .onTrue(new DriveTwoardsAprillTag(V, D)/*new INtakeFromHuman(n, visionSubsystem)*/);
+        .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);
 
       new JoystickButton(operator, JoystickConstants.BACK_BUTTON)
         .onTrue(new DriveTwoardsAprillTag(V, D));
