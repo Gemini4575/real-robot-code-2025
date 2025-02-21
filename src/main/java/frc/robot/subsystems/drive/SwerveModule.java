@@ -50,12 +50,13 @@ public class SwerveModule extends Command {
   @SuppressWarnings("unused")
   private final RelativeEncoder m_turningEncoderREV;
 
+  
   // Gains are for example purposes only - must be determined for your own robot!
   private final ProfiledPIDController m_drivePIDController = new ProfiledPIDController(
-    .0001, 
+    0.025, 
     0.0,
-    0,
-    new TrapezoidProfile.Constraints(15.1,18.8)
+    0.0,
+    new TrapezoidProfile.Constraints(SwerveConstants.MaxMetersPersecond,18.8)
     );
 
   // Gains are for example purposes only - must be determined for your own robot!
@@ -79,7 +80,7 @@ public class SwerveModule extends Command {
    * @param turningEncoderChannelA DIO input for the turning encoder channel A
    */
   public SwerveModule(SwerveModuleConstants moduleConstants) {
-    SmartDashboard.putNumber("tueing", ahhhhhhhhhhh);
+    SmartDashboard.putNumber("tuneing", ahhhhhhhhhhh);
     m_driveMotor = new SparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
     var driveConfig = new SparkMaxConfig();
     driveConfig.inverted(true);
@@ -219,7 +220,7 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
     final 
     double driveOutput =
         m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
-
+    
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
@@ -231,12 +232,13 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
         m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
     SmartDashboard.putNumber("turnFeedforward",turnFeedforward);
     if(RobotState.isAutonomous()) {
-      m_driveMotor.set(((driveOutput + driveFeedforward) /2.1) );
+     // m_driveMotor.set(((driveOutput + driveFeedforward) /2.1) );
+     m_driveMotor.set(driveOutput / SwerveConstants.MaxMetersPersecond);
       System.out.println("Output: " + driveOutput + " Feedforward: " + driveFeedforward);
-      m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+      m_turningMotor.set(turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
     } else if (RobotState.isTeleop()) {
-      m_driveMotor.set(((driveOutput + driveFeedforward) /2.1) );
-      m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+      m_driveMotor.set(state.speedMetersPerSecond);
+      m_turningMotor.set(turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
     }
     
     SmartDashboard.putNumber("m_driveMotor set " + moduleNumber, (driveOutput + driveFeedforward) /2.1);

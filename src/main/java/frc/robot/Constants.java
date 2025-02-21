@@ -342,7 +342,7 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         */
         // These number are for a 25 by 25 swerve
         // 0.33333
-        public static final Translation2d m_frontLeftLocation = new Translation2d(0.3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333, 0.33333);
+        public static final Translation2d m_frontLeftLocation = new Translation2d(0.3333, 0.33333);
         public static final Translation2d m_frontRightLocation = new Translation2d(0.33333, -0.33333);
         public static final Translation2d m_backLeftLocation = new Translation2d(-0.33333, 0.33333);
         public static final Translation2d m_backRightLocation = new Translation2d(-0.33333, -0.33333);
@@ -350,8 +350,9 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         /* Ints */
             public static final int kEncoderResolution = 4096;
         /* Doubles */
+            public static final double MaxMetersPersecond = 4.47; // This is calculated 5676rpm, 4in wheels, 6.75 gearbox
             public static final double kWheelRadius = 0.0508;
-            public static final double kModuleMaxAngularVelocity = DriveTrain.kMaxAngularSpeed;
+            public static final double kModuleMaxAngularVelocity =  27.73816874; //This is calculated 5676rpm, 150/7:1 gearbox in radians
             public static final double kModuleMaxAngularAcceleration = 18.85;//4 * Math.PI; // radians per second squared
             // FWF - stole this from 6328's code, each gear reduction written out. Final is 6.75. 39.37 converts inches to meters so we can be european fancy
             //private final double driveAfterEncoderReduction = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
