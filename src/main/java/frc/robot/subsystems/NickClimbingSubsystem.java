@@ -13,8 +13,8 @@ public class NickClimbingSubsystem extends SubsystemBase{
 
     public NickClimbingSubsystem() {
         // Initialization code here
-        ClimbingMotor1 = new Motor(NickClimbingConstanst.ClimbingMotor1, MotorType.kBrushless);
-        ClimbingMotor2 = new Motor(NickClimbingConstanst.ClimbingMotor2, MotorType.kBrushless);
+        ClimbingMotor1 = new Motor(14, MotorType.kBrushless);
+        ClimbingMotor2 = new Motor(13, MotorType.kBrushless);
     }
 
     private boolean Climb1() {
@@ -61,9 +61,19 @@ public class NickClimbingSubsystem extends SubsystemBase{
      * @param Joy The joysitck that you are using
      */
     @Deprecated
-    public void JoyClimb(double Joy) {
+    public void JoyClimb1(double Joy, boolean btuon) {
         ClimbingMotor1.set(Joy);
+        if (btuon) {
+            ClimbingMotor1.getEncoder().setPosition(0);
+        }
+    }
+
+    @Deprecated
+    public void JoyClimb2(double Joy, boolean btuon) {
         ClimbingMotor2.set(Joy);
+        if (btuon) {
+            ClimbingMotor2.getEncoder().setPosition(0);
+        }
     }
     
     public void Stop() {

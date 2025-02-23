@@ -350,7 +350,7 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         /* Ints */
             public static final int kEncoderResolution = 4096;
         /* Doubles */
-            public static final double MaxMetersPersecond = 4.47; // This is calculated 5676rpm, 4in wheels, 6.75 gearbox
+            public static final double MaxMetersPersecond = 3.264903459; //4.47 This is calculated 5676rpm, 4in wheels, 6.75 gearbox
             public static final double kWheelRadius = 0.0508;
             public static final double kModuleMaxAngularVelocity =  27.73816874; //This is calculated 5676rpm, 150/7:1 gearbox in radians
             public static final double kModuleMaxAngularAcceleration = 18.85;//4 * Math.PI; // radians per second squared

@@ -16,6 +16,9 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.swerve.SwerveSetpoint;
+import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 // import com.pathplanner.lib.config.PIDConstants;
 // import com.pathplanner.lib.config.RobotConfig;
 import com.studica.frc.AHRS;
@@ -42,6 +45,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.math.MesurementToRoation;
 import frc.robot.Constants;
+import frc.robot.Constants.SwerveConstants;
 
 
 
@@ -52,7 +56,7 @@ public class DriveTrain extends SubsystemBase {
   public boolean first;
   Field2d field = new Field2d();
   int ii = 0;
-  public static final double kMaxSpeed = 12; // was 4.47 meters per second
+  public static final double kMaxSpeed = SwerveConstants.MaxMetersPersecond; // was 4.47 meters per second
   public static final double kMaxAngularSpeed = 4.41 * 2 * Math.PI; // was Math.PI for 1/2 rotation per second
   
   double Ptranslate = 10.0;
@@ -72,14 +76,14 @@ private final Translation2d m_backRightLocation = Constants.SwerveConstants.m_ba
 
 private final SwerveModule m_backLeft = new SwerveModule(Constants.SwerveConstants.Mod0.constants);
 private final SwerveModule m_backRight = new SwerveModule(Constants.SwerveConstants.Mod1.constants);
-private final SwerveModule m_frontLeft = new SwerveModule(Constants.SwerveConstants.Mod3.constants);
 private final SwerveModule m_frontRight = new SwerveModule(Constants.SwerveConstants.Mod2.constants);
+private final SwerveModule m_frontLeft = new SwerveModule(Constants.SwerveConstants.Mod3.constants);
 
 //  private final Gyro_EPRA m_gyro = new Gyro_EPRA();
 private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI, NavXUpdateRate.k100Hz);
 
-private Double[] encoderDoubles = new Double[4];
-private Double[] curencoderDoubles = new Double[4];
+// private Double[] encoderDoubles = new Double[4];
+// private Double[] curencoderDoubles = new Double[4];
 double startencoder = 0.0;
 double target = 0.0;
 double curencoder = 0.0;
@@ -89,8 +93,8 @@ private double xSpeed_cur;
 private double ySpeed_cur;
 private double rot_cur;
   private final SwerveDriveKinematics m_kinematics =
-      new SwerveDriveKinematics(
-          m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+      new SwerveDriveKinematics(m_backLeftLocation, m_backRightLocation, m_frontRightLocation, m_frontLeftLocation);
+          //m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation); //Changed the order
 
   // private final SwerveDriveOdometry m_odometry =
   //     new SwerveDriveOdometry(
@@ -110,6 +114,9 @@ private double rot_cur;
   // private final DifferentialDrivetrainSim simDrive;
   // @Autowired
   // private MetricsProvider metricsProvider;
+
+  private final SwerveSetpointGenerator setpointGenerator;
+  private SwerveSetpoint previousSetpoint;
 
   public DriveTrain() {
     m_gyro.reset();
@@ -139,10 +146,10 @@ private double rot_cur;
             this::getPose, // Robot pose supplier
             this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            (speeds, feedforwards) -> driveForPathPlanner(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
                     new PIDConstants(1, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(16.5, 0.0, 0.0) // Rotation PID constants
+                    new PIDConstants(1, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration
             () -> {
@@ -161,9 +168,24 @@ private double rot_cur;
 
     poseEstimator.resetPosition(new Rotation2d(180), getModulePositions(), new Pose2d(7.558, 4.010, new Rotation2d(180)));
 
-
+    setpointGenerator = new SwerveSetpointGenerator(
+      config,
+      Units.rotationsToRadians(1.0) // The max rotation velocity of a swerve module in radians per second. This should probably be stored in your Constants file
+    );
+    previousSetpoint = new SwerveSetpoint(getSpeed(), getModuleStates(), DriveFeedforwards.zeros(config.numModules));
   }
   
+  public void driveForPathPlanner(ChassisSpeeds speeds) {
+    // Note: it is important to not discretize speeds before or after
+    // using the setpoint generator, as it will discretize them for you
+    previousSetpoint = setpointGenerator.generateSetpoint(
+        previousSetpoint, // The previous setpoint
+        speeds, // The desired target speeds
+        0.02 // The loop time of the robot code, in seconds
+    );
+    setModuleStates(previousSetpoint.moduleStates()); // Method that will drive the robot given target module states
+  }
+
     public void ResetDrives () {
   
       /* 
@@ -197,10 +219,10 @@ private double rot_cur;
       var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
-        m_frontLeft.setStateDirectly(swerveModuleStates[0]);
-        m_frontRight.setStateDirectly(swerveModuleStates[1]);
-        m_backLeft.setStateDirectly(swerveModuleStates[2]);
-        m_backRight.setStateDirectly(swerveModuleStates[3]);
+        m_backLeft.setStateDirectly(swerveModuleStates[0]);
+        m_backRight.setStateDirectly(swerveModuleStates[1]);
+        m_frontRight.setStateDirectly(swerveModuleStates[2]);
+        m_frontLeft.setStateDirectly(swerveModuleStates[3]);
     }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
@@ -218,10 +240,7 @@ private double rot_cur;
     SmartDashboard.putString("module 2", swerveModuleStates[2].toString());
     SmartDashboard.putString("module 3", swerveModuleStates[3].toString());
 
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);
+    setModuleStates(swerveModuleStates);
 
     Logger.recordOutput("SwerveStates", swerveModuleStates);
 
@@ -234,6 +253,13 @@ private double rot_cur;
     rot_cur = rot;
   }
 
+  private void setModuleStates(SwerveModuleState[] swerveModuleStates) {
+    m_backLeft.setDesiredState(swerveModuleStates[0]);
+    m_backRight.setDesiredState(swerveModuleStates[1]);
+    m_frontRight.setDesiredState(swerveModuleStates[2]);
+    m_frontLeft.setDesiredState(swerveModuleStates[3]);
+  }
+
   public void stop() {
     drive(-0, -0, -0, false);
   }
@@ -243,15 +269,17 @@ private double rot_cur;
   }
 
   private ChassisSpeeds getRobotRelativeSpeeds(){
-    return m_kinematics.toChassisSpeeds(getModuleStates());
+    var c = m_kinematics.toChassisSpeeds(getModuleStates());
+    SmartDashboard.putString("Robot relative speds", c.toString());
+    return c;
   }
 
   private SwerveModuleState[] getModuleStates(){
       return new SwerveModuleState[]{
-          m_frontLeft.getState(),
-          m_frontRight.getState(),
           m_backLeft.getState(),
-          m_backRight.getState()
+          m_backRight.getState(),
+          m_frontRight.getState(),
+          m_frontLeft.getState()
       };
   }
 
@@ -264,10 +292,10 @@ private double rot_cur;
 
   public SwerveModulePosition[] getModulePositions() {
     return new SwerveModulePosition[] {
-      m_frontLeft.getPosition(),
-      m_frontRight.getPosition(),
-      m_backLeft.getPosition(),
-      m_backRight.getPosition()
+        m_backLeft.getPosition(),
+          m_backRight.getPosition(),
+          m_frontRight.getPosition(),
+          m_frontLeft.getPosition()
     };
   }
 
@@ -301,29 +329,29 @@ private double rot_cur;
         );
     }
     
-    public boolean DriveMeters(double meters) {
-      if(first) {
-        first = false;
-        encoderDoubles[0] = m_frontLeft.getEncoderValue();
-        encoderDoubles[1] = m_frontRight.getEncoderValue();
-        encoderDoubles[2] = m_backLeft.getEncoderValue();
-        encoderDoubles[3] = m_backRight.getEncoderValue();
-        startencoder = Math.abs(java.util.Arrays.stream(encoderDoubles).mapToDouble(Double::doubleValue).average().orElse(0.0));
-      }
-      curencoder = Math.abs(java.util.Arrays.stream(curencoderDoubles).mapToDouble(Double::doubleValue).average().orElse(0.0));
-      target = Math.abs((startencoder + rotationsToInch.calculateRotationsM(meters, 6.75, 6)) - java.util.Arrays.stream(curencoderDoubles).mapToDouble(Double::doubleValue).average().orElse(0.0));
-      double remainingDistance = target - curencoder;
-      if (Math.abs(Math.round(remainingDistance)) <= 0) {
-        stop();
-        return true;
-      } else {
-        drive(0, 0.1, 0, false);
-        SmartDashboard.putNumber("Curencoder", curencoder);
-        SmartDashboard.putNumber("encoder", startencoder);
-        SmartDashboard.putNumber("target", target);
-        return false;
-      }
-    }
+    // public boolean DriveMeters(double meters) {
+    //   if(first) {
+    //     first = false;
+    //     encoderDoubles[0] = m_frontLeft.getEncoderValue();
+    //     encoderDoubles[1] = m_frontRight.getEncoderValue();
+    //     encoderDoubles[2] = m_backLeft.getEncoderValue();
+    //     encoderDoubles[3] = m_backRight.getEncoderValue();
+    //     startencoder = Math.abs(java.util.Arrays.stream(encoderDoubles).mapToDouble(Double::doubleValue).average().orElse(0.0));
+    //   }
+    //   curencoder = Math.abs(java.util.Arrays.stream(curencoderDoubles).mapToDouble(Double::doubleValue).average().orElse(0.0));
+    //   target = Math.abs((startencoder + rotationsToInch.calculateRotationsM(meters, 6.75, 6)) - java.util.Arrays.stream(curencoderDoubles).mapToDouble(Double::doubleValue).average().orElse(0.0));
+    //   double remainingDistance = target - curencoder;
+    //   if (Math.abs(Math.round(remainingDistance)) <= 0) {
+    //     stop();
+    //     return true;
+    //   } else {
+    //     drive(0, 0.1, 0, false);
+    //     SmartDashboard.putNumber("Curencoder", curencoder);
+    //     SmartDashboard.putNumber("encoder", startencoder);
+    //     SmartDashboard.putNumber("target", target);
+    //     return false;
+    //   }
+    // }
 
   @Override
   public void periodic() {
@@ -338,10 +366,10 @@ private double rot_cur;
       SmartDashboard.putNumber("Gyro roll", m_gyro.getRoll());
       SmartDashboard.putNumber("Gyro angle", m_gyro.getAngle());
 
-      curencoderDoubles[0] = m_frontLeft.getEncoderValue();
-      curencoderDoubles[1] = m_frontRight.getEncoderValue();
-      curencoderDoubles[2] = m_backLeft.getEncoderValue();
-      curencoderDoubles[3] = m_backRight.getEncoderValue();
+      // curencoderDoubles[0] = m_frontLeft.getEncoderValue();
+      // curencoderDoubles[1] = m_frontRight.getEncoderValue();
+      // curencoderDoubles[2] = m_backLeft.getEncoderValue();
+      // curencoderDoubles[3] = m_backRight.getEncoderValue();
       
       /*super.simulationPeriodic();
 

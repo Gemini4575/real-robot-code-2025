@@ -23,6 +23,7 @@ import frc.robot.Constants.Autos;
 import frc.robot.Constants.JoystickConstants;
 import frc.robot.commands.StartMotionSequence;
 import frc.robot.commands.TelopSwerve;
+import frc.robot.commands.Testing;
 import frc.robot.commands.algea.IntakeAlgae;
 import frc.robot.commands.algea.Proceser;
 import frc.robot.commands.algea.EXO.OzDown;
@@ -69,6 +70,7 @@ public class RobotContainer {
     private final NoraArmSubsystem n = new NoraArmSubsystem();
     private final DriveTrain D = new DriveTrain();
     private final Vision V = new Vision();
+    public final TestingSubsystem T = new TestingSubsystem(13);
     private final VisionSubsystem VS = new VisionSubsystem(V);
 
   /* Pathplanner stuff */
@@ -79,7 +81,9 @@ public class RobotContainer {
     private final String Nothing = "Nothing";
     private final String DriveAndDRop2 = " Drive And Drop2";
 
-  private Field2d autoField;
+  private final Field2d autoRobotPose = new Field2d();
+  private final Field2d autoTargetPose = new Field2d();
+  private final Field2d autoPath = new Field2d();
 
   private final MotionService motionService = new MotionService(D, c, VS);
 
@@ -106,25 +110,26 @@ public class RobotContainer {
   }
 
   private void configureLogging() {
-    autoField = new Field2d();
-    SmartDashboard.putData("AutoLog", autoField);
+    SmartDashboard.putData("Auto Robot Pose", autoRobotPose);
+    SmartDashboard.putData("Auto Target Pose", autoTargetPose);
+    SmartDashboard.putData("Auto Path", autoPath);
 
     // Logging callback for current robot pose
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
       // Do whatever you want with the pose here
-      autoField.setRobotPose(pose);
+      autoRobotPose.setRobotPose(pose);
     });
 
     // Logging callback for target robot pose
     PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
       // Do whatever you want with the pose here
-      autoField.getObject("target pose").setPose(pose);
+      autoTargetPose.setRobotPose(pose);
     });
 
     // Logging callback for the active path, this is sent as a list of poses
     PathPlannerLogging.setLogActivePathCallback((poses) -> {
       // Do whatever you want with the poses here
-      autoField.getObject("path").setPoses(poses);
+      autoPath.getObject("Path").setPoses(poses);
     });
   }
   
@@ -215,6 +220,8 @@ public class RobotContainer {
       //   and(c.Coral()).
       //   onTrue(new LIPlaceCoral(c, s_swerve));
 
+      new JoystickButton(operator, JoystickConstants.RIGHT_BUMPER).onTrue(new Testing(T));
+
       new JoystickButton(operator, JoystickConstants.YELLOW_BUTTON)
         .onTrue(new OzDown(g));
       new JoystickButton(driver, 9)
@@ -288,8 +295,8 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() {
-    c.JoyControll(operator.getRawAxis(JoystickConstants.RIGHT_Y_AXIS));
-    nc.JoyClimb(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
+    nc.JoyClimb1(operator.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), operator.getRawButton(JoystickConstants.START_BUTTON));
+    c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
     if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){
       up++;
       teleFirst = true;

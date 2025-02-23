@@ -7,7 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
+            "pathName": "Center to Side 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Side 2 to Human"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Human To Side 3"
           }
         }
       ]

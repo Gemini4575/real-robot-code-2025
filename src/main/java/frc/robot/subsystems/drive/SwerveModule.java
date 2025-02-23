@@ -232,8 +232,8 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
         m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
     SmartDashboard.putNumber("turnFeedforward",turnFeedforward);
     if(RobotState.isAutonomous()) {
-     // m_driveMotor.set(((driveOutput + driveFeedforward) /2.1) );
-     m_driveMotor.set(driveOutput / SwerveConstants.MaxMetersPersecond);
+      // m_driveMotor.set(driveOutput / SwerveConstants.MaxMetersPersecond);
+      m_driveMotor.set(state.speedMetersPerSecond / SwerveConstants.MaxMetersPersecond);
       System.out.println("Output: " + driveOutput + " Feedforward: " + driveFeedforward);
       m_turningMotor.set(turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
     } else if (RobotState.isTeleop()) {
@@ -241,11 +241,14 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
       m_turningMotor.set(turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
     }
     
-    SmartDashboard.putNumber("m_driveMotor set " + moduleNumber, (driveOutput + driveFeedforward) /2.1);
-    SmartDashboard.putNumber("m_turningMotor setVoltage " + moduleNumber, turnOutput + turnFeedforward);
+    SmartDashboard.putNumber("m_driveMotor set " + moduleNumber, state.speedMetersPerSecond / SwerveConstants.MaxMetersPersecond);
+    SmartDashboard.putNumber("m_turningMotor set " + moduleNumber, turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
   
     SmartDashboard.putNumber("m_driveMotor actual" + moduleNumber, m_driveMotor.get());
-    SmartDashboard.putNumber("m_turningMotor actual" + moduleNumber, m_turningMotor.getBusVoltage());
+    SmartDashboard.putNumber("m_turningMotor actual" + moduleNumber, m_turningMotor.get());
+
+    SmartDashboard.putNumber("drive encoder" + moduleNumber, m_driveMotor.getEncoder().getPosition());
+    SmartDashboard.putNumber("turn encoder" + moduleNumber, m_turningMotor.getEncoder().getPosition());
 
 
     if(RobotState.isTest()) {
