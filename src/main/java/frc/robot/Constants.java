@@ -292,7 +292,7 @@ public class Constants {
     public static final class Vision {
         public static final String kTagCameraName = "Arducam1";
         public static final String kAlgaeCameraName = "ArducamColor";
-        public static final AprilTagFieldLayout kTagLayout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
+        public static final AprilTagFieldLayout kTagLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
         //TODO update with real value
         public static final Transform3d kRobotToCam =
                 new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));

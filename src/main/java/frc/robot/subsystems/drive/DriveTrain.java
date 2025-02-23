@@ -74,10 +74,10 @@ private final Translation2d m_backLeftLocation = Constants.SwerveConstants.m_bac
 private final Translation2d m_backRightLocation = Constants.SwerveConstants.m_backRightLocation;
 
 
-private final SwerveModule m_backLeft = new SwerveModule(Constants.SwerveConstants.Mod0.constants);
-private final SwerveModule m_backRight = new SwerveModule(Constants.SwerveConstants.Mod1.constants);
-private final SwerveModule m_frontRight = new SwerveModule(Constants.SwerveConstants.Mod2.constants);
-private final SwerveModule m_frontLeft = new SwerveModule(Constants.SwerveConstants.Mod3.constants);
+private final SwerveModule m_backLeft_0 = new SwerveModule(Constants.SwerveConstants.Mod0.constants);
+private final SwerveModule m_backRight_1 = new SwerveModule(Constants.SwerveConstants.Mod1.constants);
+private final SwerveModule m_frontRight_2 = new SwerveModule(Constants.SwerveConstants.Mod2.constants);
+private final SwerveModule m_frontLeft_3 = new SwerveModule(Constants.SwerveConstants.Mod3.constants);
 
 //  private final Gyro_EPRA m_gyro = new Gyro_EPRA();
 private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI, NavXUpdateRate.k100Hz);
@@ -221,10 +221,10 @@ private double rot_cur;
       var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
-        m_backLeft.setStateDirectly(swerveModuleStates[0]);
-        m_backRight.setStateDirectly(swerveModuleStates[1]);
-        m_frontRight.setStateDirectly(swerveModuleStates[2]);
-        m_frontLeft.setStateDirectly(swerveModuleStates[3]);
+        m_backLeft_0.setStateDirectly(swerveModuleStates[0]);
+        m_backRight_1.setStateDirectly(swerveModuleStates[1]);
+        m_frontRight_2.setStateDirectly(swerveModuleStates[2]);
+        m_frontLeft_3.setStateDirectly(swerveModuleStates[3]);
     }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
@@ -256,10 +256,10 @@ private double rot_cur;
   }
 
   private void setModuleStates(SwerveModuleState[] swerveModuleStates) {
-    m_backLeft.setDesiredState(swerveModuleStates[0]);
-    m_backRight.setDesiredState(swerveModuleStates[1]);
-    m_frontRight.setDesiredState(swerveModuleStates[2]);
-    m_frontLeft.setDesiredState(swerveModuleStates[3]);
+    m_backLeft_0.setDesiredState(swerveModuleStates[0]);
+    m_backRight_1.setDesiredState(swerveModuleStates[1]);
+    m_frontRight_2.setDesiredState(swerveModuleStates[2]);
+    m_frontLeft_3.setDesiredState(swerveModuleStates[3]);
   }
 
   public void stop() {
@@ -278,10 +278,10 @@ private double rot_cur;
 
   private SwerveModuleState[] getModuleStates(){
       return new SwerveModuleState[]{
-          m_backLeft.getState(),
-          m_backRight.getState(),
-          m_frontRight.getState(),
-          m_frontLeft.getState()
+          m_backLeft_0.getState(),
+          m_backRight_1.getState(),
+          m_frontRight_2.getState(),
+          m_frontLeft_3.getState()
       };
   }
 
@@ -294,10 +294,10 @@ private double rot_cur;
 
   public SwerveModulePosition[] getModulePositions() {
     return new SwerveModulePosition[] {
-        m_backLeft.getPosition(),
-          m_backRight.getPosition(),
-          m_frontRight.getPosition(),
-          m_frontLeft.getPosition()
+        m_backLeft_0.getPosition(),
+          m_backRight_1.getPosition(),
+          m_frontRight_2.getPosition(),
+          m_frontLeft_3.getPosition()
     };
   }
 
