@@ -7,19 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center to Side 2"
+            "pathName": "Center to 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Drop Coral"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Side 2 to Human"
+            "pathName": "Side 1 to red barge pass"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Human To Side 3"
+            "name": "Stop"
           }
         }
       ]

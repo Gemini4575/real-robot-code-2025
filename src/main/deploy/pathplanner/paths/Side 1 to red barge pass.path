@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.758065878378378,
-        "y": 2.7206081081081073
+        "x": 5.484375,
+        "y": 3.9648972602739723
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9810331898893945,
-        "y": 2.2466538893836008
+        "x": 5.51402027027027,
+        "y": 3.002238175675675
       },
       "isLocked": false,
-      "linkedName": "Side 2"
+      "linkedName": "Side 1"
     },
     {
       "anchor": {
-        "x": 0.014822635135135136,
-        "y": 0.08217905405405304
+        "x": 5.799914383561644,
+        "y": 1.5006849315068496
       },
       "prevControl": {
-        "x": 0.7437933700303799,
-        "y": 0.5454460872672802
+        "x": 5.766005067567567,
+        "y": 1.83125
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Human bottom"
+      "linkedName": "Red Barge pass"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 145.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 29.999999999999996
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

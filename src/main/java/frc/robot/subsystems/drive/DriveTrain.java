@@ -176,6 +176,7 @@ private double rot_cur;
   }
   
   public void driveForPathPlanner(ChassisSpeeds speeds) {
+    SmartDashboard.putString("Chassiespeeds", speeds.toString());
     // Note: it is important to not discretize speeds before or after
     // using the setpoint generator, as it will discretize them for you
     previousSetpoint = setpointGenerator.generateSetpoint(
@@ -209,6 +210,7 @@ private double rot_cur;
      */
     
     public void driveRobotRelative(ChassisSpeeds chassisSpeedsIn) {
+      SmartDashboard.putString("Chassiespeeds", chassisSpeedsIn.toString());
       drive(chassisSpeedsIn.vxMetersPerSecond, chassisSpeedsIn.vyMetersPerSecond, chassisSpeedsIn.omegaRadiansPerSecond, false);
     }
     public void driveFieldRelative(ChassisSpeeds c) {

@@ -181,9 +181,9 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-   
+   var s = (m_driveEncoder.getVelocity() / (60.0 * SwerveConstants.gearboxRatio)) * (SwerveConstants.wheeldiameter * Math.PI);
     return new SwerveModuleState(
-        m_driveEncoder.getVelocity(), new Rotation2d(encoderValue()));
+        s, new Rotation2d(encoderValue()));
   }
 
   /**
