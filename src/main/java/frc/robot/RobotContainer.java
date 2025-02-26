@@ -11,7 +11,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -26,26 +25,20 @@ import frc.robot.Constants.JoystickConstants;
 import frc.robot.commands.StartMotionSequence;
 import frc.robot.commands.TelopSwerve;
 import frc.robot.commands.Testing;
-import frc.robot.commands.algea.IntakeAlgae;
-import frc.robot.commands.algea.Proceser;
 import frc.robot.commands.algea.EXO.OzDown;
 import frc.robot.commands.algea.EXO.OzIntake;
 import frc.robot.commands.algea.EXO.OzOutake;
 import frc.robot.commands.algea.EXO.OzUp;
-import frc.robot.commands.auto.DriveAndDropToOne;
 import frc.robot.commands.climbing.Climb;
-import frc.robot.commands.climbing.init;
+import frc.robot.commands.coral.lili.AUTOCoral;
 import frc.robot.commands.coral.lili.LIPlaceCoral;
-import frc.robot.commands.coral.nora.CoralStation;
 //import frc.robot.commands.coral.nora.INtakeFromHuman;
 import frc.robot.commands.coral.nora.L1;
 import frc.robot.commands.coral.nora.L2;
 import frc.robot.commands.coral.nora.L3;
-import frc.robot.commands.drive.DriveStraight;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
 import frc.robot.commands.drive.Stop;
 // import frc.robot.commands.drive.TestTurnCommand;
-import frc.robot.datamodel.MotionDirective;
 import frc.robot.service.MotionService;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.DriveTrain;
@@ -95,7 +88,8 @@ public class RobotContainer {
 
   public RobotContainer() {
     System.out.println("Starting RobotContainer()");
-    NamedCommands.registerCommand("Drop Coral", new WaitCommand(2));
+    NamedCommands.registerCommand("Drop Coral", new LIPlaceCoral(c));
+    NamedCommands.registerCommand("Is there Coral", new AUTOCoral(c));
     NamedCommands.registerCommand("Stop", new Stop(D));
     configureBindings();
 
@@ -299,7 +293,7 @@ public class RobotContainer {
     System.out.println("Ended configureBindings()");
   }
 
-  public void teleopPeriodic() {
+  public void teleopPeriodic() { 
     nc.JoyClimb1(operator.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), operator.getRawButton(JoystickConstants.START_BUTTON));
     c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
     if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){

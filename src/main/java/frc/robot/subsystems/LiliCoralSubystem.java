@@ -1,11 +1,7 @@
 package frc.robot.subsystems;
 
-import static frc.robot.datamodel.MotionDirective.turn;
-
-import java.util.function.BiPredicate;
 import java.util.function.BooleanSupplier;
 
-import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -14,7 +10,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.util.PoseTools;
 import frc.robot.Constants.LiliCoralConstants;
 
 public class LiliCoralSubystem extends SubsystemBase{
@@ -179,7 +174,8 @@ public class LiliCoralSubystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Gate", coral());
+        SmartDashboard.putBoolean("Gate", bottom());
+        SmartDashboard.putBoolean("Coral", coral());
         if(first) {
             if(bottom() && lastKnownState == State.CLOSED) {
                 

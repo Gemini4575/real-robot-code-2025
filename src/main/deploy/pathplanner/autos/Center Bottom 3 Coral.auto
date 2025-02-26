@@ -44,6 +44,12 @@
                 "data": {
                   "name": "Stop"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Is there Coral"
+                }
               }
             ]
           }
@@ -87,6 +93,12 @@
                 "type": "named",
                 "data": {
                   "name": "Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Is there Coral"
                 }
               }
             ]

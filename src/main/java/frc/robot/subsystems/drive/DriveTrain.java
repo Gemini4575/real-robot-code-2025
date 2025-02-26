@@ -43,7 +43,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.math.MesurementToRoation;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 
@@ -52,7 +51,6 @@ import frc.robot.Constants.SwerveConstants;
 /** Represents a swerve drive style drivetrain. */
 // @Component
 public class DriveTrain extends SubsystemBase {
-  private MesurementToRoation rotationsToInch = new MesurementToRoation();
   public boolean first;
   Field2d field = new Field2d();
   int ii = 0;
@@ -68,10 +66,10 @@ public class DriveTrain extends SubsystemBase {
   
   SendableChooser<Pose2d> ahhhhhh;
 
-private final Translation2d m_frontLeftLocation = Constants.SwerveConstants.m_frontLeftLocation;
-private final Translation2d m_frontRightLocation = Constants.SwerveConstants.m_frontRightLocation;
 private final Translation2d m_backLeftLocation = Constants.SwerveConstants.m_backLeftLocation;
 private final Translation2d m_backRightLocation = Constants.SwerveConstants.m_backRightLocation;
+private final Translation2d m_frontRightLocation = Constants.SwerveConstants.m_frontRightLocation;
+private final Translation2d m_frontLeftLocation = Constants.SwerveConstants.m_frontLeftLocation;
 
 
 private final SwerveModule m_backLeft_0 = new SwerveModule(Constants.SwerveConstants.Mod0.constants);
@@ -272,7 +270,7 @@ private double rot_cur;
 
   private ChassisSpeeds getRobotRelativeSpeeds(){
     var c = m_kinematics.toChassisSpeeds(getModuleStates());
-    SmartDashboard.putString("Robot relative speds", c.toString());
+    SmartDashboard.putString("Robot relative speeds", c.toString());
     return c;
   }
 
@@ -357,6 +355,13 @@ private double rot_cur;
 
   @Override
   public void periodic() {
+      SmartDashboard.putNumber("raw X", m_gyro.getRawAccelX());
+      SmartDashboard.putNumber("raw Y", m_gyro.getRawAccelY());
+
+      SmartDashboard.putNumber("X accel", m_gyro.getWorldLinearAccelX());
+      SmartDashboard.putNumber("Y accel", m_gyro.getWorldLinearAccelY());
+      
+
     // This method will be called once per scheduler run
       poseEstimator.update(m_gyro.getRotation2d(), getModulePositions());
       field.setRobotPose(poseEstimator.getEstimatedPosition());

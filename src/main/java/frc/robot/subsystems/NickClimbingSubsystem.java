@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.epramotor.Motor;
 import frc.robot.Constants.NickClimbingConstanst;
@@ -80,6 +81,13 @@ public class NickClimbingSubsystem extends SubsystemBase{
         // Code to stop the elevator
         ClimbingMotor1.stop();
         ClimbingMotor2.stop();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("CimbEndcoder 1", ClimbingMotor1.getPosition());
+        SmartDashboard.putNumber("CimbEndcoder 2", ClimbingMotor2.getPosition());
+
     }
 
 }

@@ -193,7 +193,8 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
    */
   public SwerveModulePosition getPosition() {
     // encode is % rotations
-    var retVal = (m_driveEncoder.getPosition() / SwerveConstants.gearboxRatio) * SwerveConstants.wheeldiameter * Math.PI; // distance in whatever units the wheel diameter is
+    var retVal = 0.68 * ((m_driveEncoder.getPosition() / SwerveConstants.gearboxRatio) * SwerveConstants.wheeldiameter * Math.PI); // distance in whatever units the wheel diameter is
+    // KB        ^^^^ This is from 1 meter testing dont move/change
     return new SwerveModulePosition(retVal, new Rotation2d(encoderValue()));
   }
 
