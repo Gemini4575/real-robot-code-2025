@@ -53,8 +53,9 @@ public class RobotContainer {
   private double up = 0.0;
 
   /* Controllers */
-    private final Joystick driver = new Joystick(1);
-    private final Joystick operator = new Joystick(2);
+    private final Joystick driver = new Joystick(0);
+    private final Joystick operator = new Joystick(1);
+    private final Joystick testing = new Joystick(2);
 
   /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, JoystickConstants.BACK_BUTTON);
@@ -98,11 +99,9 @@ public class RobotContainer {
     MyAutoChooser.addOption("Drive And Drop1", DriveAndDrop1);
     MyAutoChooser.setDefaultOption("Nothing", Nothing);
     MyAutoChooser.addOption(" Drive And Drop2", DriveAndDRop2);
-    SmartDashboard.putData(MyAutoChooser);
 
     configureLogging();
 
-    SmartDashboard.putData("Auto Chooser", PathplannerautoChoosers);
     SmartDashboard.putData("Vision Pose Estimate", visionPoseEstimate);
     PathfindingCommand.warmupCommand().schedule();
     System.out.println("Ended RobotContainer()");
@@ -154,7 +153,6 @@ public class RobotContainer {
 
     motionService.periodic();
 
-    SmartDashboard.putNumber("Encoder", (nc.ClimbingMotor1.getEncoder().getPosition() + nc.ClimbingMotor2.getEncoder().getPosition()));
 
     var visionEst = V.getEstimatedGlobalPose();
     visionEst.ifPresent(
@@ -237,40 +235,11 @@ public class RobotContainer {
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
         .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);
 
-      new JoystickButton(operator, JoystickConstants.BACK_BUTTON)
+      new JoystickButton(testing, JoystickConstants.BACK_BUTTON)
         .onTrue(new DriveTwoardsAprillTag(V, D));
-      //new JoystickButton(operator, JoystickConstants.BACK_BUTTON).onTrue(new Turn(s_swerve));
-
-      // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-      //   .onTrue(new 
-      //     StartMotionSequence(motionService, 
-      //     drive(1), turn(90), drive(1), turn(90), 
-      //     drive(1), turn(90), drive(1), turn(90)));
       
-      //
-          // new JoystickButton(driver, 10)
-          // .onTrue(new 
-          //   StartMotionSequence(motionService, turn(90)));
-
-      // new JoystickButton(driver, 11)
-      //   .onTrue(new 
-      //     StartMotionSequence(motionService, turn(-90))); 
-
-          new JoystickButton(driver, 12)
-          .onTrue(new 
-            StartMotionSequence(motionService, drive(1)));
-
       new JoystickButton(operator, JoystickConstants.POV_DOWN)
         .onTrue(new StartMotionSequence(motionService, apriltag()));
-
-      // new JoystickButton(operator, JoystickConstants.POV_LEFT)
-      //   .onTrue(new StartMotionSequence(motionService, new MotionDirective(MotionType.CAMERA_STRAFE)));
-
-      // new JoystickButton(operator, JoystickConstants.POV_RIGHT)
-      //   .onTrue(new StartMotionSequence(motionService, new MotionDirective(MotionType.CAMERA_ROTATE)));
-
-      // new JoystickButton(operator, JoystickConstants.POV_UP)
-      //   .onTrue(new StartMotionSequence(motionService, new MotionDirective(MotionType.CAMERA_ALL)));
 
     // Supplier<Pose2d> bestTargetSupplier = () -> {
     //   var target = vision.getTargets();
@@ -294,8 +263,8 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() { 
-    nc.JoyClimb1(operator.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), operator.getRawButton(JoystickConstants.START_BUTTON));
-    c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
+    nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), operator.getRawButton(JoystickConstants.START_BUTTON));
+    c.JoyControll(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
     if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){
       up++;
       teleFirst = true;
