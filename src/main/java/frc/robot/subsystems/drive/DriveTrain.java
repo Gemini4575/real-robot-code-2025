@@ -38,6 +38,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -46,7 +47,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 
-
+import edu.wpi.first.wpilibj.RobotController;
 
 /** Represents a swerve drive style drivetrain. */
 // @Component
@@ -182,6 +183,7 @@ private double rot_cur;
         speeds, // The desired target speeds
         0.02 // The loop time of the robot code, in seconds
     );
+    SmartDashboard.putString ("Previous Setpoint", previousSetpoint.toString());
     setModuleStates(previousSetpoint.moduleStates()); // Method that will drive the robot given target module states
   }
 
@@ -227,6 +229,7 @@ private double rot_cur;
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     SmartDashboard.putNumber("Gyro", m_gyro.getAngle());
+
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
             fieldRelative
@@ -361,6 +364,7 @@ private double rot_cur;
       SmartDashboard.putNumber("X accel", m_gyro.getWorldLinearAccelX());
       SmartDashboard.putNumber("Y accel", m_gyro.getWorldLinearAccelY());
       
+    SmartDashboard.putNumber("battery voltage", RobotController.getBatteryVoltage());
 
     // This method will be called once per scheduler run
       poseEstimator.update(m_gyro.getRotation2d(), getModulePositions());

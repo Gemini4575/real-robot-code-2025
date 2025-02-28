@@ -193,7 +193,7 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
    */
   public SwerveModulePosition getPosition() {
     // encode is % rotations
-    var retVal = 0.68 * ((m_driveEncoder.getPosition() / SwerveConstants.gearboxRatio) * SwerveConstants.wheeldiameter * Math.PI); // distance in whatever units the wheel diameter is
+    var retVal = 1* ((m_driveEncoder.getPosition() / SwerveConstants.gearboxRatio) * SwerveConstants.wheeldiameter * Math.PI); // distance in whatever units the wheel diameter is
     // KB        ^^^^ This is from 1 meter testing dont move/change
     return new SwerveModulePosition(retVal, new Rotation2d(encoderValue()));
   }
@@ -234,7 +234,7 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
     SmartDashboard.putNumber("turnFeedforward",turnFeedforward);
     if(RobotState.isAutonomous()) {
       // m_driveMotor.set(driveOutput / SwerveConstants.MaxMetersPersecond);
-      m_driveMotor.set(state.speedMetersPerSecond / SwerveConstants.MaxMetersPersecond);
+      m_driveMotor.set(state.speedMetersPerSecond / (0.8*SwerveConstants.MaxMetersPersecond));
       System.out.println("Output: " + driveOutput + " Feedforward: " + driveFeedforward);
       m_turningMotor.set(turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
     } else if (RobotState.isTeleop()) {
