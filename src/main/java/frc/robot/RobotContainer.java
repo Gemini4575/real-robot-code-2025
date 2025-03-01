@@ -36,6 +36,7 @@ import frc.robot.commands.coral.lili.LIPlaceCoral;
 import frc.robot.commands.coral.nora.L1;
 import frc.robot.commands.coral.nora.L2;
 import frc.robot.commands.coral.nora.L3;
+import frc.robot.commands.drive.AlineWheels;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
 import frc.robot.commands.drive.Stop;
 // import frc.robot.commands.drive.TestTurnCommand;
@@ -91,6 +92,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Drop Coral", new LIPlaceCoral(c));
     NamedCommands.registerCommand("Is there Coral", new AUTOCoral(c));
     NamedCommands.registerCommand("Stop", new Stop(D));
+    NamedCommands.registerCommand("Wheels", new AlineWheels(D));
     configureBindings();
 
     PathplannerautoChoosers = AutoBuilder.buildAutoChooser();
@@ -156,6 +158,10 @@ public class RobotContainer {
 
     SmartDashboard.putNumber("Encoder", (nc.ClimbingMotor1.getEncoder().getPosition() + nc.ClimbingMotor2.getEncoder().getPosition()));
 
+    //updateVisionEst();
+  }
+
+  private void updateVisionEst() {
     var visionEst = V.getEstimatedGlobalPose();
     visionEst.ifPresent(
         est -> {

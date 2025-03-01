@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Wheels"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Center to Side 2"
@@ -64,6 +70,12 @@
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop"
+                }
+              },
               {
                 "type": "named",
                 "data": {

@@ -146,7 +146,7 @@ private double rot_cur;
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> driveForPathPlanner(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(1, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(2, 0.1, 0.0), // Translation PID constants
                     new PIDConstants(1, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration
@@ -170,7 +170,7 @@ private double rot_cur;
       config,
       Units.rotationsToRadians(1.0) // The max rotation velocity of a swerve module in radians per second. This should probably be stored in your Constants file
     );
-    previousSetpoint = new SwerveSetpoint(getSpeed(), getModuleStates(), DriveFeedforwards.zeros(config.numModules));
+    previousSetpoint = new SwerveSetpoint(new ChassisSpeeds(), getModuleStates(), DriveFeedforwards.zeros(config.numModules));
   }
   
   public void driveForPathPlanner(ChassisSpeeds speeds) {
@@ -198,6 +198,7 @@ private double rot_cur;
   
       SmartDashboard.putString("Gyro has been reset", java.time.LocalTime.now().toString());
       System.out.println("Gyro has been reset");
+      Logger.recordOutput("Gyro Has Been reset", DriverStation.getMatchTime());
     }
     /**
      * Method to drive the robot using joystick info.
