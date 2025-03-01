@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.706714527027027,
+        "x": 7.572945205479453,
         "y": 3.9648972602739723
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.803589527027027,
-        "y": 1.2227097602739727
+        "x": 7.323577724793364,
+        "y": 3.98266969894381
       },
       "isLocked": false,
-      "linkedName": "Side 1"
+      "linkedName": "Center"
     },
     {
       "anchor": {
-        "x": 1.0820523648603608,
-        "y": 1.0160050675643857
+        "x": 7.49,
+        "y": 3.9648972602739723
       },
       "prevControl": {
-        "x": 3.1720439189189182,
-        "y": 0.8677787162162156
+        "x": 7.7616035323344095,
+        "y": 3.9476364812776916
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Human bottom"
+      "linkedName": "Blip Start"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 300.0,
     "maxAngularAcceleration": 720.0,
@@ -41,8 +41,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 145.0
+    "velocity": 0.0,
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": null,
@@ -50,5 +50,5 @@
     "velocity": 0,
     "rotation": 90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

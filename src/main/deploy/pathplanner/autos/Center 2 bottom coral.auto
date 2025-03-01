@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center to 1"
+            "pathName": "Center to Side 2"
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side 1 to Human"
+            "pathName": "Side 2 to Human"
           }
         },
         {

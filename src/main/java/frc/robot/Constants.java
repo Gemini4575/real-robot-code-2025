@@ -294,7 +294,7 @@ public class Constants {
         public static final AprilTagFieldLayout kTagLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
         //TODO update with real value
         public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
+                new Transform3d(new Translation3d(0.5, 0.0, Units.inchesToMeters(18.5)), new Rotation3d(0, 0, 0));
                 // The standard deviations of our vision estimated poses, which affect correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
