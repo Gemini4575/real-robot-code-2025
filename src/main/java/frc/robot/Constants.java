@@ -489,7 +489,7 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
             public final static int Top = 2;
             public final static int Bottom = 3;
         /* Doubles */
-            public final static double GateSpeed = -.5;
+            public final static double GateSpeed = -1;
     }
 
     public final static class  Autos {

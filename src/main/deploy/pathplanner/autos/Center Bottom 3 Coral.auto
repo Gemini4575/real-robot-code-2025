@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center to Side 2"
+            "pathName": "Angled Center to Side 2"
           }
         },
         {
@@ -36,13 +36,26 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Side 2 to Human"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Side 2 to Human"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Close Door"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -86,13 +99,26 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Side 3 to human"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Side 3 to human"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Close Door"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -133,6 +159,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Close Door"
           }
         }
       ]

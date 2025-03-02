@@ -35,6 +35,7 @@ import frc.robot.commands.algea.EXO.OzOutake;
 import frc.robot.commands.algea.EXO.OzUp;
 import frc.robot.commands.climbing.Climb;
 import frc.robot.commands.coral.lili.AUTOCoral;
+import frc.robot.commands.coral.lili.EXOCloseGateSlow;
 import frc.robot.commands.coral.lili.LIPlaceCoral;
 //import frc.robot.commands.coral.nora.INtakeFromHuman;
 import frc.robot.commands.coral.nora.L1;
@@ -44,6 +45,7 @@ import frc.robot.commands.drive.AlineWheels;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
 import frc.robot.commands.drive.PathFindToPose;
 import frc.robot.commands.drive.Stop;
+import frc.robot.commands.drive.PathFindToPose.PathTarget;
 // import frc.robot.commands.drive.TestTurnCommand;
 import frc.robot.service.MotionService;
 import frc.robot.subsystems.*;
@@ -90,12 +92,12 @@ public class RobotContainer {
 
   private final MotionService motionService = new MotionService(D, c, VS);
 
-
-
+  private OzUp ozGrabberUpCommand = new OzUp(g);
 
   public RobotContainer() {
     System.out.println("Starting RobotContainer()");
     NamedCommands.registerCommand("Drop Coral", new LIPlaceCoral(c));
+    NamedCommands.registerCommand("Close Door", new EXOCloseGateSlow(c).withTimeout(2));
     NamedCommands.registerCommand("Is there Coral", new AUTOCoral(c));
     NamedCommands.registerCommand("Stop", new Stop(D));
     NamedCommands.registerCommand("Wheels", new AlineWheels(D));
@@ -156,6 +158,8 @@ public class RobotContainer {
 
   public void periodic() {
 
+    SmartDashboard.putBoolean("Is flipped?", AutoBuilder.shouldFlip());
+
     if(driver.getRawButtonPressed(2)) {
       CommandScheduler.getInstance().cancelAll();
     }
@@ -189,6 +193,10 @@ public class RobotContainer {
   }
 
   public void autonomousPeriodic() {
+    if (g.isHangingLoose() && !ozGrabberUpCommand.isScheduled() && ozGrabberUpCommand.isFinished()) {
+      System.out.println("Grabber is loose, fixing..");
+      //ozGrabberUpCommand.schedule();
+    }
     if(autoFirst == 0) {
       switch (MyAutoChooser_String) {
         case DriveAndDrop1:
@@ -238,7 +246,7 @@ public class RobotContainer {
       new JoystickButton(operator, JoystickConstants.YELLOW_BUTTON)
         .onTrue(new OzDown(g));
       new JoystickButton(driver, 9)
-        .onTrue(new OzUp(g)); 
+        .onTrue(ozGrabberUpCommand); 
       new JoystickButton(driver, 10)
         .onTrue(new OzIntake(g));
         new JoystickButton(driver, 11)
@@ -249,7 +257,7 @@ public class RobotContainer {
         .onTrue(new Climb(nc));
       
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-          .onTrue(new PathFindToPose(D, () -> FieldLocations.ALGAE_INTAKE));
+          .onTrue(new PathFindToPose(D, PathTarget.ALGAE_INTAKE));
 
       //new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
       //  .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);
