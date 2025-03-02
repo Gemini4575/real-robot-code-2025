@@ -8,55 +8,41 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.7808237022646285,
-        "y": 1.6978431039596846
+        "x": 4.155949223496802,
+        "y": 2.5091255792663985
       },
       "isLocked": false,
       "linkedName": "Side 2"
     },
     {
       "anchor": {
-        "x": -1.1,
-        "y": 0.7
+        "x": 3.4684966216216213,
+        "y": 2.1869932432432426
       },
       "prevControl": {
-        "x": -0.5183699324324325,
-        "y": 1.811697635135135
+        "x": 3.6899997382482588,
+        "y": 2.3029085973801573
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Human bottom"
+      "linkedName": "Fans Dumb Idea1"
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8457943925233645,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 594.38,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 594.38,
+    "maxAngularVelocity": 300.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.2,
-    "rotation": 150.0
+    "velocity": 2.0,
+    "rotation": 29.999999999999996
   },
   "reversed": false,
   "folder": null,

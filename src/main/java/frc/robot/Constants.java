@@ -463,9 +463,9 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         /* Ints */
             public final static int ClimbingMotor1 = 14;
             public final static int ClimbingMotor2 = 13;
-            public final static double ClimbingMotorPoseition = 76;
+            public final static double ClimbingMotorPoseition = 65;
         /* Doubles */
-            public final static double ClimbingSpeed = 1;
+            public final static double ClimbingSpeed = 0.25;
     }
 
     public final static class OzzyGrabberConstants {
@@ -499,6 +499,10 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         GetCoral(), drive(-95), turn(-85), drive(170), strafe(-30), turn(-25), turn(75), strafe(35), 
         drive(25), wait2(1), GetCoral(), turn(180), strafe(175), dropCoral(), stop(), GetCoral()};//]\[], turn(-10), drive(-Units.inchesToMeters(90)), strafe(Units.inchesToMeters(230))};
         
+    }
+
+    public final static class FieldLocations {
+        public static Pose2d ALGAE_INTAKE = new Pose2d(6, 0.45, Rotation2d.fromDegrees(90));
     }
 
 }

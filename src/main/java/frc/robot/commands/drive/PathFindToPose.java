@@ -11,8 +11,7 @@ public class PathFindToPose extends Command {
 
     private final DriveTrain driveSubsystem; 
     private final Supplier<Pose2d> targetPoseSuppler;
-
-    private Command cmd;
+    private boolean finished = true;
 
     public PathFindToPose(DriveTrain driveSubsystem, Supplier<Pose2d> targetPoseSuppler) {
         this.driveSubsystem = driveSubsystem;
@@ -21,23 +20,24 @@ public class PathFindToPose extends Command {
 
     @Override
     public void initialize() {
+        finished = false;
         System.out.println("Initializing PathFindToPose command");
-        cmd = AutoBuilder.pathfindToPose(
+        Command cmd = AutoBuilder.pathfindToPoseFlipped(
                 targetPoseSuppler.get(),
                 driveSubsystem.getChassisConstrains());
         cmd.schedule();
         System.out.println("Initializing PathFindToPose command - DONE");
+        finished = true;
     }
 
     @Override
     public boolean isFinished() {
-        return cmd == null || cmd.isFinished();
+        return finished;
     }
 
     @Override
     public void end(boolean interrupted) {
         System.out.println("Ended PathFindToPose command");
-        cmd = null;
     }
     
 }

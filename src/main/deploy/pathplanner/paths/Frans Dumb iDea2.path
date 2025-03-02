@@ -3,48 +3,44 @@
   "waypoints": [
     {
       "anchor": {
-        "x": -1.1,
-        "y": 0.7
+        "x": 3.4684966216216213,
+        "y": 2.1869932432432426
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5860219594594596,
-        "y": 1.104940878378378
+        "x": 2.6680743243243246,
+        "y": 1.8164273648648646
       },
       "isLocked": false,
-      "linkedName": "Human bottom"
+      "linkedName": "Fans Dumb Idea1"
     },
     {
       "anchor": {
-        "x": 2.9348817567567567,
-        "y": 3.550675675675675
+        "x": 1.6749577702749954,
+        "y": 1.3717483108068314
       },
       "prevControl": {
-        "x": 2.4907435858312628,
-        "y": 2.3737695683854874
+        "x": 2.430912162166887,
+        "y": 1.6385557432392637
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Side 3"
+      "linkedName": "Frans Dumb iDea2"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3076923076923077,
-      "rotationDegrees": 50.0
-    },
-    {
-      "waypointRelativePos": 0.48,
-      "rotationDegrees": -29.999999999999996
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 57.5
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8504672897196262,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0.8598130841121495,
+      "maxWaypointRelativePos": 0.6355140186915887,
       "constraints": {
-        "maxVelocity": 1.0,
+        "maxVelocity": 1.52,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 300.0,
         "maxAngularAcceleration": 720.0,
@@ -64,14 +60,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": -29.999999999999996
+    "velocity": 1.5,
+    "rotation": 145.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 150.0
+    "velocity": 2.0,
+    "rotation": 29.999999999999996
   },
   "useDefaultConstraints": true
 }

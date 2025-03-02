@@ -11,7 +11,10 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Autos;
+import frc.robot.Constants.FieldLocations;
 import frc.robot.Constants.JoystickConstants;
 import frc.robot.commands.StartMotionSequence;
 import frc.robot.commands.TelopSwerve;
@@ -38,6 +42,7 @@ import frc.robot.commands.coral.nora.L2;
 import frc.robot.commands.coral.nora.L3;
 import frc.robot.commands.drive.AlineWheels;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
+import frc.robot.commands.drive.PathFindToPose;
 import frc.robot.commands.drive.Stop;
 // import frc.robot.commands.drive.TestTurnCommand;
 import frc.robot.service.MotionService;
@@ -56,6 +61,7 @@ public class RobotContainer {
   /* Controllers */
     private final Joystick driver = new Joystick(1);
     private final Joystick operator = new Joystick(2);
+    private final Joystick testing = new Joystick(3);
 
   /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, JoystickConstants.BACK_BUTTON);
@@ -158,7 +164,9 @@ public class RobotContainer {
 
     SmartDashboard.putNumber("Encoder", (nc.ClimbingMotor1.getEncoder().getPosition() + nc.ClimbingMotor2.getEncoder().getPosition()));
 
-    //updateVisionEst();
+    if (!RobotState.isAutonomous()) {
+      updateVisionEst();
+    }
   }
 
   private void updateVisionEst() {
@@ -241,10 +249,13 @@ public class RobotContainer {
         .onTrue(new Climb(nc));
       
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-        .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);
+          .onTrue(new PathFindToPose(D, () -> FieldLocations.ALGAE_INTAKE));
 
-      new JoystickButton(operator, JoystickConstants.BACK_BUTTON)
-        .onTrue(new DriveTwoardsAprillTag(V, D));
+      //new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
+      //  .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);
+
+      //new JoystickButton(operator, JoystickConstants.BACK_BUTTON)
+      //  .onTrue(new DriveTwoardsAprillTag(V, D));
       //new JoystickButton(operator, JoystickConstants.BACK_BUTTON).onTrue(new Turn(s_swerve));
 
       // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
@@ -300,9 +311,11 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() { 
-    nc.JoyClimb1(operator.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), operator.getRawButton(JoystickConstants.START_BUTTON));
     c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
-    if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){
+    nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), testing.getRawButton(JoystickConstants.START_BUTTON));
+    nc.JoyClimb2(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), operator.getRawButton(JoystickConstants.BACK_BUTTON));    
+  
+  if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){
       up++;
       teleFirst = true;
     }

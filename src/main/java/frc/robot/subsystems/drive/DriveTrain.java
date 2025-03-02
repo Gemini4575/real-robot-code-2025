@@ -325,7 +325,7 @@ private double rot_cur;
 
     public PathConstraints getChassisConstrains() {
         return new PathConstraints(
-          3.000,
+          4.000,
           3.000,
           Units.degreesToRadians(540.000),
           Units.degreesToRadians(720.000)

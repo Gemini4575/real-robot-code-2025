@@ -120,16 +120,16 @@ public class SwerveModule extends Command {
 // hard coding the offset because its better?
 switch (moduleNumber) {
   case 0: 
-  encoderOffset = -4.134986246400915;
+  encoderOffset = -0.619176235447182;
   break;
   case 1: 
-  encoderOffset = -4.08058153307745;
+  encoderOffset = -4.018841603091038;//0.922783865280067
   break;
   case 2: 
-  encoderOffset = -3.023956665037501;//-13.00*Math.PI/180.00;
+  encoderOffset = -3.048560530693669;//-13.00*Math.PI/180.00;
   break;
   case 3: 
-  encoderOffset = -1.334522613764654;
+  encoderOffset = -1.331789020338969;
   break;
 }
     configAngleMotor();

@@ -20,12 +20,12 @@ public class NickClimbingSubsystem extends SubsystemBase{
 
     private boolean Climb1() {
         // Code to move the elevator
-        return ClimbingMotor1.SetIfBoolean(ClimbingMotor1.getPosition() < (NickClimbingConstanst.ClimbingMotorPoseition), NickClimbingConstanst.ClimbingSpeed);
+        return ClimbingMotor1.SetIfBoolean(Math.abs(ClimbingMotor1.getPosition()) < (NickClimbingConstanst.ClimbingMotorPoseition), -NickClimbingConstanst.ClimbingSpeed);
     }
     
     private boolean Climb2() {
         // Code to move the elevator
-        return ClimbingMotor2.SetIfBoolean((ClimbingMotor2.getPosition()) < (NickClimbingConstanst.ClimbingMotorPoseition), NickClimbingConstanst.ClimbingSpeed);
+        return ClimbingMotor2.SetIfBoolean(Math.abs(ClimbingMotor2.getPosition()) < (NickClimbingConstanst.ClimbingMotorPoseition), NickClimbingConstanst.ClimbingSpeed);
     }
 
     public boolean init1() {
