@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.DriveTrain;
 
-public class Stop extends Command{
+public class AlineWheels extends Command{
     DriveTrain d;
     boolean isFinished;
     Timer timer;
-    public Stop(DriveTrain d) {
+    public AlineWheels(DriveTrain d) {
         this.d = d;
         addRequirements(d);
     }
@@ -22,8 +22,8 @@ public class Stop extends Command{
 
     @Override
     public void execute() {
-        d.drive(0, 0, 0, false);
-        if(timer.advanceIfElapsed(1.75)) {
+        d.drive(0, .01, 0, false);
+        if(timer.advanceIfElapsed(.75)) {
             isFinished = true;
         }
     }

@@ -5,15 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Wheels"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Center to 1"
+            "pathName": "Center to Side 2"
           }
         },
         {
@@ -38,13 +32,38 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side 1 to P"
+            "pathName": "Frans Dumb iDea"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Stop"
+            "pathName": "Frans Dumb iDea2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Frans Dumb iDea3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Is there Coral"
+                }
+              }
+            ]
           }
         }
       ]

@@ -7,9 +7,11 @@ package frc.robot;
 
 
 
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.commands.FollowPathCommand;
 
-import edu.wpi.first.wpilibj.TimedRobot;
 // import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.stereotype.Component;
 import edu.wpi.first.wpilibj.Timer;
@@ -17,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 // @Component
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private static final Constants.RobotMode JAVA_SIM_MODE = Constants.RobotMode.SIM;
     public static final Constants.RobotMode CURRENT_ROBOT_MODE = isReal() ? Constants.RobotMode.REAL : JAVA_SIM_MODE;
     public static final boolean IS_COMPETITION = false;
@@ -36,7 +38,7 @@ public class Robot extends TimedRobot {
   public void robotInit () {
         // Set up data receivers & replay source
         
-
+    Logger.start();
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();

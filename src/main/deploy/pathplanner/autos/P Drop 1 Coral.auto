@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center to Side 2"
+            "pathName": "P to side 2"
           }
         },
         {
@@ -36,9 +36,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Side 2 to Human"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "P Side 2 to human"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Close Door"
+                }
+              }
+            ]
           }
         },
         {
@@ -63,7 +76,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Human To Side 3"
+            "pathName": "P Human To Side 3"
           }
         },
         {
@@ -83,6 +96,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Close Door"
           }
         }
       ]

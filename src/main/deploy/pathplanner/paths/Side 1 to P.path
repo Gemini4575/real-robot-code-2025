@@ -8,42 +8,28 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.653875,
-        "y": 1.2227097602739727
+        "x": 5.447904851711456,
+        "y": 3.0045747961998934
       },
       "isLocked": false,
       "linkedName": "Side 1"
     },
     {
       "anchor": {
-        "x": -0.5,
-        "y": 0.5
+        "x": 6.0921030405405405,
+        "y": 0.4527449324324323
       },
       "prevControl": {
-        "x": 1.5899915540585585,
-        "y": 0.3517736486518288
+        "x": 6.2109849856603825,
+        "y": 0.9302108680757747
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Human bottom"
+      "linkedName": "Red Barge pass"
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0,
-      "constraints": {
-        "maxVelocity": 4.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 300.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -56,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 150.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Mid",
+  "folder": "P stuff",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

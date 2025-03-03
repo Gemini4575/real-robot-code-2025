@@ -11,7 +11,10 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Autos;
+import frc.robot.Constants.FieldLocations;
 import frc.robot.Constants.JoystickConstants;
 import frc.robot.commands.StartMotionSequence;
 import frc.robot.commands.TelopSwerve;
@@ -31,13 +35,18 @@ import frc.robot.commands.algea.EXO.OzOutake;
 import frc.robot.commands.algea.EXO.OzUp;
 import frc.robot.commands.climbing.Climb;
 import frc.robot.commands.coral.lili.AUTOCoral;
+import frc.robot.commands.coral.lili.EXOCloseGateSlow;
 import frc.robot.commands.coral.lili.LIPlaceCoral;
+import frc.robot.commands.coral.lili.LiAutoPlaceCoral;
 //import frc.robot.commands.coral.nora.INtakeFromHuman;
 import frc.robot.commands.coral.nora.L1;
 import frc.robot.commands.coral.nora.L2;
 import frc.robot.commands.coral.nora.L3;
+import frc.robot.commands.drive.AlineWheels;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
+import frc.robot.commands.drive.PathFindToPose;
 import frc.robot.commands.drive.Stop;
+import frc.robot.commands.drive.PathFindToPose.PathTarget;
 // import frc.robot.commands.drive.TestTurnCommand;
 import frc.robot.service.MotionService;
 import frc.robot.subsystems.*;
@@ -84,14 +93,15 @@ public class RobotContainer {
 
   private final MotionService motionService = new MotionService(D, c, VS);
 
-
-
+  private OzUp ozGrabberUpCommand = new OzUp(g);
 
   public RobotContainer() {
     System.out.println("Starting RobotContainer()");
-    NamedCommands.registerCommand("Drop Coral", new LIPlaceCoral(c));
+    NamedCommands.registerCommand("Drop Coral", new LiAutoPlaceCoral(c));
+    NamedCommands.registerCommand("Close Door", new EXOCloseGateSlow(c).withTimeout(2));
     NamedCommands.registerCommand("Is there Coral", new AUTOCoral(c));
     NamedCommands.registerCommand("Stop", new Stop(D));
+    NamedCommands.registerCommand("Wheels", new AlineWheels(D));
     configureBindings();
 
     PathplannerautoChoosers = AutoBuilder.buildAutoChooser();
@@ -147,6 +157,8 @@ public class RobotContainer {
 
   public void periodic() {
 
+    SmartDashboard.putBoolean("Is flipped?", AutoBuilder.shouldFlip());
+
     if(driver.getRawButtonPressed(2)) {
       CommandScheduler.getInstance().cancelAll();
     }
@@ -154,6 +166,12 @@ public class RobotContainer {
     motionService.periodic();
 
 
+    if (!RobotState.isAutonomous()) {
+      updateVisionEst();
+    }
+  }
+
+  private void updateVisionEst() {
     var visionEst = V.getEstimatedGlobalPose();
     visionEst.ifPresent(
         est -> {
@@ -173,6 +191,10 @@ public class RobotContainer {
   }
 
   public void autonomousPeriodic() {
+    if (g.isHangingLoose() && !ozGrabberUpCommand.isScheduled() && ozGrabberUpCommand.isFinished()) {
+      System.out.println("Grabber is loose, fixing..");
+      //ozGrabberUpCommand.schedule();
+    }
     if(autoFirst == 0) {
       switch (MyAutoChooser_String) {
         case DriveAndDrop1:
@@ -202,27 +224,16 @@ public class RobotContainer {
     /* Driver Controls */
       zeroGyro.onTrue(new InstantCommand(() -> D.ResetDrives()));
     /* Operator Controls */
-    //  new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-    //    .onTrue(new DriveTwoardsAprillTag(vision, s_swerve));
-
       new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)
         .onTrue(new LIPlaceCoral(c));
-        // .and(g.BeamBreak())
-        // .onTrue(new Proceser(g, new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)))
-        // .or(new JoystickButton(operator, JoystickConstants.BLUE_BUTTON))
-        // .and(g.FalseBeamnBreak())
-        // .onTrue(new IntakeAlgae(g));
 
-      // new JoystickButton(operator, 1).//JoystickConstants.GREEN_BUTTON).
-      //   and(c.Coral()).
-      //   onTrue(new LIPlaceCoral(c, s_swerve));
-
-      new JoystickButton(operator, JoystickConstants.RIGHT_BUMPER).onTrue(new Testing(T));
+      new JoystickButton(operator, JoystickConstants.RIGHT_BUMPER)
+        .onTrue(new Testing(T));
 
       new JoystickButton(operator, JoystickConstants.YELLOW_BUTTON)
         .onTrue(new OzDown(g));
       new JoystickButton(driver, 9)
-        .onTrue(new OzUp(g)); 
+        .onTrue(ozGrabberUpCommand); 
       new JoystickButton(driver, 10)
         .onTrue(new OzIntake(g));
         new JoystickButton(driver, 11)
@@ -233,11 +244,37 @@ public class RobotContainer {
         .onTrue(new Climb(nc));
       
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-        .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);
+          .onTrue(new PathFindToPose(D, PathTarget.ALGAE_INTAKE));
+
+      //new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
+      //  .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);
 
       new JoystickButton(testing, JoystickConstants.BACK_BUTTON)
         .onTrue(new DriveTwoardsAprillTag(V, D));
       
+      //new JoystickButton(operator, JoystickConstants.BACK_BUTTON)
+      //  .onTrue(new DriveTwoardsAprillTag(V, D));
+      //new JoystickButton(operator, JoystickConstants.BACK_BUTTON).onTrue(new Turn(s_swerve));
+
+      // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
+      //   .onTrue(new 
+      //     StartMotionSequence(motionService, 
+      //     drive(1), turn(90), drive(1), turn(90), 
+      //     drive(1), turn(90), drive(1), turn(90)));
+      
+      //
+          // new JoystickButton(driver, 10)
+          // .onTrue(new 
+          //   StartMotionSequence(motionService, turn(90)));
+
+      // new JoystickButton(driver, 11)
+      //   .onTrue(new 
+      //     StartMotionSequence(motionService, turn(-90))); 
+
+          new JoystickButton(driver, 12)
+          .onTrue(new 
+            StartMotionSequence(motionService, drive(1)));
+
       new JoystickButton(operator, JoystickConstants.POV_DOWN)
         .onTrue(new StartMotionSequence(motionService, apriltag()));
 
@@ -266,6 +303,11 @@ public class RobotContainer {
     nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), operator.getRawButton(JoystickConstants.START_BUTTON));
     c.JoyControll(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
     if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){
+    c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
+    nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), testing.getRawButton(JoystickConstants.START_BUTTON));
+    nc.JoyClimb2(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), operator.getRawButton(JoystickConstants.BACK_BUTTON));    
+  
+  if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){
       up++;
       teleFirst = true;
     }
@@ -290,6 +332,7 @@ public class RobotContainer {
     } else if (up > 3) {
       up = 0;
     }
+  }
   }
 
   public Command getAutonomousCommand() {

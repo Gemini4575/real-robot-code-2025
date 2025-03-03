@@ -46,7 +46,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 
-
+import edu.wpi.first.wpilibj.RobotController;
 
 /** Represents a swerve drive style drivetrain. */
 // @Component
@@ -146,7 +146,7 @@ private double rot_cur;
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> driveForPathPlanner(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(1, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(3, 0.1, 0.0), // Translation PID constants
                     new PIDConstants(1, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration
@@ -170,7 +170,7 @@ private double rot_cur;
       config,
       Units.rotationsToRadians(1.0) // The max rotation velocity of a swerve module in radians per second. This should probably be stored in your Constants file
     );
-    previousSetpoint = new SwerveSetpoint(getSpeed(), getModuleStates(), DriveFeedforwards.zeros(config.numModules));
+    previousSetpoint = new SwerveSetpoint(new ChassisSpeeds(), getModuleStates(), DriveFeedforwards.zeros(config.numModules));
   }
   
   public void driveForPathPlanner(ChassisSpeeds speeds) {
@@ -182,6 +182,7 @@ private double rot_cur;
         speeds, // The desired target speeds
         0.02 // The loop time of the robot code, in seconds
     );
+    SmartDashboard.putString ("Previous Setpoint", previousSetpoint.toString());
     setModuleStates(previousSetpoint.moduleStates()); // Method that will drive the robot given target module states
   }
 
@@ -197,6 +198,7 @@ private double rot_cur;
   
       SmartDashboard.putString("Gyro has been reset", java.time.LocalTime.now().toString());
       System.out.println("Gyro has been reset");
+      Logger.recordOutput("Gyro Has Been reset", DriverStation.getMatchTime());
     }
     /**
      * Method to drive the robot using joystick info.
@@ -227,6 +229,7 @@ private double rot_cur;
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     SmartDashboard.putNumber("Gyro", m_gyro.getAngle());
+
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
             fieldRelative
@@ -322,7 +325,7 @@ private double rot_cur;
 
     public PathConstraints getChassisConstrains() {
         return new PathConstraints(
-          3.000,
+          4.000,
           3.000,
           Units.degreesToRadians(540.000),
           Units.degreesToRadians(720.000)
@@ -361,6 +364,7 @@ private double rot_cur;
       SmartDashboard.putNumber("X accel", m_gyro.getWorldLinearAccelX());
       SmartDashboard.putNumber("Y accel", m_gyro.getWorldLinearAccelY());
       
+    SmartDashboard.putNumber("battery voltage", RobotController.getBatteryVoltage());
 
     // This method will be called once per scheduler run
       poseEstimator.update(m_gyro.getRotation2d(), getModulePositions());

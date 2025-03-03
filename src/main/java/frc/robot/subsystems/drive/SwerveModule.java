@@ -120,16 +120,16 @@ public class SwerveModule extends Command {
 // hard coding the offset because its better?
 switch (moduleNumber) {
   case 0: 
-  encoderOffset = -4.134986246400915;
+  encoderOffset = -0.619176235447182;
   break;
   case 1: 
-  encoderOffset = -4.08058153307745;
+  encoderOffset = -4.018841603091038;//0.922783865280067
   break;
   case 2: 
-  encoderOffset = -3.023956665037501;//-13.00*Math.PI/180.00;
+  encoderOffset = -3.048560530693669;//-13.00*Math.PI/180.00;
   break;
   case 3: 
-  encoderOffset = -1.334522613764654;
+  encoderOffset = -1.331789020338969;
   break;
 }
     configAngleMotor();
@@ -193,7 +193,7 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
    */
   public SwerveModulePosition getPosition() {
     // encode is % rotations
-    var retVal = 0.68 * ((m_driveEncoder.getPosition() / SwerveConstants.gearboxRatio) * SwerveConstants.wheeldiameter * Math.PI); // distance in whatever units the wheel diameter is
+    var retVal = 1* ((m_driveEncoder.getPosition() / SwerveConstants.gearboxRatio) * SwerveConstants.wheeldiameter * Math.PI); // distance in whatever units the wheel diameter is
     // KB        ^^^^ This is from 1 meter testing dont move/change
     return new SwerveModulePosition(retVal, new Rotation2d(encoderValue()));
   }
@@ -234,7 +234,7 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
     SmartDashboard.putNumber("turnFeedforward",turnFeedforward);
     if(RobotState.isAutonomous()) {
       // m_driveMotor.set(driveOutput / SwerveConstants.MaxMetersPersecond);
-      m_driveMotor.set(state.speedMetersPerSecond / SwerveConstants.MaxMetersPersecond);
+      m_driveMotor.set(state.speedMetersPerSecond / (0.8*SwerveConstants.MaxMetersPersecond));
       System.out.println("Output: " + driveOutput + " Feedforward: " + driveFeedforward);
       m_turningMotor.set(turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
     } else if (RobotState.isTeleop()) {

@@ -294,7 +294,7 @@ public class Constants {
         public static final AprilTagFieldLayout kTagLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
         //TODO update with real value
         public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
+                new Transform3d(new Translation3d(0.5, 0.0, Units.inchesToMeters(18.5)), new Rotation3d(0, 0, 0));
                 // The standard deviations of our vision estimated poses, which affect correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
@@ -463,9 +463,9 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         /* Ints */
             public final static int ClimbingMotor1 = 14;
             public final static int ClimbingMotor2 = 13;
-            public final static double ClimbingMotorPoseition = 76;
+            public final static double ClimbingMotorPoseition = 65;
         /* Doubles */
-            public final static double ClimbingSpeed = 1;
+            public final static double ClimbingSpeed = 0.25;
     }
 
     public final static class OzzyGrabberConstants {
@@ -489,7 +489,7 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
             public final static int Top = 2;
             public final static int Bottom = 3;
         /* Doubles */
-            public final static double GateSpeed = -.5;
+            public final static double GateSpeed = -1;
     }
 
     public final static class  Autos {
@@ -499,6 +499,10 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         GetCoral(), drive(-95), turn(-85), drive(170), strafe(-30), turn(-25), turn(75), strafe(35), 
         drive(25), wait2(1), GetCoral(), turn(180), strafe(175), dropCoral(), stop(), GetCoral()};//]\[], turn(-10), drive(-Units.inchesToMeters(90)), strafe(Units.inchesToMeters(230))};
         
+    }
+
+    public final static class FieldLocations {
+        public static Pose2d ALGAE_INTAKE = new Pose2d(6, 0.45, Rotation2d.fromDegrees(90));
     }
 
 }

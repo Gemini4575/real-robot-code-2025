@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.49,
-        "y": 3.9648972602739723
+        "x": 6.0,
+        "y": 1.5006849315068496
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.829179096586814,
-        "y": 3.9570892539617915
+        "x": 6.020141789774529,
+        "y": 0.6194483388752037
       },
       "isLocked": false,
-      "linkedName": "Blip Start"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.407,
-        "y": 3.9648972602739723
+        "x": 6.0,
+        "y": 0.45
       },
       "prevControl": {
-        "x": 6.869095564454225,
-        "y": 3.962265622163069
+        "x": 6.001086112594194,
+        "y": 1.1443594349909985
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 300.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -50,5 +50,5 @@
     "velocity": 0,
     "rotation": 90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
