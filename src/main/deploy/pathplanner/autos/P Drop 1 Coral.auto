@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center to Side 2"
+            "pathName": "P to side 2"
           }
         },
         {
@@ -42,7 +42,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Side 2 to Human"
+                  "pathName": "P Side 2 to human"
                 }
               },
               {
@@ -76,70 +76,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Human To Side 3"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Drop Coral"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Side 3 to human"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Close Door"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Is there Coral"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Human To side 4"
+            "pathName": "P Human To Side 3"
           }
         },
         {

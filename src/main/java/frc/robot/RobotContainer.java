@@ -37,6 +37,7 @@ import frc.robot.commands.climbing.Climb;
 import frc.robot.commands.coral.lili.AUTOCoral;
 import frc.robot.commands.coral.lili.EXOCloseGateSlow;
 import frc.robot.commands.coral.lili.LIPlaceCoral;
+import frc.robot.commands.coral.lili.LiAutoPlaceCoral;
 //import frc.robot.commands.coral.nora.INtakeFromHuman;
 import frc.robot.commands.coral.nora.L1;
 import frc.robot.commands.coral.nora.L2;
@@ -96,7 +97,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     System.out.println("Starting RobotContainer()");
-    NamedCommands.registerCommand("Drop Coral", new LIPlaceCoral(c));
+    NamedCommands.registerCommand("Drop Coral", new LiAutoPlaceCoral(c));
     NamedCommands.registerCommand("Close Door", new EXOCloseGateSlow(c).withTimeout(2));
     NamedCommands.registerCommand("Is there Coral", new AUTOCoral(c));
     NamedCommands.registerCommand("Stop", new Stop(D));
