@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center to Side 2"
+            "pathName": "NoNP Algea To Side 6"
           }
         },
         {
@@ -36,59 +36,34 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Side 2 to Human"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Stop"
+                  "pathName": "Side 6 to NoNP"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Is there Coral"
+                  "name": "Close Door"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Human To Side 3"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Drop Coral"
-                }
-              }
-            ]
+            "name": "Stop"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "1 Coral",
   "choreoAuto": false
 }

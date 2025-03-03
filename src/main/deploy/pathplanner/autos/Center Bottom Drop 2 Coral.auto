@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Wheels"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Center to Side 2"
@@ -32,19 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Frans Dumb iDea"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Frans Dumb iDea2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Frans Dumb iDea3"
+            "pathName": "Side 2 to Human"
           }
         },
         {
@@ -65,11 +59,36 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Human To Side 3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Drop Coral"
+                }
+              }
+            ]
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Testing",
+  "folder": "2 Coral",
   "choreoAuto": false
 }

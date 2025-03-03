@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center to 1"
+            "pathName": "P to side 2"
           }
         },
         {
@@ -36,9 +36,28 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Side 2 To P"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Close Door"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Close Door"
+            "name": "Stop"
           }
         }
       ]

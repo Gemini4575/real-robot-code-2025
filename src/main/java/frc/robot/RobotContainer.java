@@ -300,13 +300,10 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() { 
-    nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), operator.getRawButton(JoystickConstants.START_BUTTON));
-    c.JoyControll(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
-    if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){
     c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
     nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), testing.getRawButton(JoystickConstants.START_BUTTON));
     nc.JoyClimb2(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), operator.getRawButton(JoystickConstants.BACK_BUTTON));    
-  
+    
   if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){
       up++;
       teleFirst = true;
@@ -332,7 +329,6 @@ public class RobotContainer {
     } else if (up > 3) {
       up = 0;
     }
-  }
   }
 
   public Command getAutonomousCommand() {

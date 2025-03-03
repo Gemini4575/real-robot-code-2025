@@ -36,9 +36,28 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Side 1 To NoNP"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Close Door"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Close Door"
+            "name": "Stop"
           }
         }
       ]

@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Wheels"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Center to Side 2"
+            "pathName": "P to side 2"
           }
         },
         {
@@ -30,21 +36,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Frans Dumb iDea"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Frans Dumb iDea2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Frans Dumb iDea3"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "P Side 2 to human"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Close Door"
+                }
+              }
+            ]
           }
         },
         {
@@ -65,11 +72,42 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P Human To Side 3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Drop Coral"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Close Door"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Testing",
+  "folder": "2 Coral",
   "choreoAuto": false
 }

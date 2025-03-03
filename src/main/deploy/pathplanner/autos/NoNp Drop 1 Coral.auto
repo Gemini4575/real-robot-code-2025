@@ -40,11 +40,17 @@
           "data": {
             "name": "Close Door"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "1 Coral",
   "choreoAuto": false
 }
