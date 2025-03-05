@@ -4,6 +4,7 @@ package frc.robot.commands.drive;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drive.DriveTrain;
@@ -43,8 +44,8 @@ public class DriveTwoardsAprillTag extends Command {
             chassisSpeeds.vyMetersPerSecond = 0.05;
         }
         
-        if (Math.abs(tagTarget.getYaw()) > 10) {
-            chassisSpeeds.vxMetersPerSecond = ((tagTarget.getYaw() - 1) / 1000);
+        if (Math.abs(tagTarget.getYaw()) > 5) {
+            chassisSpeeds.vxMetersPerSecond = ((tagTarget.getYaw() - 1) / 500);
         } else {
             chassisSpeeds.vxMetersPerSecond = 0;
         }

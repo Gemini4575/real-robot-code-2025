@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends LoggedRobot {
   private static final Constants.RobotMode JAVA_SIM_MODE = Constants.RobotMode.SIM;
     public static final Constants.RobotMode CURRENT_ROBOT_MODE = isReal() ? Constants.RobotMode.REAL : JAVA_SIM_MODE;
-    public static final boolean IS_COMPETITION = true;
+    public static final boolean IS_COMPETITION = false;
   private Command m_autonomousCommand;
 
   private Timer m_gcTimer = new Timer();

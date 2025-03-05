@@ -62,9 +62,9 @@ public class RobotContainer {
   private double up = 0.0;
 
   /* Controllers */
-    private final Joystick driver = new Joystick(1);
-    private final Joystick operator = new Joystick(2);
-    private final Joystick testing = new Joystick(3);
+    private final Joystick driver = new Joystick(0);
+    private final Joystick operator = new Joystick(1);
+    private final Joystick testing = new Joystick(2);
 
   /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, JoystickConstants.BACK_BUTTON);
@@ -109,11 +109,9 @@ public class RobotContainer {
     MyAutoChooser.addOption("Drive And Drop1", DriveAndDrop1);
     MyAutoChooser.setDefaultOption("Nothing", Nothing);
     MyAutoChooser.addOption(" Drive And Drop2", DriveAndDRop2);
-    SmartDashboard.putData(MyAutoChooser);
 
     configureLogging();
 
-    SmartDashboard.putData("Auto Chooser", PathplannerautoChoosers);
     SmartDashboard.putData("Vision Pose Estimate", visionPoseEstimate);
     PathfindingCommand.warmupCommand().schedule();
     System.out.println("Ended RobotContainer()");
@@ -167,7 +165,6 @@ public class RobotContainer {
 
     motionService.periodic();
 
-    SmartDashboard.putNumber("Encoder", (nc.ClimbingMotor1.getEncoder().getPosition() + nc.ClimbingMotor2.getEncoder().getPosition()));
 
     if (!RobotState.isAutonomous()) {
       updateVisionEst();
@@ -227,22 +224,11 @@ public class RobotContainer {
     /* Driver Controls */
       zeroGyro.onTrue(new InstantCommand(() -> D.ResetDrives()));
     /* Operator Controls */
-    //  new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-    //    .onTrue(new DriveTwoardsAprillTag(vision, s_swerve));
-
       new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)
         .onTrue(new LIPlaceCoral(c));
-        // .and(g.BeamBreak())
-        // .onTrue(new Proceser(g, new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)))
-        // .or(new JoystickButton(operator, JoystickConstants.BLUE_BUTTON))
-        // .and(g.FalseBeamnBreak())
-        // .onTrue(new IntakeAlgae(g));
 
-      // new JoystickButton(operator, 1).//JoystickConstants.GREEN_BUTTON).
-      //   and(c.Coral()).
-      //   onTrue(new LIPlaceCoral(c, s_swerve));
-
-      new JoystickButton(operator, JoystickConstants.RIGHT_BUMPER).onTrue(new Testing(T));
+      new JoystickButton(operator, JoystickConstants.RIGHT_BUMPER)
+        .onTrue(new Testing(T));
 
       new JoystickButton(operator, JoystickConstants.YELLOW_BUTTON)
         .onTrue(new OzDown(g));
@@ -263,6 +249,9 @@ public class RobotContainer {
       //new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
       //  .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);
 
+      new JoystickButton(testing, JoystickConstants.BACK_BUTTON)
+        .onTrue(new DriveTwoardsAprillTag(V, D));
+      
       //new JoystickButton(operator, JoystickConstants.BACK_BUTTON)
       //  .onTrue(new DriveTwoardsAprillTag(V, D));
       //new JoystickButton(operator, JoystickConstants.BACK_BUTTON).onTrue(new Turn(s_swerve));
@@ -288,15 +277,6 @@ public class RobotContainer {
 
       new JoystickButton(operator, JoystickConstants.POV_DOWN)
         .onTrue(new StartMotionSequence(motionService, apriltag()));
-
-      // new JoystickButton(operator, JoystickConstants.POV_LEFT)
-      //   .onTrue(new StartMotionSequence(motionService, new MotionDirective(MotionType.CAMERA_STRAFE)));
-
-      // new JoystickButton(operator, JoystickConstants.POV_RIGHT)
-      //   .onTrue(new StartMotionSequence(motionService, new MotionDirective(MotionType.CAMERA_ROTATE)));
-
-      // new JoystickButton(operator, JoystickConstants.POV_UP)
-      //   .onTrue(new StartMotionSequence(motionService, new MotionDirective(MotionType.CAMERA_ALL)));
 
     // Supplier<Pose2d> bestTargetSupplier = () -> {
     //   var target = vision.getTargets();
