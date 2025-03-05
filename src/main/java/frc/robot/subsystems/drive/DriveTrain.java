@@ -115,12 +115,11 @@ private double rot_cur;
 
   private final SwerveSetpointGenerator setpointGenerator;
   private SwerveSetpoint previousSetpoint;
+  private RobotConfig config;
 
   public DriveTrain() {
     m_gyro.reset();
-
     
-    RobotConfig config;
     try {
       config = RobotConfig.fromGUISettings();
     } catch (IOException | org.json.simple.parser.ParseException e) {
@@ -139,6 +138,16 @@ private double rot_cur;
                     stateStdDevs,
                     visionStdDevs);
 
+    poseEstimator.resetPosition(new Rotation2d(180), getModulePositions(), new Pose2d(7.558, 4.010, new Rotation2d(180)));
+
+    setpointGenerator = new SwerveSetpointGenerator(
+      config,
+      Units.rotationsToRadians(1.0) // The max rotation velocity of a swerve module in radians per second. This should probably be stored in your Constants file
+    );
+    previousSetpoint = new SwerveSetpoint(new ChassisSpeeds(), getModuleStates(), DriveFeedforwards.zeros(config.numModules));
+  }
+
+  public void configureAutoBuilder() {
     // Configure AutoBuilder last
     AutoBuilder.configure(
             this::getPose, // Robot pose supplier
@@ -163,14 +172,6 @@ private double rot_cur;
             },
             this // Reference to this subsystem to set requirements
     );
-
-    poseEstimator.resetPosition(new Rotation2d(180), getModulePositions(), new Pose2d(7.558, 4.010, new Rotation2d(180)));
-
-    setpointGenerator = new SwerveSetpointGenerator(
-      config,
-      Units.rotationsToRadians(1.0) // The max rotation velocity of a swerve module in radians per second. This should probably be stored in your Constants file
-    );
-    previousSetpoint = new SwerveSetpoint(new ChassisSpeeds(), getModuleStates(), DriveFeedforwards.zeros(config.numModules));
   }
   
   public void driveForPathPlanner(ChassisSpeeds speeds) {

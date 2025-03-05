@@ -105,6 +105,7 @@ public class RobotContainer {
     configureBindings();
 
     PathplannerautoChoosers = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chosers", PathplannerautoChoosers);
 
     MyAutoChooser.addOption("Drive And Drop1", DriveAndDrop1);
     MyAutoChooser.setDefaultOption("Nothing", Nothing);
@@ -186,6 +187,7 @@ public class RobotContainer {
   }
   double autoFirst = 0.0;
   public void autonomousInit() {
+    D.configureAutoBuilder();
     MyAutoChooser_String = MyAutoChooser.getSelected();
     autoFirst = 0.0;
   }
@@ -301,8 +303,8 @@ public class RobotContainer {
 
   public void teleopPeriodic() { 
     c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
-    // nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), testing.getRawButton(JoystickConstants.START_BUTTON));
-    // nc.JoyClimb2(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), testing.getRawButton(JoystickConstants.BACK_BUTTON));    
+    nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), testing.getRawButton(JoystickConstants.START_BUTTON));
+    nc.JoyClimb2(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), testing.getRawButton(JoystickConstants.BACK_BUTTON));    
   
   if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){
       up++;
