@@ -36,9 +36,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Close Door"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Side 6 to NoNP"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Close Door"
+                }
+              }
+            ]
           }
         },
         {
@@ -51,6 +64,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "1 Coral",
   "choreoAuto": false
 }

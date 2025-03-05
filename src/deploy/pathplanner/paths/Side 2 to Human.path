@@ -3,46 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.572945205479453,
-        "y": 2.176840753424658
+        "x": 4.733090753424658,
+        "y": 3.108433219178082
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.025299657531507,
-        "y": 2.477354452059635
+        "x": 5.652090131364962,
+        "y": 1.952264498813443
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Side 2"
     },
     {
       "anchor": {
-        "x": 5.100897435897436,
-        "y": 2.9929487179487175
+        "x": -0.5,
+        "y": 0.5
       },
       "prevControl": {
-        "x": 6.363054970144011,
-        "y": 2.376895635756936
+        "x": 0.08162707373991818,
+        "y": 1.6116992014733285
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "P Side 2"
+      "linkedName": "Human bottom"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 35.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8285714285714286,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0.869047619047619,
+      "maxWaypointRelativePos": 0.930952380952381,
       "constraints": {
         "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 300.0,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 594.38,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
         "unlimited": false
@@ -50,12 +45,12 @@
     },
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8952380952380953,
+      "minWaypointRelativePos": 0.9285714285714286,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 0.5,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 300.0,
+        "maxAcceleration": 0.5,
+        "maxAngularVelocity": 594.38,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
         "unlimited": false
@@ -73,14 +68,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 29.999999999999996
+    "velocity": 0.2,
+    "rotation": 150.0
   },
   "reversed": false,
-  "folder": "P stuff",
+  "folder": "Mid",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 37.0
   },
   "useDefaultConstraints": true
 }

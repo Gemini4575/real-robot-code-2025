@@ -36,69 +36,6 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "P Side 2 to human"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Close Door"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Is there Coral"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "P Human To Side 3"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Drop Coral"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Close Door"

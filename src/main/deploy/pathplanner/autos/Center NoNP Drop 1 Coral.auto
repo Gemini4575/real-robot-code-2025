@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NoNP Algea To Side 6"
+            "pathName": "Center to 1"
           }
         },
         {
@@ -36,9 +36,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Close Door"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Side 1 To NoNP"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Close Door"
+                }
+              }
+            ]
           }
         },
         {

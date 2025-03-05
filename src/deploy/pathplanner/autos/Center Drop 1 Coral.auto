@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NoNP Algea To Side 6"
+            "pathName": "Center to 1"
           }
         },
         {
@@ -40,17 +40,11 @@
           "data": {
             "name": "Close Door"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "1 Coral",
   "choreoAuto": false
 }

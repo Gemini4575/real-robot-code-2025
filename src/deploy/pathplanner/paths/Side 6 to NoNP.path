@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.557,
-        "y": 3.9648972602739723
+        "x": 5.138784246575342,
+        "y": 5.076797945205479
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.6848817414084065,
-        "y": 2.9581051665985774
+        "x": 5.6375641025641015,
+        "y": 5.851730769230769
       },
       "isLocked": false,
-      "linkedName": "Side 1"
+      "linkedName": "P side 6"
     },
     {
       "anchor": {
-        "x": 6.0194230769230765,
-        "y": 0.7946794871794873
+        "x": 6.284797297297297,
+        "y": 7.0339949324324325
       },
       "prevControl": {
-        "x": 5.956618424142426,
-        "y": 1.3368793968218866
+        "x": 5.751089743589744,
+        "y": 5.934294871794872
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Red Barge pass"
+      "linkedName": "NonP"
     }
   ],
   "rotationTargets": [],
@@ -45,10 +45,10 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "P stuff",
+  "folder": "NoNP stuff",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 150.0
   },
   "useDefaultConstraints": true
 }

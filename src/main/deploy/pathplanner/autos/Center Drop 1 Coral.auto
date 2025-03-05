@@ -36,15 +36,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Side 1 to P"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Stop"
+            "name": "Close Door"
           }
         }
       ]

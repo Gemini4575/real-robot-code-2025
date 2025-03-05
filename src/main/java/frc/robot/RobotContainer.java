@@ -258,7 +258,7 @@ public class RobotContainer {
         .onTrue(new Climb(nc));
       
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-          .onTrue(new PathFindToPose(D, PathTarget.ALGAE_INTAKE));
+          .onTrue(new PathFindToPose(D, PathTarget.LEFT_HUMAN_STATION));
 
       //new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
       //  .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);
@@ -321,8 +321,8 @@ public class RobotContainer {
 
   public void teleopPeriodic() { 
     c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
-    nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), testing.getRawButton(JoystickConstants.START_BUTTON));
-    nc.JoyClimb2(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), operator.getRawButton(JoystickConstants.BACK_BUTTON));    
+    // nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), testing.getRawButton(JoystickConstants.START_BUTTON));
+    // nc.JoyClimb2(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), testing.getRawButton(JoystickConstants.BACK_BUTTON));    
   
   if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){
       up++;

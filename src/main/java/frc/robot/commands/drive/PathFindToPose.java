@@ -16,19 +16,24 @@ import org.json.simple.parser.ParseException;
 public class PathFindToPose extends Command {
 
     public static enum PathTarget {
-        ALGAE_INTAKE
+        ALGAE_INTAKE,
+        LEFT_HUMAN_STATION
+    }
+
+    private static final Map<PathTarget, String> PATH_BY_TARGET = new HashMap<>();
+    static {
+        PATH_BY_TARGET.put(PathTarget.ALGAE_INTAKE, "To_Algae_Intake");
+        PATH_BY_TARGET.put(PathTarget.LEFT_HUMAN_STATION, "To_Left_Human");
     }
 
     private final DriveTrain driveSubsystem; 
     private PathPlannerPath path;
     private boolean finished = true;
 
-    private final Map<PathTarget, PathPlannerPath> path_map = new HashMap<>();
-
     public PathFindToPose(DriveTrain driveSubsystem, PathTarget pathTarget) {
         this.driveSubsystem = driveSubsystem;
         try {
-            this.path = PathPlannerPath.fromPathFile("To_Algae_Intake");
+            this.path = PathPlannerPath.fromPathFile(PATH_BY_TARGET.get(pathTarget));
         } catch (FileVersionException | IOException | ParseException e) {
             System.out.println("PathFindToPose Could not load paths");
             e.printStackTrace();

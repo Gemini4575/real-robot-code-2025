@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.557,
+        "x": 7.49,
         "y": 3.9648972602739723
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.6848817414084065,
-        "y": 2.9581051665985774
+        "x": 6.829179096586814,
+        "y": 3.9570892539617915
       },
       "isLocked": false,
-      "linkedName": "Side 1"
+      "linkedName": "Blip Start"
     },
     {
       "anchor": {
-        "x": 6.0194230769230765,
-        "y": 0.7946794871794873
+        "x": 6.407,
+        "y": 3.9648972602739723
       },
       "prevControl": {
-        "x": 5.956618424142426,
-        "y": 1.3368793968218866
+        "x": 6.869095564454225,
+        "y": 3.962265622163069
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Red Barge pass"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "P stuff",
+  "folder": "Testing",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0
