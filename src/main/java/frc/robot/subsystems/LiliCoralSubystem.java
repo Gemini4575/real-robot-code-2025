@@ -160,7 +160,7 @@ public class LiliCoralSubystem extends SubsystemBase{
             first = true;
             return true;
         } else {
-            gate.set(-LiliCoralConstants.GateSpeed);
+            gate.set(-LiliCoralConstants.GateSpeed/2.0);
             pervois = bottom();
             return false;
         }

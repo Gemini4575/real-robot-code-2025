@@ -98,7 +98,7 @@ public class RobotContainer {
   public RobotContainer() {
     System.out.println("Starting RobotContainer()");
     NamedCommands.registerCommand("Drop Coral", new LiAutoPlaceCoral(c));
-    NamedCommands.registerCommand("Close Door", new EXOCloseGateSlow(c).withTimeout(2));
+    NamedCommands.registerCommand("Close Door", new EXOCloseGateSlow(c));
     NamedCommands.registerCommand("Is there Coral", new AUTOCoral(c));
     NamedCommands.registerCommand("Stop", new Stop(D));
     NamedCommands.registerCommand("Wheels", new AlineWheels(D));
@@ -187,7 +187,6 @@ public class RobotContainer {
   }
   double autoFirst = 0.0;
   public void autonomousInit() {
-    D.configureAutoBuilder();
     MyAutoChooser_String = MyAutoChooser.getSelected();
     autoFirst = 0.0;
   }
@@ -253,6 +252,12 @@ public class RobotContainer {
 
       new JoystickButton(testing, JoystickConstants.BACK_BUTTON)
         .onTrue(new DriveTwoardsAprillTag(V, D));
+
+      new JoystickButton(testing, JoystickConstants.YELLOW_BUTTON)
+        .onTrue(new LiAutoPlaceCoral(c));
+
+      new JoystickButton(testing, JoystickConstants.GREEN_BUTTON)
+        .onTrue(new EXOCloseGateSlow(c));
       
       //new JoystickButton(operator, JoystickConstants.BACK_BUTTON)
       //  .onTrue(new DriveTwoardsAprillTag(V, D));

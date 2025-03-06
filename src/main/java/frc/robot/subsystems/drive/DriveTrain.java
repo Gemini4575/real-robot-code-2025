@@ -140,6 +140,8 @@ private double rot_cur;
 
     poseEstimator.resetPosition(new Rotation2d(180), getModulePositions(), new Pose2d(7.558, 4.010, new Rotation2d(180)));
 
+    configureAutoBuilder();
+
     setpointGenerator = new SwerveSetpointGenerator(
       config,
       Units.rotationsToRadians(1.0) // The max rotation velocity of a swerve module in radians per second. This should probably be stored in your Constants file
