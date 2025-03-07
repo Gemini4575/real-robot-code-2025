@@ -55,6 +55,10 @@ import frc.robot.subsystems.drive.DriveTrain;
 import static frc.robot.datamodel.MotionDirective.apriltag;
 import static frc.robot.datamodel.MotionDirective.drive;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+
 // @Component
 public class RobotContainer {
 
@@ -174,6 +178,12 @@ public class RobotContainer {
 
   private void updateVisionEst() {
     var visionEst = V.getEstimatedGlobalPose();
+    updateLocationWithVision(visionEst);
+    var visionEstColor = V.getEstimatedGlobalPoseColor();
+    updateLocationWithVision(visionEstColor);
+  }
+
+  private void updateLocationWithVision(Optional<EstimatedRobotPose> visionEst) {
     visionEst.ifPresent(
         est -> {
           // Change our trust in the measurement based on the tags we can see

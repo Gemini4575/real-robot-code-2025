@@ -48,7 +48,9 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class Vision extends SubsystemBase {
     private final PhotonCamera tagCamera;
+    private final PhotonCamera tagCameraColor;
     private final PhotonPoseEstimator photonEstimator;
+    private final PhotonPoseEstimator photonEstimatorColor;
     private Matrix<N3, N1> curStdDevs;
 
     private final PhotonCamera algaeCamera;
@@ -63,9 +65,13 @@ public class Vision extends SubsystemBase {
     public Vision() {
         super();
         tagCamera = new PhotonCamera(kTagCameraName);
+        tagCameraColor = new PhotonCamera(kTagCameraColorName);
 
         photonEstimator = new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, kRobotToCam);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+        photonEstimatorColor = new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, kRobotToCamColor);
+        photonEstimatorColor.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         algaeCamera = new PhotonCamera(kAlgaeCameraName);
         algaeCamera.setPipelineIndex(0);
@@ -128,8 +134,14 @@ public class Vision extends SubsystemBase {
      *         used for estimation.
      */
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+        return getEstimatedGlobalPose(tagCamera);
+    }
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPoseColor() {
+        return getEstimatedGlobalPose(tagCameraColor);
+    }
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPose(PhotonCamera cam) {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        for (var change : tagCamera.getAllUnreadResults()) {
+        for (var change : cam.getAllUnreadResults()) {
             visionEst = photonEstimator.update(change);
             updateEstimationStdDevs(visionEst, change.getTargets());
 

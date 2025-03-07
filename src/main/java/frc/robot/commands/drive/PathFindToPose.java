@@ -1,6 +1,7 @@
 package frc.robot.commands.drive;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
 
@@ -28,7 +29,7 @@ public class PathFindToPose extends Command {
 
     private final DriveTrain driveSubsystem; 
     private PathPlannerPath path;
-    private boolean finished = true;
+    private Command cmd;
 
     public PathFindToPose(DriveTrain driveSubsystem, PathTarget pathTarget) {
         this.driveSubsystem = driveSubsystem;
@@ -42,22 +43,23 @@ public class PathFindToPose extends Command {
 
     @Override
     public void initialize() {
-        finished = false;
         System.out.println("Initializing PathFindToPose command");
-        Command cmd = AutoBuilder.pathfindThenFollowPath(path, driveSubsystem.getChassisConstrains());
+        var constraints = new PathConstraints(4, 3, 300, 720);
+        cmd = AutoBuilder.pathfindThenFollowPath(path, constraints);
         cmd.schedule();
         System.out.println("Initializing PathFindToPose command - DONE");
-        finished = true;
     }
 
     @Override
     public boolean isFinished() {
-        return finished;
+        return cmd == null || cmd.isFinished();
     }
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("Ended PathFindToPose command");
+        if(cmd != null) {
+            cmd.cancel();
+        }
     }
     
 }
