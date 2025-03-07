@@ -25,7 +25,7 @@ public class PathFindToPose extends Command {
     static {
         PATH_BY_TARGET.put(PathTarget.ALGAE_INTAKE, "To_Algae_Intake");
         PATH_BY_TARGET.put(PathTarget.LEFT_HUMAN_STATION, "To_Left_Human");
-    }
+    } //jjs
 
     private final DriveTrain driveSubsystem; 
     private PathPlannerPath path;
