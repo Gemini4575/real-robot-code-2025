@@ -36,9 +36,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Side 2 to Human"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Close Door"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Side 2 to Human"
+                }
+              }
+            ]
           }
         },
         {
@@ -83,6 +96,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Close Door"
           }
         }
       ]

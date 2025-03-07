@@ -245,7 +245,7 @@ public class RobotContainer {
         .onTrue(new Climb(nc));
       
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-          .onTrue(new PathFindToPose(D, PathTarget.LEFT_HUMAN_STATION));
+          .whileTrue(new PathFindToPose(D, PathTarget.LEFT_HUMAN_STATION));
 
       //new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
       //  .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);

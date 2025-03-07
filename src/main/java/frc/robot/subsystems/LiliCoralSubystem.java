@@ -101,67 +101,55 @@ public class LiliCoralSubystem extends SubsystemBase{
     //     }
     //     return false;
     // }
-    boolean pervois = false;
+    boolean previous = true;
     boolean first = true;
     private void start() {
         if(first) {
-            pervois = true;
+            previous = true;
             first = false;
         }
     }
     public void isInterupted() {
-        pervois = false;
+        previous = false;
         first = true;
     }
     
     public boolean DropGate() {
         start();
-        if(!pervois && bottom()) {
+        if(!previous && bottom()) {
             gate.stopMotor();
             first = true;
             return true;
         } else {
             gate.set(LiliCoralConstants.GateSpeed);
-            pervois = bottom();
+            previous = bottom();
         }
 
         return false;//!coral();
     }
 
-    public boolean CloseGate() {
-        start();
-        if((!pervois && bottom()) || coral()) {
-            gate.stopMotor();
-            first = true;
-            return true;
-        } else {
-            gate.set(-LiliCoralConstants.GateSpeed);
-            pervois = bottom();
-            return false;
-        }
-    }
-
     public boolean GetCoral() {
-        if((pervois && bottom()) || coral()) {
+        if((previous && bottom()) || coral()) {
             gate.stopMotor();
             first = true;
             return true;
         } else {
             gate.set(-LiliCoralConstants.GateSpeed);
-            pervois = bottom();
+            previous = bottom();
             return false;
         }
     }
 
     public boolean CloseGateSlow() {
         start();
-        if((!pervois && bottom()) || coral()) {
+        SmartDashboard.putString("previous", "" + previous + "," + first + "," + bottom());
+        if((!previous && bottom()) /* Mr.Fran Doesn't think we need to check for coral */) {
             gate.stopMotor();
             first = true;
             return true;
         } else {
             gate.set(-LiliCoralConstants.GateSpeed/2.0);
-            pervois = bottom();
+            previous = bottom();
             return false;
         }
     }
@@ -183,10 +171,11 @@ public class LiliCoralSubystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        if((DriverStation.isFMSAttached() || Robot.IS_COMPETITION) || RobotState.isTest()) {
+       
         SmartDashboard.putBoolean("Gate", bottom());
         SmartDashboard.putBoolean("Coral", coral());
-        }
+        
+
         if(first) {
             if(bottom() && lastKnownState == State.CLOSED) {
                 
