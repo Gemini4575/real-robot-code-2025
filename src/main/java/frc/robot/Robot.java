@@ -11,12 +11,15 @@ import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
 // import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.stereotype.Component;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 // @Component
 public class Robot extends LoggedRobot {
@@ -29,6 +32,7 @@ public class Robot extends LoggedRobot {
   private Timer timer = new Timer();
   // @Autowired
   private RobotContainer m_robotContainer;
+  private boolean firstInit = true;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -42,8 +46,6 @@ public class Robot extends LoggedRobot {
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
-
-        FollowPathCommand.warmupCommand().schedule();
 
     m_gcTimer.start();
     timer = new Timer();
@@ -74,6 +76,12 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     CommandScheduler.getInstance().cancelAll();
+    if (firstInit) {
+      Command AutonStartCommand =
+                    FollowPathCommand.warmupCommand().andThen(PathfindingCommand.warmupCommand());
+            AutonStartCommand.schedule();
+      firstInit = false;
+    }
   }
 
   @Override
@@ -88,7 +96,7 @@ public class Robot extends LoggedRobot {
     this.m_robotContainer.autonomousInit();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+      Commands.waitSeconds(0.01).andThen(m_autonomousCommand).schedule();
     }
   }
 

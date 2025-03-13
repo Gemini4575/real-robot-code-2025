@@ -345,10 +345,15 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         */
         // These number are for a 25 by 25 swerve
         // 0.33333
-        public static final Translation2d m_backLeftLocation = new Translation2d(-0.33333, 0.33333);
-        public static final Translation2d m_backRightLocation = new Translation2d(-0.33333, -0.33333);
-        public static final Translation2d m_frontRightLocation = new Translation2d(0.33333, -0.33333);
-        public static final Translation2d m_frontLeftLocation = new Translation2d(0.3333, 0.33333);
+        private static final double ROBOT_WIDTH = Units.inchesToMeters(25.0);
+        private static final double ROBOT_LENGTH = Units.inchesToMeters(25.0);
+        private static final double SWERVE_FROM_CORNER = Units.inchesToMeters(2.61);
+        private static final double MODULE_OFFSET_X = ROBOT_WIDTH/2 - SWERVE_FROM_CORNER;
+        private static final double MODULE_OFFSET_Y = ROBOT_LENGTH/2 - SWERVE_FROM_CORNER;
+        public static final Translation2d m_backLeftLocation = new Translation2d(-MODULE_OFFSET_X, MODULE_OFFSET_Y);
+        public static final Translation2d m_backRightLocation = new Translation2d(-MODULE_OFFSET_X, -MODULE_OFFSET_Y);
+        public static final Translation2d m_frontRightLocation = new Translation2d(MODULE_OFFSET_X, -MODULE_OFFSET_Y);
+        public static final Translation2d m_frontLeftLocation = new Translation2d(MODULE_OFFSET_X, MODULE_OFFSET_Y);
 
         /* Ints */
             public static final int kEncoderResolution = 4096;
@@ -375,7 +380,7 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
             public static final int angleMotorID = 2;
             public static final int canCoderID = 0;
             public static final double angleOffset = 3.201315307;
-            public static final double speedAdjustmentFactor = 0.85;//1.798006206333298/4.0;//2.092980946810132;
+            public static final double speedAdjustmentFactor = 1;//1.798006206333298/4.0;//2.092980946810132;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, speedAdjustmentFactor);
         }
@@ -408,7 +413,7 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
             public static final int angleMotorID = 8;
             public static final int canCoderID = 3;
             public static final double angleOffset = 3.769512307;
-            public static final double speedAdjustmentFactor = 1.05;
+            public static final double speedAdjustmentFactor = 1;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, speedAdjustmentFactor);
         }

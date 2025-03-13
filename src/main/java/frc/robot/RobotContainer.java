@@ -171,9 +171,9 @@ public class RobotContainer {
     motionService.periodic();
 
 
-    if (!RobotState.isAutonomous()) {
+    //if (!RobotState.isAutonomous()) {
       updateVisionEst();
-    }
+   // }
   }
 
   private void updateVisionEst() {

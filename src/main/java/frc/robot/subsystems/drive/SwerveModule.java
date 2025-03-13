@@ -126,7 +126,7 @@ switch (moduleNumber) {
   encoderOffset = -4.018841603091038;//0.922783865280067
   break;
   case 2: 
-  encoderOffset = -3.048560530693669;//-13.00*Math.PI/180.00;
+  encoderOffset = -0.980362372791372;//-13.00*Math.PI/180.00;
   break;
   case 3: 
   encoderOffset = -1.331789020338969;
@@ -234,7 +234,7 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
     SmartDashboard.putNumber("turnFeedforward",turnFeedforward);
     if(RobotState.isAutonomous()) {
       // m_driveMotor.set(driveOutput / SwerveConstants.MaxMetersPersecond);
-      m_driveMotor.set(state.speedMetersPerSecond / (0.8*SwerveConstants.MaxMetersPersecond));
+      m_driveMotor.set(state.speedMetersPerSecond / (1*SwerveConstants.MaxMetersPersecond));
       System.out.println("Output: " + driveOutput + " Feedforward: " + driveFeedforward);
       m_turningMotor.set(turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
     } else if (RobotState.isTeleop()) {
