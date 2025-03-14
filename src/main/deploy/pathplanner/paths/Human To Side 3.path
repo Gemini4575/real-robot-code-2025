@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": -0.5,
-        "y": 0.5
+        "x": 0.9916952054794521,
+        "y": 1.0348886986301375
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9528253424657533,
-        "y": 1.7214041095890416
+        "x": 3.2150904757497214,
+        "y": 2.591265387819327
       },
       "isLocked": false,
       "linkedName": "Human bottom"
     },
     {
       "anchor": {
-        "x": 2.794777397260274,
-        "y": 3.9949486301369865
+        "x": 3.696318493150685,
+        "y": 3.228638698630137
       },
       "prevControl": {
-        "x": 2.1787243150684934,
-        "y": 2.837970890410959
+        "x": 2.61426612828582,
+        "y": 2.368925860792299
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.24248496993987967,
+      "waypointRelativePos": 0.20440881763527052,
       "rotationDegrees": 50.0
     },
     {

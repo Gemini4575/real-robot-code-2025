@@ -181,9 +181,13 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-   var s = (m_driveEncoder.getVelocity() / (60.0 * SwerveConstants.gearboxRatio)) * (SwerveConstants.wheeldiameter * Math.PI);
+   var s = getConvertedVelocity();
     return new SwerveModuleState(
         s, new Rotation2d(encoderValue()));
+  }
+
+  private double getConvertedVelocity() {
+    return (m_driveEncoder.getVelocity() / (60.0 * SwerveConstants.gearboxRatio)) * (SwerveConstants.wheeldiameter * Math.PI);
   }
 
   /**
@@ -218,24 +222,23 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
        *  by default, and can be changed by a scale factor using setVelocityConversionFactor().
        */
 
-    final 
-    double driveOutput =
-        m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
+    //final double driveOutput =
+    //    m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
     
-    final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
+    //final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
         m_turningPIDController.calculate(encoderValue(), state.angle.getRadians());
 // SmartDashboard.putNumber("pid " + moduleNumber, turnOutput);
  
     SmartDashboard.putNumber("Setpoint velocity", m_turningPIDController.getSetpoint().velocity);
-    final double turnFeedforward =
-        m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
-    SmartDashboard.putNumber("turnFeedforward",turnFeedforward);
+    //final double turnFeedforward =
+    //    m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
+    //SmartDashboard.putNumber("turnFeedforward",turnFeedforward);
     if(RobotState.isAutonomous()) {
       // m_driveMotor.set(driveOutput / SwerveConstants.MaxMetersPersecond);
       m_driveMotor.set(state.speedMetersPerSecond / (1*SwerveConstants.MaxMetersPersecond));
-      System.out.println("Output: " + driveOutput + " Feedforward: " + driveFeedforward);
+      //System.out.println("Output: " + driveOutput + " Feedforward: " + driveFeedforward);
       m_turningMotor.set(turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
     } else if (RobotState.isTeleop()) {
       m_driveMotor.set(state.speedMetersPerSecond);
@@ -245,7 +248,7 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
     SmartDashboard.putNumber("m_driveMotor set " + moduleNumber, state.speedMetersPerSecond / SwerveConstants.MaxMetersPersecond);
     SmartDashboard.putNumber("m_turningMotor set " + moduleNumber, turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
   
-    SmartDashboard.putNumber("m_driveMotor actual" + moduleNumber, m_driveMotor.get());
+    SmartDashboard.putNumber("m_driveMotor actual" + moduleNumber, getConvertedVelocity());
     SmartDashboard.putNumber("m_turningMotor actual" + moduleNumber, m_turningMotor.get());
 
     SmartDashboard.putNumber("drive encoder" + moduleNumber, m_driveMotor.getEncoder().getPosition());
@@ -254,9 +257,9 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
 
     if(RobotState.isTest()) {
       SmartDashboard.putNumber("turnOutput",turnOutput);
-      SmartDashboard.putNumber("Drive", ((driveOutput + driveFeedforward) /2.1) /2);
-      SmartDashboard.putNumber("Turning stuff", Math.max(turnOutput, turnFeedforward));
-      SmartDashboard.putNumber("Turning stuff", turnOutput + turnFeedforward);
+      //SmartDashboard.putNumber("Drive", ((driveOutput + driveFeedforward) /2.1) /2);
+      //SmartDashboard.putNumber("Turning stuff", Math.max(turnOutput, turnFeedforward));
+      //SmartDashboard.putNumber("Turning stuff", turnOutput + turnFeedforward);
       SmartDashboard.putNumber("target " + moduleNumber, state.angle.getRadians());
     }
     
