@@ -13,7 +13,6 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -50,15 +49,6 @@ public class SwerveModule extends Command {
   @SuppressWarnings("unused")
   private final RelativeEncoder m_turningEncoderREV;
 
-  
-  // Gains are for example purposes only - must be determined for your own robot!
-  private final ProfiledPIDController m_drivePIDController = new ProfiledPIDController(
-    0.025, 
-    0.0,
-    0.0,
-    new TrapezoidProfile.Constraints(SwerveConstants.MaxMetersPersecond,18.8)
-    );
-
   // Gains are for example purposes only - must be determined for your own robot!
   private final ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(
@@ -68,9 +58,9 @@ public class SwerveModule extends Command {
           new TrapezoidProfile.Constraints(
               Constants.SwerveConstants.kModuleMaxAngularVelocity, Constants.SwerveConstants.kModuleMaxAngularAcceleration));
 
-  // Gains are for example purposes only - must be determined for your own robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 1.5); // this was 3, changed to 1.5 because it was driving too far
-  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
+  // // Gains are for example purposes only - must be determined for your own robot!
+  // private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 1.5); // this was 3, changed to 1.5 because it was driving too far
+  // private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
   /**
    * Constructs a SwerveModule with a drive motor, turning motor and turning encoder.

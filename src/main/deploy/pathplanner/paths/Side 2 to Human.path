@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.039695945945946,
-        "y": 2.928125
+        "x": 4.733090753424658,
+        "y": 2.5975599315068494
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.6394847973017725,
-        "y": 1.356925675681081
+        "x": 4.3328796047804845,
+        "y": 1.0263606071879303
       },
       "isLocked": false,
-      "linkedName": "Side 2"
+      "linkedName": "Drive By end"
     },
     {
       "anchor": {
@@ -48,7 +48,7 @@
   "folder": "Mid",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 37.0
+    "rotation": 35.0
   },
   "useDefaultConstraints": true
 }

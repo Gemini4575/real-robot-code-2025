@@ -23,13 +23,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Stop"
+                  "name": "Drop Coral"
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Drop Coral"
+                  "pathName": "Slow Drive By"
                 }
               }
             ]

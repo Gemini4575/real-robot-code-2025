@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.039695945945946,
-        "y": 2.928125
+        "x": 5.634631849315068,
+        "y": 3.1535102739726026
       },
       "prevControl": {
-        "x": 6.166216216216216,
-        "y": 2.824366554054055
+        "x": 6.761152119585338,
+        "y": 3.0497518280266576
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Side 2"
+      "linkedName": "Drive By start"
     }
   ],
   "rotationTargets": [
@@ -74,7 +74,7 @@
   },
   "goalEndState": {
     "velocity": 0.2,
-    "rotation": 37.0
+    "rotation": 35.0
   },
   "reversed": false,
   "folder": "Center",

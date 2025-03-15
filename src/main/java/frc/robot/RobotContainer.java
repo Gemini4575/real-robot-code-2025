@@ -11,22 +11,16 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Autos;
-import frc.robot.Constants.FieldLocations;
 import frc.robot.Constants.JoystickConstants;
-import frc.robot.commands.StartMotionSequence;
 import frc.robot.commands.TelopSwerve;
 import frc.robot.commands.Testing;
 import frc.robot.commands.algea.EXO.OzDown;
@@ -35,6 +29,7 @@ import frc.robot.commands.algea.EXO.OzOutake;
 import frc.robot.commands.algea.EXO.OzUp;
 import frc.robot.commands.climbing.Climb;
 import frc.robot.commands.coral.lili.AUTOCoral;
+import frc.robot.commands.coral.lili.AUTOCoralFalse;
 import frc.robot.commands.coral.lili.EXOCloseGateSlow;
 import frc.robot.commands.coral.lili.LIPlaceCoral;
 import frc.robot.commands.coral.lili.LiAutoPlaceCoral;
@@ -48,7 +43,6 @@ import frc.robot.commands.drive.PathFindToPose;
 import frc.robot.commands.drive.Stop;
 import frc.robot.commands.drive.PathFindToPose.PathTarget;
 // import frc.robot.commands.drive.TestTurnCommand;
-import frc.robot.service.MotionService;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.DriveTrain;
 
@@ -95,7 +89,6 @@ public class RobotContainer {
   private final Field2d autoTargetPose = new Field2d();
   private final Field2d autoPath = new Field2d();
 
-  private final MotionService motionService = new MotionService(D, c, VS);
 
   private OzUp ozGrabberUpCommand = new OzUp(g);
 
@@ -104,6 +97,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Drop Coral", new LiAutoPlaceCoral(c));
     NamedCommands.registerCommand("Close Door", new EXOCloseGateSlow(c));
     NamedCommands.registerCommand("Is there Coral", new AUTOCoral(c));
+    NamedCommands.registerCommand("Is there not Coral", new AUTOCoralFalse(c));
     NamedCommands.registerCommand("Stop", new Stop(D));
     NamedCommands.registerCommand("Wheels", new AlineWheels(D));
     configureBindings();
@@ -111,9 +105,6 @@ public class RobotContainer {
     PathplannerautoChoosers = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chosers", PathplannerautoChoosers);
 
-    MyAutoChooser.addOption("Drive And Drop1", DriveAndDrop1);
-    MyAutoChooser.setDefaultOption("Nothing", Nothing);
-    MyAutoChooser.addOption(" Drive And Drop2", DriveAndDRop2);
 
     configureLogging();
 
@@ -168,7 +159,6 @@ public class RobotContainer {
       CommandScheduler.getInstance().cancelAll();
     }
 
-    motionService.periodic();
 
 
     //if (!RobotState.isAutonomous()) {
@@ -205,27 +195,6 @@ public class RobotContainer {
     if (g.isHangingLoose() && !ozGrabberUpCommand.isScheduled() && ozGrabberUpCommand.isFinished()) {
       System.out.println("Grabber is loose, fixing..");
       //ozGrabberUpCommand.schedule();
-    }
-    if(autoFirst == 0) {
-      switch (MyAutoChooser_String) {
-        case DriveAndDrop1:
-          new  
-          StartMotionSequence(motionService, Autos.AUTO_CORAL1).schedule();
-        break;
-
-        case Nothing:
-
-        break;
-
-        case DriveAndDRop2:
-          new StartMotionSequence(motionService, Autos.AUTO_CORAL2).schedule();
-        break;
-        default:
-          new  
-          StartMotionSequence(motionService, Autos.AUTO_CORAL1).schedule();
-        break;
-      }
-      autoFirst++;
     }
   }
 
@@ -288,12 +257,7 @@ public class RobotContainer {
       //   .onTrue(new 
       //     StartMotionSequence(motionService, turn(-90))); 
 
-          new JoystickButton(driver, 12)
-          .onTrue(new 
-            StartMotionSequence(motionService, drive(1)));
-
-      new JoystickButton(operator, JoystickConstants.POV_DOWN)
-        .onTrue(new StartMotionSequence(motionService, apriltag()));
+          
 
     // Supplier<Pose2d> bestTargetSupplier = () -> {
     //   var target = vision.getTargets();
@@ -352,7 +316,5 @@ public class RobotContainer {
     return PathplannerautoChoosers.getSelected();
   }
 
-  public void onDisable() {
-    motionService.stop(true);
-  }
+  public void onDisable() {}
 }

@@ -2,24 +2,14 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
-import com.pathplanner.lib.config.RobotConfig;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.hal.FRCNetComm;
-import edu.wpi.first.hal.simulation.RoboRioDataJNI;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
 import frc.robot.Constants.LiliCoralConstants;
-import frc.robot.Constants.RobotMode;
 
 public class LiliCoralSubystem extends SubsystemBase{
 
