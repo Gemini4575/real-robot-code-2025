@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.634631849315068,
-        "y": 3.1535102739726026
+        "x": 5.439907094594595,
+        "y": 3.1504645270270264
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.863369140171625,
-        "y": 2.6962425876772502
+        "x": 4.668644385451152,
+        "y": 2.693196840731674
       },
       "isLocked": false,
       "linkedName": "Drive By start"
     },
     {
       "anchor": {
-        "x": 4.733090753424658,
-        "y": 2.5975599315068494
+        "x": 4.728420608108108,
+        "y": 2.7354307432432425
       },
       "prevControl": {
-        "x": 5.353889534502462,
-        "y": 2.9541954262045595
+        "x": 5.3492193891859126,
+        "y": 3.0920662379409527
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
+    "velocity": 1.0,
     "rotation": 35.0
   },
   "reversed": false,
   "folder": "Testing",
   "idealStartingState": {
-    "velocity": 0.0,
+    "velocity": 1.0,
     "rotation": 35.0
   },
   "useDefaultConstraints": false

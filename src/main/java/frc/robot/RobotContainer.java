@@ -9,6 +9,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.events.EventTrigger;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Autos;
@@ -40,6 +42,7 @@ import frc.robot.commands.coral.nora.L3;
 import frc.robot.commands.drive.AlineWheels;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
 import frc.robot.commands.drive.PathFindToPose;
+import frc.robot.commands.drive.PatrolCoralStations;
 import frc.robot.commands.drive.Stop;
 import frc.robot.commands.drive.PathFindToPose.PathTarget;
 // import frc.robot.commands.drive.TestTurnCommand;
@@ -100,6 +103,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("Is there not Coral", new AUTOCoralFalse(c));
     NamedCommands.registerCommand("Stop", new Stop(D));
     NamedCommands.registerCommand("Wheels", new AlineWheels(D));
+
+    new EventTrigger("Drop Coral Event").onTrue(new LiAutoPlaceCoral(c).andThen(new EXOCloseGateSlow(c)));
+
+
     configureBindings();
 
     PathplannerautoChoosers = AutoBuilder.buildAutoChooser();
@@ -225,6 +232,7 @@ public class RobotContainer {
       
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
           .whileTrue(new PathFindToPose(D, PathTarget.LEFT_HUMAN_STATION));
+      new JoystickButton(driver, 12).whileTrue(new PatrolCoralStations(D));
 
       //new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
       //  .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);
