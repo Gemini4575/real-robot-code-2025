@@ -13,7 +13,6 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -50,15 +49,6 @@ public class SwerveModule extends Command {
   @SuppressWarnings("unused")
   private final RelativeEncoder m_turningEncoderREV;
 
-  
-  // Gains are for example purposes only - must be determined for your own robot!
-  private final ProfiledPIDController m_drivePIDController = new ProfiledPIDController(
-    0.025, 
-    0.0,
-    0.0,
-    new TrapezoidProfile.Constraints(SwerveConstants.MaxMetersPersecond,18.8)
-    );
-
   // Gains are for example purposes only - must be determined for your own robot!
   private final ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(
@@ -68,9 +58,9 @@ public class SwerveModule extends Command {
           new TrapezoidProfile.Constraints(
               Constants.SwerveConstants.kModuleMaxAngularVelocity, Constants.SwerveConstants.kModuleMaxAngularAcceleration));
 
-  // Gains are for example purposes only - must be determined for your own robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 1.5); // this was 3, changed to 1.5 because it was driving too far
-  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
+  // // Gains are for example purposes only - must be determined for your own robot!
+  // private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 1.5); // this was 3, changed to 1.5 because it was driving too far
+  // private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
   /**
    * Constructs a SwerveModule with a drive motor, turning motor and turning encoder.
@@ -80,7 +70,7 @@ public class SwerveModule extends Command {
    * @param turningEncoderChannelA DIO input for the turning encoder channel A
    */
   public SwerveModule(SwerveModuleConstants moduleConstants) {
-    SmartDashboard.putNumber("tuneing", ahhhhhhhhhhh);
+    SmartDashboard.putNumber("[Swerve]tuneing", ahhhhhhhhhhh);
     m_driveMotor = new SparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
     var driveConfig = new SparkMaxConfig();
     driveConfig.inverted(true);
@@ -120,16 +110,16 @@ public class SwerveModule extends Command {
 // hard coding the offset because its better?
 switch (moduleNumber) {
   case 0: 
-  encoderOffset = -0.619176235447182;
+  encoderOffset = -0.635377605473116;
   break;
   case 1: 
-  encoderOffset = -4.018841603091038;//0.922783865280067
+  encoderOffset = -4.070485595654124;//0.922783865280067
   break;
   case 2: 
-  encoderOffset = -3.048560530693669;//-13.00*Math.PI/180.00;
+  encoderOffset = -5.111284189381797;//-13.00*Math.PI/180.00;
   break;
   case 3: 
-  encoderOffset = -1.331789020338969;
+  encoderOffset = -1.338818624880911;
   break;
 }
     configAngleMotor();
@@ -142,20 +132,21 @@ switch (moduleNumber) {
 
   private double encoderValue () {
     var retVal = getRawAngle();
-    //SmartDashboard.putNumber("module " + moduleNumber, retVal);
+    //SmartDashboard.putNumber("[Swerve]module " + moduleNumber, retVal);
     if(RobotState.isTest()){
-SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
+      SmartDashboard.putNumber("[Swerve]encoder raw " + moduleNumber, retVal);
 
-    
- SmartDashboard.putNumber("encoder " + moduleNumber, (retVal * 1000) / 1000.0);
- SmartDashboard.putNumber("encoder degrees " + moduleNumber, (retVal *(180/Math.PI) * 1000) / 1000.0);
+      SmartDashboard.putNumber("[Swerve]encoder " + moduleNumber, (retVal * 1000) / 1000.0);
+      SmartDashboard.putNumber("[Swerve]encoder degrees " + moduleNumber, (retVal *(180/Math.PI) * 1000) / 1000.0);
     }
     retVal = (retVal + encoderOffset) % (2.0 * Math.PI);    // apply offset for this encoder and map it back onto [0, 2pi]
       // might need this so we're in the same range as the pid controller is expecting.
 //    retVal = retVal - Math.PI;
     if (RobotState.isTest()) {
-      SmartDashboard.putNumber("encoder adjusted " + moduleNumber, retVal);
+      SmartDashboard.putNumber("[Swerve]encoder adjusted " + moduleNumber, retVal);
     }
+
+    SmartDashboard.putNumber("[Swerve]EncoderValue() " + moduleNumber, retVal);
     return (retVal);
 }
 
@@ -181,9 +172,13 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-   var s = (m_driveEncoder.getVelocity() / (60.0 * SwerveConstants.gearboxRatio)) * (SwerveConstants.wheeldiameter * Math.PI);
+   var s = getConvertedVelocity();
     return new SwerveModuleState(
         s, new Rotation2d(encoderValue()));
+  }
+
+  private double getConvertedVelocity() {
+    return (m_driveEncoder.getVelocity() / (60.0 * SwerveConstants.gearboxRatio)) * (SwerveConstants.wheeldiameter * Math.PI);
   }
 
   /**
@@ -204,11 +199,13 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
+    SmartDashboard.putNumber("[Swerve]Pre Optimize angle target degrees " + moduleNumber, desiredState.angle.getDegrees());
     // Optimize the reference state to avoid spinning further than 90 degrees
+    SmartDashboard.putNumber("[Swerve]turn encoder" + moduleNumber, encoderValue());
     @SuppressWarnings ("deprecation")
     SwerveModuleState state =
         SwerveModuleState.optimize(desiredState, new Rotation2d(encoderValue()));
-
+    SmartDashboard.putNumber("[Swerve]After Optimize angle target degrees " + moduleNumber, state.angle.getDegrees());
     // Calculate the drive output from the drive PID controller.
 
       /* this bit from the example uses driveencoder.getrate() - Get the current rate of the 
@@ -218,66 +215,65 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
        *  by default, and can be changed by a scale factor using setVelocityConversionFactor().
        */
 
-    final 
-    double driveOutput =
-        m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
+    //final double driveOutput =
+    //    m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
     
-    final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
+    //final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
         m_turningPIDController.calculate(encoderValue(), state.angle.getRadians());
-// SmartDashboard.putNumber("pid " + moduleNumber, turnOutput);
+// SmartDashboard.putNumber("[Swerve]pid " + moduleNumber, turnOutput);
  
-    SmartDashboard.putNumber("Setpoint velocity", m_turningPIDController.getSetpoint().velocity);
-    final double turnFeedforward =
-        m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
-    SmartDashboard.putNumber("turnFeedforward",turnFeedforward);
+    SmartDashboard.putNumber("[Swerve]Setpoint velocity", m_turningPIDController.getSetpoint().velocity);
+    //final double turnFeedforward =
+    //    m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
+    //SmartDashboard.putNumber("[Swerve]turnFeedforward",turnFeedforward);
     if(RobotState.isAutonomous()) {
       // m_driveMotor.set(driveOutput / SwerveConstants.MaxMetersPersecond);
-      m_driveMotor.set(state.speedMetersPerSecond / (0.8*SwerveConstants.MaxMetersPersecond));
-      System.out.println("Output: " + driveOutput + " Feedforward: " + driveFeedforward);
+      m_driveMotor.set(state.speedMetersPerSecond / (1*SwerveConstants.MaxMetersPersecond));
+      //System.out.println("Output: " + driveOutput + " Feedforward: " + driveFeedforward);
       m_turningMotor.set(turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
     } else if (RobotState.isTeleop()) {
       m_driveMotor.set(state.speedMetersPerSecond);
       m_turningMotor.set(turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
     }
     
-    SmartDashboard.putNumber("m_driveMotor set " + moduleNumber, state.speedMetersPerSecond / SwerveConstants.MaxMetersPersecond);
-    SmartDashboard.putNumber("m_turningMotor set " + moduleNumber, turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
+    SmartDashboard.putNumber("[Swerve]m_driveMotor set " + moduleNumber, state.speedMetersPerSecond / SwerveConstants.MaxMetersPersecond);
+    SmartDashboard.putNumber("[Swerve]m_turningMotor set " + moduleNumber, turnOutput / SwerveConstants.kModuleMaxAngularVelocity);
   
-    SmartDashboard.putNumber("m_driveMotor actual" + moduleNumber, m_driveMotor.get());
-    SmartDashboard.putNumber("m_turningMotor actual" + moduleNumber, m_turningMotor.get());
+    SmartDashboard.putNumber("[Swerve]m_driveMotor actual" + moduleNumber, getConvertedVelocity());
+    SmartDashboard.putNumber("[Swerve]m_turningMotor actual" + moduleNumber, m_turningMotor.get());
 
-    SmartDashboard.putNumber("drive encoder" + moduleNumber, m_driveMotor.getEncoder().getPosition());
-    SmartDashboard.putNumber("turn encoder" + moduleNumber, m_turningMotor.getEncoder().getPosition());
+    SmartDashboard.putNumber("[Swerve]drive encoder" + moduleNumber, m_driveMotor.getEncoder().getPosition());
+    SmartDashboard.putNumber("[Swerve]turn encoder" + moduleNumber, encoderValue());
 
 
     if(RobotState.isTest()) {
-      SmartDashboard.putNumber("turnOutput",turnOutput);
-      SmartDashboard.putNumber("Drive", ((driveOutput + driveFeedforward) /2.1) /2);
-      SmartDashboard.putNumber("Turning stuff", Math.max(turnOutput, turnFeedforward));
-      SmartDashboard.putNumber("Turning stuff", turnOutput + turnFeedforward);
-      SmartDashboard.putNumber("target " + moduleNumber, state.angle.getRadians());
+      SmartDashboard.putNumber("[Swerve]turnOutput",turnOutput);
+      //SmartDashboard.putNumber("[Swerve]Drive", ((driveOutput + driveFeedforward) /2.1) /2);
+      //SmartDashboard.putNumber("[Swerve]Turning stuff", Math.max(turnOutput, turnFeedforward));
+      //SmartDashboard.putNumber("[Swerve]Turning stuff", turnOutput + turnFeedforward);
+      SmartDashboard.putNumber("[Swerve]target " + moduleNumber, state.angle.getRadians());
     }
     
   }
 
-  public void setStateDirectly(SwerveModuleState desiredState) {
-    // Optimize the reference state to avoid spinning further than 90 degrees
-    desiredState.angle = desiredState.angle.minus(Rotation2d.fromRadians(encoderOffset));
-    @SuppressWarnings("deprecation")
-    SwerveModuleState state =
-        SwerveModuleState.optimize(desiredState, new Rotation2d(getRawAngle()));
-    m_driveMotor.set(state.speedMetersPerSecond);
-    m_turningMotor.setVoltage(toPositiveAngle(state.angle.getRadians()) * RobotController.getVoltage5V() / (2.0 * Math.PI));
-        //m_driveMotor.getClosedLoopController().setReference(state.speedMetersPerSecond, SparkMax.ControlType.kVelocity);
-        //m_turningMotor.getClosedLoopController().setReference(state.angle.getRadians(), SparkMax.ControlType.kPosition);
-        SmartDashboard.putBoolean("Driving auto", true);
-      }
+  // public void setStateDirectly(SwerveModuleState desiredState) {
+  //   // Optimize the reference state to avoid spinning further than 90 degrees
+  //   desiredState.angle = desiredState.angle.minus(Rotation2d.fromRadians(encoderOffset));
+  //   @SuppressWarnings("deprecation")
+  //   SwerveModuleState state =
+  //       SwerveModuleState.optimize(desiredState, new Rotation2d(getRawAngle()));
+  //   m_driveMotor.set(state.speedMetersPerSecond);
+  //   m_turningMotor.setVoltage(toPositiveAngle(state.angle.getRadians()) * RobotController.getVoltage5V() / (2.0 * Math.PI));
+  //       //m_driveMotor.getClosedLoopController().setReference(state.speedMetersPerSecond, SparkMax.ControlType.kVelocity);
+  //       //m_turningMotor.getClosedLoopController().setReference(state.angle.getRadians(), SparkMax.ControlType.kPosition);
+  //       SmartDashboard.putBoolean("[Swerve]Driving auto", true);
+  //     }
     
-    private double toPositiveAngle(double radians) {
-        return radians < 0 ? (radians + 2.0 * Math.PI) : radians;
-      }
+    // private double toPositiveAngle(double radians) {
+    //     return radians < 0 ? (radians + 2.0 * Math.PI) : radians;
+    //   }
     
     private void configAngleMotor() {
     var turnConfig = new SparkMaxConfig();

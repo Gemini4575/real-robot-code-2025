@@ -9,24 +9,21 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.events.EventTrigger;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Autos;
-import frc.robot.Constants.FieldLocations;
 import frc.robot.Constants.JoystickConstants;
-import frc.robot.commands.StartMotionSequence;
 import frc.robot.commands.TelopSwerve;
 import frc.robot.commands.Testing;
 import frc.robot.commands.algea.EXO.OzDown;
@@ -35,6 +32,7 @@ import frc.robot.commands.algea.EXO.OzOutake;
 import frc.robot.commands.algea.EXO.OzUp;
 import frc.robot.commands.climbing.Climb;
 import frc.robot.commands.coral.lili.AUTOCoral;
+import frc.robot.commands.coral.lili.AUTOCoralFalse;
 import frc.robot.commands.coral.lili.EXOCloseGateSlow;
 import frc.robot.commands.coral.lili.LIPlaceCoral;
 import frc.robot.commands.coral.lili.LiAutoPlaceCoral;
@@ -45,10 +43,10 @@ import frc.robot.commands.coral.nora.L3;
 import frc.robot.commands.drive.AlineWheels;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
 import frc.robot.commands.drive.PathFindToPose;
+import frc.robot.commands.drive.PatrolCoralStations;
 import frc.robot.commands.drive.Stop;
 import frc.robot.commands.drive.PathFindToPose.PathTarget;
 // import frc.robot.commands.drive.TestTurnCommand;
-import frc.robot.service.MotionService;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.DriveTrain;
 
@@ -57,13 +55,13 @@ import static frc.robot.datamodel.MotionDirective.drive;
 
 import java.util.Optional;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.EstimatedRobotPose;
 
 // @Component
 public class RobotContainer {
 
   Field2d visionPoseEstimate = new Field2d();
-  private double up = 0.0;
 
   /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -77,55 +75,53 @@ public class RobotContainer {
     private final NickClimbingSubsystem nc = new NickClimbingSubsystem();
     private final OzzyGrabberSubsystem g = new OzzyGrabberSubsystem();
     private final LiliCoralSubystem c = new LiliCoralSubystem();
-    private final NoraArmSubsystem n = new NoraArmSubsystem();
     private final DriveTrain D = new DriveTrain();
     private final Vision V = new Vision();
-    public final TestingSubsystem T = new TestingSubsystem(13);
     private final VisionSubsystem VS = new VisionSubsystem(V);
 
   /* Pathplanner stuff */
     private final SendableChooser<Command> PathplannerautoChoosers;
     private final SendableChooser<String> MyAutoChooser = new SendableChooser<>();
-    private String MyAutoChooser_String;
-    private final String DriveAndDrop1 = "Drive And Drop1";
-    private final String Nothing = "Nothing";
-    private final String DriveAndDRop2 = " Drive And Drop2";
 
   private final Field2d autoRobotPose = new Field2d();
   private final Field2d autoTargetPose = new Field2d();
   private final Field2d autoPath = new Field2d();
 
-  private final MotionService motionService = new MotionService(D, c, VS);
 
   private OzUp ozGrabberUpCommand = new OzUp(g);
 
   public RobotContainer() {
     System.out.println("Starting RobotContainer()");
     NamedCommands.registerCommand("Drop Coral", new LiAutoPlaceCoral(c));
+    NamedCommands.registerCommand("Drop and Close Coral", new LIPlaceCoral(c));
     NamedCommands.registerCommand("Close Door", new EXOCloseGateSlow(c));
     NamedCommands.registerCommand("Is there Coral", new AUTOCoral(c));
+    NamedCommands.registerCommand("Is there not Coral", new AUTOCoralFalse(c));
     NamedCommands.registerCommand("Stop", new Stop(D));
     NamedCommands.registerCommand("Wheels", new AlineWheels(D));
+
+    new EventTrigger("Drop Coral").onTrue(new LiAutoPlaceCoral(c));
+    
+
+
     configureBindings();
 
     PathplannerautoChoosers = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chosers", PathplannerautoChoosers);
+    SmartDashboard.putData("[Robot]Auto Chosers", PathplannerautoChoosers);
+    SmartDashboard.putString("[Robot]Note", "");
 
-    MyAutoChooser.addOption("Drive And Drop1", DriveAndDrop1);
-    MyAutoChooser.setDefaultOption("Nothing", Nothing);
-    MyAutoChooser.addOption(" Drive And Drop2", DriveAndDRop2);
 
     configureLogging();
 
-    SmartDashboard.putData("Vision Pose Estimate", visionPoseEstimate);
+    SmartDashboard.putData("[Robot]Vision Pose Estimate", visionPoseEstimate);
     PathfindingCommand.warmupCommand().schedule();
     System.out.println("Ended RobotContainer()");
   }
 
   private void configureLogging() {
-    SmartDashboard.putData("Auto Robot Pose", autoRobotPose);
-    SmartDashboard.putData("Auto Target Pose", autoTargetPose);
-    SmartDashboard.putData("Auto Path", autoPath);
+    SmartDashboard.putData("[Robot]Auto Robot Pose", autoRobotPose);
+    SmartDashboard.putData("[Robot]Auto Target Pose", autoTargetPose);
+    SmartDashboard.putData("[Robot]Auto Path", autoPath);
 
     // Logging callback for current robot pose
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
@@ -150,7 +146,7 @@ public class RobotContainer {
 
   public void teleopInit() {
     teleFirst = false;
-    //new init(nc).schedule();
+    // new init(nc).schedule();
     D.setDefaultCommand(
         new TelopSwerve(
             D,
@@ -159,21 +155,22 @@ public class RobotContainer {
             () -> -driver.getTwist(),
             () -> operator.getRawButton(JoystickConstants.START_BUTTON)));
   }
-
+  @AutoLogOutput
+  String noteString;
   public void periodic() {
+    noteString = SmartDashboard.getString("[Robot]Note", "");
 
-    SmartDashboard.putBoolean("Is flipped?", AutoBuilder.shouldFlip());
+    SmartDashboard.putBoolean("[Robot]Is flipped?", AutoBuilder.shouldFlip());
 
     if(driver.getRawButtonPressed(2)) {
       CommandScheduler.getInstance().cancelAll();
     }
 
-    motionService.periodic();
 
 
-    if (!RobotState.isAutonomous()) {
+    //if (!RobotState.isAutonomous()) {
       updateVisionEst();
-    }
+   // }
   }
 
   private void updateVisionEst() {
@@ -197,7 +194,6 @@ public class RobotContainer {
   }
   double autoFirst = 0.0;
   public void autonomousInit() {
-    MyAutoChooser_String = MyAutoChooser.getSelected();
     autoFirst = 0.0;
   }
 
@@ -205,27 +201,6 @@ public class RobotContainer {
     if (g.isHangingLoose() && !ozGrabberUpCommand.isScheduled() && ozGrabberUpCommand.isFinished()) {
       System.out.println("Grabber is loose, fixing..");
       //ozGrabberUpCommand.schedule();
-    }
-    if(autoFirst == 0) {
-      switch (MyAutoChooser_String) {
-        case DriveAndDrop1:
-          new  
-          StartMotionSequence(motionService, Autos.AUTO_CORAL1).schedule();
-        break;
-
-        case Nothing:
-
-        break;
-
-        case DriveAndDRop2:
-          new StartMotionSequence(motionService, Autos.AUTO_CORAL2).schedule();
-        break;
-        default:
-          new  
-          StartMotionSequence(motionService, Autos.AUTO_CORAL1).schedule();
-        break;
-      }
-      autoFirst++;
     }
   }
 
@@ -238,8 +213,7 @@ public class RobotContainer {
       new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)
         .onTrue(new LIPlaceCoral(c));
 
-      new JoystickButton(operator, JoystickConstants.RIGHT_BUMPER)
-        .onTrue(new Testing(T));
+      
 
       new JoystickButton(operator, JoystickConstants.YELLOW_BUTTON)
         .onTrue(new OzDown(g));
@@ -251,11 +225,12 @@ public class RobotContainer {
         .onTrue(new OzOutake(g));
 
 
-      new JoystickButton(operator, JoystickConstants.RED_BUTTON)
-        .onTrue(new Climb(nc));
+      // new JoystickButton(operator, JoystickConstants.RED_BUTTON)
+      //   .onTrue(new Climb(nc));
       
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
           .whileTrue(new PathFindToPose(D, PathTarget.LEFT_HUMAN_STATION));
+      new JoystickButton(driver, 12).whileTrue(new PatrolCoralStations(D));
 
       //new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
       //  .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);
@@ -288,17 +263,12 @@ public class RobotContainer {
       //   .onTrue(new 
       //     StartMotionSequence(motionService, turn(-90))); 
 
-          new JoystickButton(driver, 12)
-          .onTrue(new 
-            StartMotionSequence(motionService, drive(1)));
-
-      new JoystickButton(operator, JoystickConstants.POV_DOWN)
-        .onTrue(new StartMotionSequence(motionService, apriltag()));
+          
 
     // Supplier<Pose2d> bestTargetSupplier = () -> {
     //   var target = vision.getTargets();
     //   if (target != null && kTagLayout.getTagPose(target.fiduc                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ialId).isPresent()) {
-    //     SmartDashboard.putString("Targeting tag", String.valueOf(target.getFiducialId()));
+    //     SmartDashboard.putString("[Robot]Targeting tag", String.valueOf(target.getFiducialId()));
     //     return kTagLayout.getTagPose(target.fiducialId).get().toPose2d();
     //   }
     //   return null;
@@ -318,41 +288,13 @@ public class RobotContainer {
 
   public void teleopPeriodic() { 
     c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
-    nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), testing.getRawButton(JoystickConstants.START_BUTTON));
-    nc.JoyClimb2(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), testing.getRawButton(JoystickConstants.BACK_BUTTON));    
-  
-  if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){
-      up++;
-      teleFirst = true;
-    }
-    if(up == 1) {
-      if(teleFirst) {
-        up = 100;
-        teleFirst = false;
-        new L1(n).schedule();
-      }
-    } else if (up == 2) {
-      if(teleFirst) {
-        up = 100;
-        teleFirst = false;
-        new L2(n).schedule();
-      }
-    } else if (up == 3) {
-      if(teleFirst) {
-        up = 100;
-        teleFirst = false;
-        new L3(n).schedule();
-      }
-    } else if (up > 3) {
-      up = 0;
-    }
+    nc.JoyClimb1(MathUtil.applyDeadband(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), testing.getRawButton(JoystickConstants.START_BUTTON));
+    nc.JoyClimb2(MathUtil.applyDeadband(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), testing.getRawButton(JoystickConstants.BACK_BUTTON));    
   }
 
   public Command getAutonomousCommand() {
     return PathplannerautoChoosers.getSelected();
   }
 
-  public void onDisable() {
-    motionService.stop(true);
-  }
+  public void onDisable() {}
 }

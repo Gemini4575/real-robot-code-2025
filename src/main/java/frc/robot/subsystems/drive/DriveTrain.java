@@ -6,6 +6,9 @@ package frc.robot.subsystems.drive;
 
 import java.io.IOException;
 
+import javax.xml.crypto.dsig.keyinfo.KeyValue;
+
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 
@@ -77,7 +80,7 @@ private final SwerveModule m_backRight_1 = new SwerveModule(Constants.SwerveCons
 private final SwerveModule m_frontRight_2 = new SwerveModule(Constants.SwerveConstants.Mod2.constants);
 private final SwerveModule m_frontLeft_3 = new SwerveModule(Constants.SwerveConstants.Mod3.constants);
 
-//  private final Gyro_EPRA m_gyro = new Gyro_EPRA();
+//  private final Gyro_EPRA m_gyro = new Gyro_EPRA()
 private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI, NavXUpdateRate.k100Hz);
 
 // private Double[] encoderDoubles = new Double[4];
@@ -157,8 +160,8 @@ private double rot_cur;
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> driveForPathPlanner(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(3, 0.1, 0.0), // Translation PID constants
-                    new PIDConstants(1, 0.0, 0.0) // Rotation PID constants
+                    new PIDConstants(6, 0, 0.0), // Translation PID constants
+                    new PIDConstants(1.5, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration
             () -> {
@@ -177,7 +180,7 @@ private double rot_cur;
   }
   
   public void driveForPathPlanner(ChassisSpeeds speeds) {
-    SmartDashboard.putString("Chassiespeeds", speeds.toString());
+    SmartDashboard.putString("[Drivetrain]ChassisSpeeds", speeds.toString());
     // Note: it is important to not discretize speeds before or after
     // using the setpoint generator, as it will discretize them for you
     previousSetpoint = setpointGenerator.generateSetpoint(
@@ -185,7 +188,7 @@ private double rot_cur;
         speeds, // The desired target speeds
         0.02 // The loop time of the robot code, in seconds
     );
-    SmartDashboard.putString ("Previous Setpoint", previousSetpoint.toString());
+    SmartDashboard.putString ("[Drivetrain]Previous Setpoint", previousSetpoint.toString());
     setModuleStates(previousSetpoint.moduleStates()); // Method that will drive the robot given target module states
   }
 
@@ -199,7 +202,7 @@ private double rot_cur;
       */
       m_gyro.reset();
   
-      SmartDashboard.putString("Gyro has been reset", java.time.LocalTime.now().toString());
+      SmartDashboard.putString("[Drivetrain]Gyro has been reset", java.time.LocalTime.now().toString());
       System.out.println("Gyro has been reset");
       Logger.recordOutput("Gyro Has Been reset", DriverStation.getMatchTime());
     }
@@ -213,26 +216,27 @@ private double rot_cur;
      */
     
     public void driveRobotRelative(ChassisSpeeds chassisSpeedsIn) {
-      SmartDashboard.putString("Chassiespeeds", chassisSpeedsIn.toString());
+      SmartDashboard.putString("[Drivetrain]ChassisSpeeds", chassisSpeedsIn.toString());
       drive(chassisSpeedsIn.vxMetersPerSecond, chassisSpeedsIn.vyMetersPerSecond, chassisSpeedsIn.omegaRadiansPerSecond, false);
     }
     public void driveFieldRelative(ChassisSpeeds c) {
       drive(c.vxMetersPerSecond, c.vyMetersPerSecond, 0, true);
     }
-    public void driveDirect(ChassisSpeeds chassisSpeedsIn) {
-      var speeds = ChassisSpeeds.discretize(chassisSpeedsIn, LoggedRobot.defaultPeriodSecs);
-      var swerveModuleStates =
-        m_kinematics.toSwerveModuleStates(speeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
-        m_backLeft_0.setStateDirectly(swerveModuleStates[0]);
-        m_backRight_1.setStateDirectly(swerveModuleStates[1]);
-        m_frontRight_2.setStateDirectly(swerveModuleStates[2]);
-        m_frontLeft_3.setStateDirectly(swerveModuleStates[3]);
-    }
-
+    // public void driveDirect(ChassisSpeeds chassisSpeedsIn) {
+    //   var speeds = ChassisSpeeds.discretize(chassisSpeedsIn, LoggedRobot.defaultPeriodSecs);
+    //   var swerveModuleStates =
+    //     m_kinematics.toSwerveModuleStates(speeds);
+    //     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+    //     m_backLeft_0.setStateDirectly(swerveModuleStates[0]);
+    //     m_backRight_1.setStateDirectly(swerveModuleStates[1]);
+    //     m_frontRight_2.setStateDirectly(swerveModuleStates[2]);
+    //     m_frontLeft_3.setStateDirectly(swerveModuleStates[3]);
+    // }
+//    @AutoLogOutput 
+//    SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    SmartDashboard.putNumber("Gyro", m_gyro.getAngle());
-
+    Logger.recordOutput(getName(), 1);
+    SmartDashboard.putNumber("[Drivetrain]Gyro", m_gyro.getAngle());
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
             fieldRelative
@@ -240,11 +244,11 @@ private double rot_cur;
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
 
-    SmartDashboard.putString("gyro", m_gyro.getRotation2d().toString());
-    SmartDashboard.putString("module 0", swerveModuleStates[0].toString());
-    SmartDashboard.putString("module 1", swerveModuleStates[1].toString());
-    SmartDashboard.putString("module 2", swerveModuleStates[2].toString());
-    SmartDashboard.putString("module 3", swerveModuleStates[3].toString());
+    SmartDashboard.putString("[Drivetrain]gyro", m_gyro.getRotation2d().toString());
+    SmartDashboard.putString("[Drivetrain]module 0", swerveModuleStates[0].toString());
+    SmartDashboard.putString("[Drivetrain]module 1", swerveModuleStates[1].toString());
+    SmartDashboard.putString("[Drivetrain]module 2", swerveModuleStates[2].toString());
+    SmartDashboard.putString("[Drivetrain]module 3", swerveModuleStates[3].toString());
 
     setModuleStates(swerveModuleStates);
 
@@ -276,7 +280,7 @@ private double rot_cur;
 
   private ChassisSpeeds getRobotRelativeSpeeds(){
     var c = m_kinematics.toChassisSpeeds(getModuleStates());
-    SmartDashboard.putString("Robot relative speeds", c.toString());
+    SmartDashboard.putString("[Drivetrain]Robot relative speeds", c.toString());
     return c;
   }
 
@@ -352,33 +356,33 @@ private double rot_cur;
     //     return true;
     //   } else {
     //     drive(0, 0.1, 0, false);
-    //     SmartDashboard.putNumber("Curencoder", curencoder);
-    //     SmartDashboard.putNumber("encoder", startencoder);
-    //     SmartDashboard.putNumber("target", target);
+    //     SmartDashboard.putNumber("[Drivetrain]Curencoder", curencoder);
+    //     SmartDashboard.putNumber("[Drivetrain]encoder", startencoder);
+    //     SmartDashboard.putNumber("[Drivetrain]target", target);
     //     return false;
     //   }
     // }
 
   @Override
   public void periodic() {
-      SmartDashboard.putNumber("raw X", m_gyro.getRawAccelX());
-      SmartDashboard.putNumber("raw Y", m_gyro.getRawAccelY());
+      SmartDashboard.putNumber("[Drivetrain]raw X", m_gyro.getRawAccelX());
+      SmartDashboard.putNumber("[Drivetrain]raw Y", m_gyro.getRawAccelY());
 
-      SmartDashboard.putNumber("X accel", m_gyro.getWorldLinearAccelX());
-      SmartDashboard.putNumber("Y accel", m_gyro.getWorldLinearAccelY());
+      SmartDashboard.putNumber("[Drivetrain]X accel", m_gyro.getWorldLinearAccelX());
+      SmartDashboard.putNumber("[Drivetrain]Y accel", m_gyro.getWorldLinearAccelY());
       
-    SmartDashboard.putNumber("battery voltage", RobotController.getBatteryVoltage());
+    SmartDashboard.putNumber("[Drivetrain]battery voltage", RobotController.getBatteryVoltage());
 
     // This method will be called once per scheduler run
       poseEstimator.update(m_gyro.getRotation2d(), getModulePositions());
       field.setRobotPose(poseEstimator.getEstimatedPosition());
     
-      SmartDashboard.putData("robotpose", field);
+      SmartDashboard.putData("[Drivetrain]robotpose", field);
 
-      SmartDashboard.putNumber("Gyro yaw", m_gyro.getYaw());
-      SmartDashboard.putNumber("Gyro pitch", m_gyro.getPitch());
-      SmartDashboard.putNumber("Gyro roll", m_gyro.getRoll());
-      SmartDashboard.putNumber("Gyro angle", m_gyro.getAngle());
+      SmartDashboard.putNumber("[Drivetrain]Gyro yaw", m_gyro.getYaw());
+      SmartDashboard.putNumber("[Drivetrain]Gyro pitch", m_gyro.getPitch());
+      SmartDashboard.putNumber("[Drivetrain]Gyro roll", m_gyro.getRoll());
+      SmartDashboard.putNumber("[Drivetrain]Gyro angle", m_gyro.getAngle());
 
       // curencoderDoubles[0] = m_frontLeft.getEncoderValue();
       // curencoderDoubles[1] = m_frontRight.getEncoderValue();

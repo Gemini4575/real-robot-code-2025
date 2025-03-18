@@ -3,10 +3,10 @@ package frc.robot.commands.coral.lili;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LiliCoralSubystem;
 
-public class AUTOCoral extends Command{
+public class AUTOCoralFalse extends Command{
     boolean isFinished;
     LiliCoralSubystem c;
-    public AUTOCoral(LiliCoralSubystem s) {
+    public AUTOCoralFalse(LiliCoralSubystem s) {
         c = s;
     }
 
@@ -17,7 +17,7 @@ public class AUTOCoral extends Command{
 
     @Override
     public void execute() {
-        if(c.Coral().getAsBoolean()) {
+        if(!c.Coral().getAsBoolean()) {
             isFinished = true;
         }
     }

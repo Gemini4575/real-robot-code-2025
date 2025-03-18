@@ -7,21 +7,29 @@ package frc.robot;
 
 
 
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
 
 import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
 // import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.stereotype.Component;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
 
 // @Component
 public class Robot extends LoggedRobot {
-  private static final Constants.RobotMode JAVA_SIM_MODE = Constants.RobotMode.SIM;
-    public static final Constants.RobotMode CURRENT_ROBOT_MODE = isReal() ? Constants.RobotMode.REAL : JAVA_SIM_MODE;
+  
     public static final boolean IS_COMPETITION = false;
   private Command m_autonomousCommand;
 
@@ -29,21 +37,48 @@ public class Robot extends LoggedRobot {
   private Timer timer = new Timer();
   // @Autowired
   private RobotContainer m_robotContainer;
+  private boolean firstInit = true;
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+  public Robot() {
+    // Set up data receivers & replay source
+    switch (Constants.currentMode) {
+      case REAL:
+        // Running on a real robot, log to a USB stick ("/U/logs")
+        Logger.addDataReceiver(new WPILOGWriter());
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
+
+      case SIM:
+        // Running a physics simulator, log to NT
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
+
+      case REPLAY:
+        // Replaying a log, set up replay source
+        setUseTiming(false); // Run as fast as possible
+        String logPath = LogFileUtil.findReplayLog();
+        Logger.setReplaySource(new WPILOGReader(logPath));
+        Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+        break;
+    }
+    Logger.start();
+    Logger.disableConsoleCapture();
+  }
   @Override
   public void robotInit () {
         // Set up data receivers & replay source
         
-    Logger.start();
+    // Initialize URCL
+    
+    // Start AdvantageKit logger
+    
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
-
-        FollowPathCommand.warmupCommand().schedule();
 
     m_gcTimer.start();
     timer = new Timer();
@@ -59,6 +94,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotPeriodic() {
+    Logger.recordOutput("Auto number", auto);
     if (m_gcTimer.advanceIfElapsed(5)) {
       System.gc();
     }
@@ -74,6 +110,12 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     CommandScheduler.getInstance().cancelAll();
+    if (firstInit) {
+      Command AutonStartCommand =
+                    FollowPathCommand.warmupCommand().andThen(PathfindingCommand.warmupCommand());
+            AutonStartCommand.schedule();
+      firstInit = false;
+    }
   }
 
   @Override
@@ -82,13 +124,17 @@ public class Robot extends LoggedRobot {
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  @AutoLogOutput
+  int auto = 0;
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     this.m_robotContainer.autonomousInit();
+    auto++;
+    
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+      Commands.waitSeconds(0.01).andThen(m_autonomousCommand).schedule();
     }
   }
 
