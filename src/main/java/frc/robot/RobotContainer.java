@@ -12,6 +12,7 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.events.EventTrigger;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -106,21 +107,21 @@ public class RobotContainer {
     configureBindings();
 
     PathplannerautoChoosers = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chosers", PathplannerautoChoosers);
-    SmartDashboard.putString("Note", "");
+    SmartDashboard.putData("[Robot]Auto Chosers", PathplannerautoChoosers);
+    SmartDashboard.putString("[Robot]Note", "");
 
 
     configureLogging();
 
-    SmartDashboard.putData("Vision Pose Estimate", visionPoseEstimate);
+    SmartDashboard.putData("[Robot]Vision Pose Estimate", visionPoseEstimate);
     PathfindingCommand.warmupCommand().schedule();
     System.out.println("Ended RobotContainer()");
   }
 
   private void configureLogging() {
-    SmartDashboard.putData("Auto Robot Pose", autoRobotPose);
-    SmartDashboard.putData("Auto Target Pose", autoTargetPose);
-    SmartDashboard.putData("Auto Path", autoPath);
+    SmartDashboard.putData("[Robot]Auto Robot Pose", autoRobotPose);
+    SmartDashboard.putData("[Robot]Auto Target Pose", autoTargetPose);
+    SmartDashboard.putData("[Robot]Auto Path", autoPath);
 
     // Logging callback for current robot pose
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
@@ -157,9 +158,9 @@ public class RobotContainer {
   @AutoLogOutput
   String noteString;
   public void periodic() {
-    noteString = SmartDashboard.getString("Note", "");
+    noteString = SmartDashboard.getString("[Robot]Note", "");
 
-    SmartDashboard.putBoolean("Is flipped?", AutoBuilder.shouldFlip());
+    SmartDashboard.putBoolean("[Robot]Is flipped?", AutoBuilder.shouldFlip());
 
     if(driver.getRawButtonPressed(2)) {
       CommandScheduler.getInstance().cancelAll();
@@ -224,8 +225,8 @@ public class RobotContainer {
         .onTrue(new OzOutake(g));
 
 
-      new JoystickButton(operator, JoystickConstants.RED_BUTTON)
-        .onTrue(new Climb(nc));
+      // new JoystickButton(operator, JoystickConstants.RED_BUTTON)
+      //   .onTrue(new Climb(nc));
       
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
           .whileTrue(new PathFindToPose(D, PathTarget.LEFT_HUMAN_STATION));
@@ -267,7 +268,7 @@ public class RobotContainer {
     // Supplier<Pose2d> bestTargetSupplier = () -> {
     //   var target = vision.getTargets();
     //   if (target != null && kTagLayout.getTagPose(target.fiduc                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ialId).isPresent()) {
-    //     SmartDashboard.putString("Targeting tag", String.valueOf(target.getFiducialId()));
+    //     SmartDashboard.putString("[Robot]Targeting tag", String.valueOf(target.getFiducialId()));
     //     return kTagLayout.getTagPose(target.fiducialId).get().toPose2d();
     //   }
     //   return null;
@@ -287,8 +288,8 @@ public class RobotContainer {
 
   public void teleopPeriodic() { 
     c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
-    nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), testing.getRawButton(JoystickConstants.START_BUTTON));
-    nc.JoyClimb2(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), testing.getRawButton(JoystickConstants.BACK_BUTTON));    
+    nc.JoyClimb1(MathUtil.applyDeadband(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), testing.getRawButton(JoystickConstants.START_BUTTON));
+    nc.JoyClimb2(MathUtil.applyDeadband(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), testing.getRawButton(JoystickConstants.BACK_BUTTON));    
   }
 
   public Command getAutonomousCommand() {
