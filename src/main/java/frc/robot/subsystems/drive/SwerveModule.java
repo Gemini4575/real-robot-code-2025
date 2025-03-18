@@ -110,16 +110,16 @@ public class SwerveModule extends Command {
 // hard coding the offset because its better?
 switch (moduleNumber) {
   case 0: 
-  encoderOffset = -0.619176235447182;
+  encoderOffset = -0.635377605473116;
   break;
   case 1: 
-  encoderOffset = -4.018841603091038;//0.922783865280067
+  encoderOffset = -4.070485595654124;//0.922783865280067
   break;
   case 2: 
-  encoderOffset = -0.980362372791372;//-13.00*Math.PI/180.00;
+  encoderOffset = -5.111284189381797;//-13.00*Math.PI/180.00;
   break;
   case 3: 
-  encoderOffset = -1.331789020338969;
+  encoderOffset = -1.338818624880911;
   break;
 }
     configAngleMotor();
@@ -242,7 +242,7 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
     SmartDashboard.putNumber("m_turningMotor actual" + moduleNumber, m_turningMotor.get());
 
     SmartDashboard.putNumber("drive encoder" + moduleNumber, m_driveMotor.getEncoder().getPosition());
-    SmartDashboard.putNumber("turn encoder" + moduleNumber, m_turningMotor.getEncoder().getPosition());
+    SmartDashboard.putNumber("turn encoder" + moduleNumber, encoderValue());
 
 
     if(RobotState.isTest()) {
@@ -255,22 +255,22 @@ SmartDashboard.putNumber("encoder raw " + moduleNumber, retVal);
     
   }
 
-  public void setStateDirectly(SwerveModuleState desiredState) {
-    // Optimize the reference state to avoid spinning further than 90 degrees
-    desiredState.angle = desiredState.angle.minus(Rotation2d.fromRadians(encoderOffset));
-    @SuppressWarnings("deprecation")
-    SwerveModuleState state =
-        SwerveModuleState.optimize(desiredState, new Rotation2d(getRawAngle()));
-    m_driveMotor.set(state.speedMetersPerSecond);
-    m_turningMotor.setVoltage(toPositiveAngle(state.angle.getRadians()) * RobotController.getVoltage5V() / (2.0 * Math.PI));
-        //m_driveMotor.getClosedLoopController().setReference(state.speedMetersPerSecond, SparkMax.ControlType.kVelocity);
-        //m_turningMotor.getClosedLoopController().setReference(state.angle.getRadians(), SparkMax.ControlType.kPosition);
-        SmartDashboard.putBoolean("Driving auto", true);
-      }
+  // public void setStateDirectly(SwerveModuleState desiredState) {
+  //   // Optimize the reference state to avoid spinning further than 90 degrees
+  //   desiredState.angle = desiredState.angle.minus(Rotation2d.fromRadians(encoderOffset));
+  //   @SuppressWarnings("deprecation")
+  //   SwerveModuleState state =
+  //       SwerveModuleState.optimize(desiredState, new Rotation2d(getRawAngle()));
+  //   m_driveMotor.set(state.speedMetersPerSecond);
+  //   m_turningMotor.setVoltage(toPositiveAngle(state.angle.getRadians()) * RobotController.getVoltage5V() / (2.0 * Math.PI));
+  //       //m_driveMotor.getClosedLoopController().setReference(state.speedMetersPerSecond, SparkMax.ControlType.kVelocity);
+  //       //m_turningMotor.getClosedLoopController().setReference(state.angle.getRadians(), SparkMax.ControlType.kPosition);
+  //       SmartDashboard.putBoolean("Driving auto", true);
+  //     }
     
-    private double toPositiveAngle(double radians) {
-        return radians < 0 ? (radians + 2.0 * Math.PI) : radians;
-      }
+    // private double toPositiveAngle(double radians) {
+    //     return radians < 0 ? (radians + 2.0 * Math.PI) : radians;
+    //   }
     
     private void configAngleMotor() {
     var turnConfig = new SparkMaxConfig();

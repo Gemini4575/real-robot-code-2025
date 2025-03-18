@@ -33,6 +33,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.lib.math.MesurementToRoation;
 import frc.lib.util.SwerveModuleConstants;
 import frc.robot.datamodel.MotionDirective;
@@ -40,24 +41,21 @@ import frc.robot.datamodel.MotionDirective;
 public class Constants {
     public static MesurementToRoation rotationsToInch = new MesurementToRoation();
 
-    public enum RobotMode {
-        /**
-         * Running on a real robot.
-         */
-        REAL,
+    public static final Mode simMode = Mode.SIM;
+  public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
-        /**
-         * Running a physics simulator.
-         */
-        SIM,
+  public static enum Mode {
+    /** Running on a real robot. */
+    REAL,
 
-        /**
-         * Replaying from a log file.
-         */
-        REPLAY
-    }
+    /** Running a physics simulator. */
+    SIM,
 
-    public static final String ROBOT_NAME = "4575-2025-OffSeason";
+    /** Replaying from a log file. */
+    REPLAY
+  }
+
+    public static final String ROBOT_NAME = "4575-2025";
 
     // avoid typo errors
     public static final class LogConfigs {
@@ -292,7 +290,7 @@ public class Constants {
         public static final String kTagCameraName = "Arducam1";
         public static final String kTagCameraColorName = "Arducam IMX179 Camera Module";
         public static final String kAlgaeCameraName = "ArducamColor";
-        public static final AprilTagFieldLayout kTagLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
+        public static final AprilTagFieldLayout kTagLayout = AprilTagFields.k2025ReefscapeWelded.loadAprilTagLayoutField();
         //TODO update with real value
         public static final Transform3d kRobotToCam =
                 new Transform3d(Units.inchesToMeters(1.25), Units.inchesToMeters(10.5), Units.inchesToMeters(17.75), new Rotation3d(0, 0, Math.PI/2));

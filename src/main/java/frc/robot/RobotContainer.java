@@ -54,13 +54,13 @@ import static frc.robot.datamodel.MotionDirective.drive;
 
 import java.util.Optional;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.EstimatedRobotPose;
 
 // @Component
 public class RobotContainer {
 
   Field2d visionPoseEstimate = new Field2d();
-  private double up = 0.0;
 
   /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -74,19 +74,13 @@ public class RobotContainer {
     private final NickClimbingSubsystem nc = new NickClimbingSubsystem();
     private final OzzyGrabberSubsystem g = new OzzyGrabberSubsystem();
     private final LiliCoralSubystem c = new LiliCoralSubystem();
-    private final NoraArmSubsystem n = new NoraArmSubsystem();
     private final DriveTrain D = new DriveTrain();
     private final Vision V = new Vision();
-    public final TestingSubsystem T = new TestingSubsystem(13);
     private final VisionSubsystem VS = new VisionSubsystem(V);
 
   /* Pathplanner stuff */
     private final SendableChooser<Command> PathplannerautoChoosers;
     private final SendableChooser<String> MyAutoChooser = new SendableChooser<>();
-    private String MyAutoChooser_String;
-    private final String DriveAndDrop1 = "Drive And Drop1";
-    private final String Nothing = "Nothing";
-    private final String DriveAndDRop2 = " Drive And Drop2";
 
   private final Field2d autoRobotPose = new Field2d();
   private final Field2d autoTargetPose = new Field2d();
@@ -98,19 +92,22 @@ public class RobotContainer {
   public RobotContainer() {
     System.out.println("Starting RobotContainer()");
     NamedCommands.registerCommand("Drop Coral", new LiAutoPlaceCoral(c));
+    NamedCommands.registerCommand("Drop and Close Coral", new LIPlaceCoral(c));
     NamedCommands.registerCommand("Close Door", new EXOCloseGateSlow(c));
     NamedCommands.registerCommand("Is there Coral", new AUTOCoral(c));
     NamedCommands.registerCommand("Is there not Coral", new AUTOCoralFalse(c));
     NamedCommands.registerCommand("Stop", new Stop(D));
     NamedCommands.registerCommand("Wheels", new AlineWheels(D));
 
-    new EventTrigger("Drop Coral Event").onTrue(new LiAutoPlaceCoral(c).andThen(new EXOCloseGateSlow(c)));
+    new EventTrigger("Drop Coral").onTrue(new LiAutoPlaceCoral(c));
+    
 
 
     configureBindings();
 
     PathplannerautoChoosers = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chosers", PathplannerautoChoosers);
+    SmartDashboard.putString("Note", "");
 
 
     configureLogging();
@@ -148,7 +145,7 @@ public class RobotContainer {
 
   public void teleopInit() {
     teleFirst = false;
-    //new init(nc).schedule();
+    // new init(nc).schedule();
     D.setDefaultCommand(
         new TelopSwerve(
             D,
@@ -157,8 +154,10 @@ public class RobotContainer {
             () -> -driver.getTwist(),
             () -> operator.getRawButton(JoystickConstants.START_BUTTON)));
   }
-
+  @AutoLogOutput
+  String noteString;
   public void periodic() {
+    noteString = SmartDashboard.getString("Note", "");
 
     SmartDashboard.putBoolean("Is flipped?", AutoBuilder.shouldFlip());
 
@@ -194,7 +193,6 @@ public class RobotContainer {
   }
   double autoFirst = 0.0;
   public void autonomousInit() {
-    MyAutoChooser_String = MyAutoChooser.getSelected();
     autoFirst = 0.0;
   }
 
@@ -214,8 +212,7 @@ public class RobotContainer {
       new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)
         .onTrue(new LIPlaceCoral(c));
 
-      new JoystickButton(operator, JoystickConstants.RIGHT_BUMPER)
-        .onTrue(new Testing(T));
+      
 
       new JoystickButton(operator, JoystickConstants.YELLOW_BUTTON)
         .onTrue(new OzDown(g));
@@ -292,32 +289,6 @@ public class RobotContainer {
     c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
     nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), testing.getRawButton(JoystickConstants.START_BUTTON));
     nc.JoyClimb2(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), testing.getRawButton(JoystickConstants.BACK_BUTTON));    
-  
-  if(operator.getRawButtonPressed(JoystickConstants.POV_UP)){
-      up++;
-      teleFirst = true;
-    }
-    if(up == 1) {
-      if(teleFirst) {
-        up = 100;
-        teleFirst = false;
-        new L1(n).schedule();
-      }
-    } else if (up == 2) {
-      if(teleFirst) {
-        up = 100;
-        teleFirst = false;
-        new L2(n).schedule();
-      }
-    } else if (up == 3) {
-      if(teleFirst) {
-        up = 100;
-        teleFirst = false;
-        new L3(n).schedule();
-      }
-    } else if (up > 3) {
-      up = 0;
-    }
   }
 
   public Command getAutonomousCommand() {

@@ -6,6 +6,9 @@ package frc.robot.subsystems.drive;
 
 import java.io.IOException;
 
+import javax.xml.crypto.dsig.keyinfo.KeyValue;
+
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 
@@ -77,7 +80,7 @@ private final SwerveModule m_backRight_1 = new SwerveModule(Constants.SwerveCons
 private final SwerveModule m_frontRight_2 = new SwerveModule(Constants.SwerveConstants.Mod2.constants);
 private final SwerveModule m_frontLeft_3 = new SwerveModule(Constants.SwerveConstants.Mod3.constants);
 
-//  private final Gyro_EPRA m_gyro = new Gyro_EPRA();
+//  private final Gyro_EPRA m_gyro = new Gyro_EPRA()
 private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI, NavXUpdateRate.k100Hz);
 
 // private Double[] encoderDoubles = new Double[4];
@@ -219,20 +222,21 @@ private double rot_cur;
     public void driveFieldRelative(ChassisSpeeds c) {
       drive(c.vxMetersPerSecond, c.vyMetersPerSecond, 0, true);
     }
-    public void driveDirect(ChassisSpeeds chassisSpeedsIn) {
-      var speeds = ChassisSpeeds.discretize(chassisSpeedsIn, LoggedRobot.defaultPeriodSecs);
-      var swerveModuleStates =
-        m_kinematics.toSwerveModuleStates(speeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
-        m_backLeft_0.setStateDirectly(swerveModuleStates[0]);
-        m_backRight_1.setStateDirectly(swerveModuleStates[1]);
-        m_frontRight_2.setStateDirectly(swerveModuleStates[2]);
-        m_frontLeft_3.setStateDirectly(swerveModuleStates[3]);
-    }
-
+    // public void driveDirect(ChassisSpeeds chassisSpeedsIn) {
+    //   var speeds = ChassisSpeeds.discretize(chassisSpeedsIn, LoggedRobot.defaultPeriodSecs);
+    //   var swerveModuleStates =
+    //     m_kinematics.toSwerveModuleStates(speeds);
+    //     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+    //     m_backLeft_0.setStateDirectly(swerveModuleStates[0]);
+    //     m_backRight_1.setStateDirectly(swerveModuleStates[1]);
+    //     m_frontRight_2.setStateDirectly(swerveModuleStates[2]);
+    //     m_frontLeft_3.setStateDirectly(swerveModuleStates[3]);
+    // }
+//    @AutoLogOutput 
+//    SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    Logger.recordOutput(getName(), 1);
     SmartDashboard.putNumber("Gyro", m_gyro.getAngle());
-
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
             fieldRelative

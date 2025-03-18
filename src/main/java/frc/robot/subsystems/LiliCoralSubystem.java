@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -36,11 +38,10 @@ public class LiliCoralSubystem extends SubsystemBase{
     // private boolean top() {
     //     return top.get();
     // }
-
+    
     private boolean bottom() {
         return bottom.get();
     }
-
     private boolean coral() {
         return coral.get();
     }
@@ -138,7 +139,7 @@ public class LiliCoralSubystem extends SubsystemBase{
             first = true;
             return true;
         } else {
-            gate.set(-LiliCoralConstants.GateSpeed/2.0);
+            gate.set(-LiliCoralConstants.GateSpeed*.75);
             previous = bottom();
             return false;
         }

@@ -3,32 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.728420608108108,
-        "y": 2.7354307432432425
+        "x": 5.063655821917808,
+        "y": 3.0333047945205482
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.328209459463935,
-        "y": 1.1642314189243235
+        "x": 4.492679794520548,
+        "y": 1.6058647260273977
       },
       "isLocked": false,
-      "linkedName": "Drive By end"
+      "linkedName": "Side 2"
     },
     {
       "anchor": {
-        "x": 0.5559503424657535,
-        "y": 0.764426369863014
+        "x": 0.48082191780821915,
+        "y": 1.3354023972602738
       },
       "prevControl": {
-        "x": 1.1375774162056702,
-        "y": 1.8761255713363403
+        "x": 1.397388698630137,
+        "y": 2.2970462328767116
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.40280561122244474,
+      "rotationDegrees": 59.99999999999999
+    },
+    {
+      "waypointRelativePos": 0.6012024048096193,
+      "rotationDegrees": 150.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -41,14 +50,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.2,
+    "velocity": 0.0,
     "rotation": 150.0
   },
   "reversed": false,
   "folder": "Mid",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 35.0
+    "rotation": 29.999999999999996
   },
   "useDefaultConstraints": true
 }

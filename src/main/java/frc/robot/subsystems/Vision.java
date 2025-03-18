@@ -37,6 +37,8 @@ import frc.robot.Robot;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -136,6 +138,7 @@ public class Vision extends SubsystemBase {
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
         return getEstimatedGlobalPose(tagCamera);
     }
+    
     public Optional<EstimatedRobotPose> getEstimatedGlobalPoseColor() {
         return getEstimatedGlobalPose(tagCameraColor);
     }

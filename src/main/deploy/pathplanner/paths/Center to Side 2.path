@@ -8,29 +8,29 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.0407516891891895,
-        "y": 3.224577702702702
+        "x": 7.287457191780821,
+        "y": 3.018279109589041
       },
       "isLocked": false,
-      "linkedName": "Center"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.439907094594595,
-        "y": 3.1504645270270264
+        "x": 5.063655821917808,
+        "y": 3.0333047945205482
       },
       "prevControl": {
-        "x": 6.5664273648648654,
-        "y": 3.0467060810810813
+        "x": 5.995248287671233,
+        "y": 2.236943493150685
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Drive By start"
+      "linkedName": "Side 2"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.42084168336673333,
       "rotationDegrees": 37.0
     }
   ],
@@ -73,8 +73,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": 35.0
+    "velocity": 0.0,
+    "rotation": 29.999999999999996
   },
   "reversed": false,
   "folder": "Center",

@@ -23,13 +23,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Drop Coral"
+                  "name": "Stop"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Stop"
+                  "name": "Drop Coral"
                 }
               }
             ]
@@ -39,17 +39,17 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Close Door"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "Side 2 to Human"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Close Door"
+                }
               }
             ]
           }
@@ -61,13 +61,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Stop"
+                  "name": "Is there Coral"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Is there Coral"
+                  "name": "Stop"
                 }
               }
             ]
@@ -86,22 +86,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Stop"
+                  "name": "Drop and Close Coral"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Drop Coral"
+                  "name": "Stop"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Close Door"
           }
         }
       ]

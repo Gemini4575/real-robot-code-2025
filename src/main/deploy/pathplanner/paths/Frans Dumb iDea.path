@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.039695945945946,
-        "y": 2.928125
+        "x": 5.063655821917808,
+        "y": 3.0333047945205482
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.3338208451184235,
-        "y": 2.5832387549420748
+        "x": 4.357780721090286,
+        "y": 2.688418549462623
       },
       "isLocked": false,
       "linkedName": "Side 2"
@@ -48,7 +48,7 @@
   "folder": "Frans Dumb iDea",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 37.0
+    "rotation": 29.999999999999996
   },
   "useDefaultConstraints": true
 }
