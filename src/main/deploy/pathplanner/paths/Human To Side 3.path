@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.2150904757497214,
-        "y": 2.591265387819327
+        "x": 3.219783839966017,
+        "y": 2.8416129419048417
       },
       "isLocked": false,
       "linkedName": "Human bottom"
     },
     {
       "anchor": {
-        "x": 3.6512414383561644,
-        "y": 3.138484589041096
+        "x": 3.591138698630137,
+        "y": 3.243664383561644
       },
       "prevControl": {
-        "x": 2.5691890734912994,
-        "y": 2.278771751203258
+        "x": 2.7162533895072745,
+        "y": 2.359647670443843
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,11 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.21242484969939884,
-      "rotationDegrees": 50.0
-    },
-    {
-      "waypointRelativePos": 0.5531062124248498,
+      "waypointRelativePos": 0.5270541082164328,
       "rotationDegrees": -29.999999999999996
     }
   ],

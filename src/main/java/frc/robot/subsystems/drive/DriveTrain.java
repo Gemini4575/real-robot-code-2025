@@ -271,7 +271,13 @@ private double rot_cur;
   }
 
   public void stop() {
-    drive(-0, -0, -0, false);
+    m_backLeft_0.stop();
+    m_backRight_1.stop();
+    m_frontRight_2.stop();
+    m_frontLeft_3.stop();
+    xSpeed_cur = 0;
+    ySpeed_cur = 0;
+    rot_cur = 0;
   }
 
   public ChassisSpeeds getSpeed() {

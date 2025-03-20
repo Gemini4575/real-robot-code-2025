@@ -258,6 +258,11 @@ switch (moduleNumber) {
     
   }
 
+  public void stop() {
+    m_driveMotor.stopMotor();
+    m_turningMotor.stopMotor();
+  }
+
   // public void setStateDirectly(SwerveModuleState desiredState) {
   //   // Optimize the reference state to avoid spinning further than 90 degrees
   //   desiredState.angle = desiredState.angle.minus(Rotation2d.fromRadians(encoderOffset));
