@@ -26,21 +26,14 @@ import frc.robot.Constants.Autos;
 import frc.robot.Constants.JoystickConstants;
 import frc.robot.commands.TelopSwerve;
 import frc.robot.commands.Testing;
-import frc.robot.commands.algea.EXO.OzDown;
-import frc.robot.commands.algea.EXO.OzIntake;
-import frc.robot.commands.algea.EXO.OzOutake;
-import frc.robot.commands.algea.EXO.OzUp;
 import frc.robot.commands.climbing.Climb;
 import frc.robot.commands.coral.lili.AUTOCoral;
 import frc.robot.commands.coral.lili.AUTOCoralFalse;
 import frc.robot.commands.coral.lili.EXOCloseGateSlow;
 import frc.robot.commands.coral.lili.LIPlaceCoral;
 import frc.robot.commands.coral.lili.LiAutoPlaceCoral;
-//import frc.robot.commands.coral.nora.INtakeFromHuman;
-import frc.robot.commands.coral.nora.L1;
-import frc.robot.commands.coral.nora.L2;
-import frc.robot.commands.coral.nora.L3;
 import frc.robot.commands.drive.AlineWheels;
+import frc.robot.commands.drive.AlineWheels2;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
 import frc.robot.commands.drive.PathFindToPose;
 import frc.robot.commands.drive.PatrolCoralStations;
@@ -88,7 +81,7 @@ public class RobotContainer {
   private final Field2d autoPath = new Field2d();
 
 
-  private OzUp ozGrabberUpCommand = new OzUp(g);
+  // private OzUp ozGrabberUpCommand = new OzUp(g);
 
   public RobotContainer() {
     System.out.println("Starting RobotContainer()");
@@ -99,6 +92,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Is there not Coral", new AUTOCoralFalse(c));
     NamedCommands.registerCommand("Stop", new Stop(D));
     NamedCommands.registerCommand("Wheels", new AlineWheels(D));
+    NamedCommands.registerCommand("Wheels long", new AlineWheels2(D));
 
     new EventTrigger("Drop Coral").onTrue(new LiAutoPlaceCoral(c));
     
@@ -198,10 +192,10 @@ public class RobotContainer {
   }
 
   public void autonomousPeriodic() {
-    if (g.isHangingLoose() && !ozGrabberUpCommand.isScheduled() && ozGrabberUpCommand.isFinished()) {
-      System.out.println("Grabber is loose, fixing..");
-      //ozGrabberUpCommand.schedule();
-    }
+    // if (g.isHangingLoose() && !ozGrabberUpCommand.isScheduled() && ozGrabberUpCommand.isFinished()) {
+    //   System.out.println("Grabber is loose, fixing..");
+    //   //ozGrabberUpCommand.schedule();
+    // }
   }
 
   private void configureBindings() {
@@ -215,14 +209,14 @@ public class RobotContainer {
 
       
 
-      new JoystickButton(operator, JoystickConstants.YELLOW_BUTTON)
-        .onTrue(new OzDown(g));
-      new JoystickButton(driver, 9)
-        .onTrue(ozGrabberUpCommand); 
-      new JoystickButton(driver, 10)
-        .onTrue(new OzIntake(g));
-        new JoystickButton(driver, 11)
-        .onTrue(new OzOutake(g));
+      // new JoystickButton(operator, JoystickConstants.YELLOW_BUTTON)
+      //   .onTrue(new OzDown(g));
+      // new JoystickButton(driver, 9)
+      //   .onTrue(ozGrabberUpCommand); 
+      // new JoystickButton(driver, 10)
+      //   .onTrue(new OzIntake(g));
+      //   new JoystickButton(driver, 11)
+      //   .onTrue(new OzOutake(g));
 
 
       // new JoystickButton(operator, JoystickConstants.RED_BUTTON)
@@ -287,7 +281,9 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() { 
-    c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
+    // c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
+    g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.2));
+    // g.joy1(MathUtil.applyDeadband(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.2));
     nc.JoyClimb1(MathUtil.applyDeadband(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), testing.getRawButton(JoystickConstants.START_BUTTON));
     nc.JoyClimb2(MathUtil.applyDeadband(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), testing.getRawButton(JoystickConstants.BACK_BUTTON));    
   }

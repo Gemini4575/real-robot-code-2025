@@ -7,7 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Wheels"
+            "name": "Wheels long"
           }
         },
         {
@@ -29,16 +29,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Drop Coral"
+                  "name": "Drop and Close Coral"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Close Door"
           }
         }
       ]

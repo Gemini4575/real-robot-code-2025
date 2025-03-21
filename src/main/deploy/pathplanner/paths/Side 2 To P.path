@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.861824324324324,
-        "y": 3.1208192567567563
+        "x": 4.91339897260274,
+        "y": 2.928125
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.351051094421466,
-        "y": 2.221127893798149
+        "x": 5.402625742699882,
+        "y": 2.0284336370413927
       },
       "isLocked": false,
       "linkedName": "P Side 2"
@@ -48,7 +48,7 @@
   "folder": "P stuff",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 29.999999999999996
+    "rotation": 25.0
   },
   "useDefaultConstraints": true
 }

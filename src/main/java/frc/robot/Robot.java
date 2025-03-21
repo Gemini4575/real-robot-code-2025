@@ -16,6 +16,8 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 // import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.stereotype.Component;
 import edu.wpi.first.wpilibj.Timer;
@@ -44,6 +46,10 @@ public class Robot extends LoggedRobot {
    * initialization code.
    */
   public Robot() {
+    UsbCamera camera = CameraServer.startAutomaticCapture();
+              // Set the resolution
+              camera.setResolution(1280, 800);
+              camera.setWhiteBalanceAuto();
     // Set up data receivers & replay source
     switch (Constants.currentMode) {
       case REAL:
