@@ -46,10 +46,11 @@ public class Robot extends LoggedRobot {
    * initialization code.
    */
   public Robot() {
-    UsbCamera camera = CameraServer.startAutomaticCapture();
-              // Set the resolution
-              camera.setResolution(1280, 800);
-              camera.setWhiteBalanceAuto();
+    // UsbCamera camera = CameraServer.startAutomaticCapture();
+    //           // Set the resolution
+    //           camera.setResolution(1280, 800);
+    //           camera.setWhiteBalanceAuto();
+    //           camera.setFPS(30);
     // Set up data receivers & replay source
     switch (Constants.currentMode) {
       case REAL:

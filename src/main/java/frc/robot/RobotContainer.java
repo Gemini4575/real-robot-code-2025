@@ -26,6 +26,7 @@ import frc.robot.Constants.Autos;
 import frc.robot.Constants.JoystickConstants;
 import frc.robot.commands.TelopSwerve;
 import frc.robot.commands.Testing;
+import frc.robot.commands.algea.EXO.Down;
 import frc.robot.commands.climbing.Climb;
 import frc.robot.commands.coral.lili.AUTOCoral;
 import frc.robot.commands.coral.lili.AUTOCoralFalse;
@@ -46,6 +47,8 @@ import frc.robot.subsystems.drive.DriveTrain;
 import static frc.robot.datamodel.MotionDirective.apriltag;
 import static frc.robot.datamodel.MotionDirective.drive;
 
+import static frc.robot.Constants.JoystickConstants.*;
+
 import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -59,7 +62,8 @@ public class RobotContainer {
   /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final Joystick operator = new Joystick(1);
-    private final Joystick testing = new Joystick(2);
+    private final Joystick climber = new Joystick(2);
+    private final Joystick testing = new Joystick(3);
 
   /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, JoystickConstants.BACK_BUTTON);
@@ -224,7 +228,7 @@ public class RobotContainer {
       
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
           .whileTrue(new PathFindToPose(D, PathTarget.LEFT_HUMAN_STATION));
-      new JoystickButton(driver, 12).whileTrue(new PatrolCoralStations(D));
+      // new JoystickButton(driver, 12).whileTrue(new PatrolCoralStations(D));
 
       //new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
       //  .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new INtakeFromHuman(n, visionSubsystem)*/);
@@ -237,6 +241,9 @@ public class RobotContainer {
 
       new JoystickButton(testing, JoystickConstants.GREEN_BUTTON)
         .onTrue(new EXOCloseGateSlow(c));
+
+      new JoystickButton(operator, RED_BUTTON)
+        .onTrue(new Down(g));
       
       //new JoystickButton(operator, JoystickConstants.BACK_BUTTON)
       //  .onTrue(new DriveTwoardsAprillTag(V, D));
@@ -282,10 +289,18 @@ public class RobotContainer {
 
   public void teleopPeriodic() { 
     // c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
-    g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.2));
-    // g.joy1(MathUtil.applyDeadband(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.2));
-    nc.JoyClimb1(MathUtil.applyDeadband(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), testing.getRawButton(JoystickConstants.START_BUTTON));
-    nc.JoyClimb2(MathUtil.applyDeadband(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), testing.getRawButton(JoystickConstants.BACK_BUTTON));    
+    g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5) * 0.5);
+    // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.2));
+    nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
+    nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
+    
+    if(operator.getRawButton(JoystickConstants.LEFT_BUMPER)) {
+      g.intake();
+    } else if (operator.getRawButton(JoystickConstants.RIGHT_BUMPER)) {
+      g.outake();
+    } else {
+      g.stop();
+    }
   }
 
   public Command getAutonomousCommand() {

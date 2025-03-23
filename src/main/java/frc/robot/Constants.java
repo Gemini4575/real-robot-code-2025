@@ -485,8 +485,8 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         /* Doubles */
             public final static double IntakeSpeed = 0.8;
             public final static double OutakeSpeed = -0.8;
-            public final static double UpSpeed = 0.9;
-            public final static double DownSpeed = 0.8;
+            public final static double UpSpeed = 0.4;
+            public final static double DownSpeed = -0.1;
             public final static double MovmentLength = 12.5;
             public final static double MiddleLength = 0.0;
     }

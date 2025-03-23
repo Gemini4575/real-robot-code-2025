@@ -4,6 +4,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -14,12 +15,16 @@ public class OzzyGrabberSubsystem extends SubsystemBase{
     SparkMax intake;
     SparkMax Pose;
 
+    Timer timer;
+
     DigitalInput Top;
     DigitalInput bottom;
 
     public OzzyGrabberSubsystem() {
         intake = new SparkMax(GrabberMotor, MotorType.kBrushless);
         Pose = new SparkMax(PosetionMotor, MotorType.kBrushed);
+
+        timer = new Timer();
 
         Top = new DigitalInput(top);
         bottom = new DigitalInput(Bottom);
@@ -41,15 +46,37 @@ public class OzzyGrabberSubsystem extends SubsystemBase{
         intake.set(OutakeSpeed);
     }
     
+
+    public void stop() {
+        intake.stopMotor();
+    }
+    
     private boolean Up() {
         if(!top()) {
             Pose.set(UpSpeed);
+            return false;
         } else {
             Pose.stopMotor();
+            return true;
         }
+    }
 
-
-        return top();
+    public boolean down() {
+        intake.set(IntakeSpeed);
+        if(!bottom()) {
+            Pose.set(DownSpeed);
+            return false;
+        }else {
+            timer.start();
+            Pose.stopMotor();
+            if(!timer.advanceIfElapsed(2)) {
+                return false;
+            } else {
+                intake.stopMotor();
+                timer.reset();
+                return true;
+            }
+        }
     }
 
     public void joy(double joy) {
