@@ -51,31 +51,47 @@ public class OzzyGrabberSubsystem extends SubsystemBase{
         intake.stopMotor();
     }
     
-    private boolean Up() {
-        if(!top()) {
+    // private boolean Up() {
+    //     if(!top()) {
+    //         Pose.set(UpSpeed);
+    //         return false;
+    //     } else {
+    //         Pose.stopMotor();
+    //         return true;
+    //     }
+    // }
+
+    // private boolean down() {
+    //     intake.set(IntakeSpeed);
+    //     if(!bottom()) {
+    //         Pose.set(DownSpeed);
+    //         return false;
+    //     }else {
+    //         timer.start();
+    //         Pose.stopMotor();
+    //         if(!timer.advanceIfElapsed(2)) {
+    //             return false;
+    //         } else {
+    //             intake.stopMotor();
+    //             timer.reset();
+    //             return true;
+    //         }
+    //     }
+    // }
+
+    public void end() {
+        Pose.stopMotor();
+    }
+
+    public void Up() {
+        if(!top()){
             Pose.set(UpSpeed);
-            return false;
-        } else {
-            Pose.stopMotor();
-            return true;
         }
     }
 
-    public boolean down() {
-        intake.set(IntakeSpeed);
-        if(!bottom()) {
+    public void down() {
+        if(!bottom()){
             Pose.set(DownSpeed);
-            return false;
-        }else {
-            timer.start();
-            Pose.stopMotor();
-            if(!timer.advanceIfElapsed(2)) {
-                return false;
-            } else {
-                intake.stopMotor();
-                timer.reset();
-                return true;
-            }
         }
     }
 

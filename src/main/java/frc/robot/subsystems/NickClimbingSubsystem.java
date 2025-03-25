@@ -49,13 +49,15 @@ public class NickClimbingSubsystem extends SubsystemBase{
             }
             return false;
     }
-    public boolean Climb() {
+    public void Climb() {
         // Code to move the elevator
-        if(Climb1() || Climb2()) {
-            Stop();
-            return true;
-        }
-        return false;
+        ClimbingMotor1.set(-1);
+        ClimbingMotor2.set(-1);
+    }
+
+    public void End() {
+        ClimbingMotor1.stop();
+        ClimbingMotor2.stop();
     }
     /**
      * Curently this is what we are using but after I get mesurments this should not be used 1/28

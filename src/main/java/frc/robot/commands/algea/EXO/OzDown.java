@@ -1,13 +1,13 @@
-package frc.robot.commands.climbing;
+package frc.robot.commands.algea.EXO;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.NickClimbingSubsystem;
+import frc.robot.subsystems.OzzyGrabberSubsystem;
 
-public class Climb extends Command{
-    
-    private NickClimbingSubsystem climbing;
+public class OzDown extends Command{
+    private OzzyGrabberSubsystem climbing;
 
-    public Climb(NickClimbingSubsystem subsystem) {
+    public OzDown(OzzyGrabberSubsystem subsystem) {
         // Initialization code here
         climbing = subsystem;
         addRequirements(climbing);
@@ -27,13 +27,11 @@ public class Climb extends Command{
     @Override
     public void execute() {
         // Code to move the elevator
-        climbing.Climb();
+        climbing.down();
     }
 
     @Override
     public void end(boolean interrupted) {
-        // Code to stop the elevator
-        climbing.End();
+        climbing.end();
     }
-    
 }
