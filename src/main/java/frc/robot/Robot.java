@@ -21,6 +21,7 @@ import edu.wpi.first.cscore.UsbCamera;
 // import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.stereotype.Component;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -46,11 +47,12 @@ public class Robot extends LoggedRobot {
    * initialization code.
    */
   public Robot() {
-    // UsbCamera camera = CameraServer.startAutomaticCapture();
-    //           // Set the resolution
-    //           camera.setResolution(1280, 800);
-    //           camera.setWhiteBalanceAuto();
-    //           camera.setFPS(30);
+    SmartDashboard.putNumber("WheelPointAngle", 1);
+    UsbCamera camera = CameraServer.startAutomaticCapture();
+              // Set the resolution
+              camera.setResolution(1280, 800);
+              camera.setWhiteBalanceAuto();
+              camera.setFPS(30);
     // Set up data receivers & replay source
     switch (Constants.currentMode) {
       case REAL:
@@ -101,6 +103,8 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotPeriodic() {
+
+
     Logger.recordOutput("Auto number", auto);
     if (m_gcTimer.advanceIfElapsed(5)) {
       System.gc();

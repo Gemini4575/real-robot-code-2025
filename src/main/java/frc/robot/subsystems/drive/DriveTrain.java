@@ -263,7 +263,7 @@ private double rot_cur;
     rot_cur = rot;
   }
 
-  private void setModuleStates(SwerveModuleState[] swerveModuleStates) {
+  public void setModuleStates(SwerveModuleState[] swerveModuleStates) {
     m_backLeft_0.setDesiredState(swerveModuleStates[0]);
     m_backRight_1.setDesiredState(swerveModuleStates[1]);
     m_frontRight_2.setDesiredState(swerveModuleStates[2]);

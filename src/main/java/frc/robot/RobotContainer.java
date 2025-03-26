@@ -43,6 +43,7 @@ import frc.robot.commands.drive.AlineWheels2;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
 import frc.robot.commands.drive.PathFindToPose;
 import frc.robot.commands.drive.PatrolCoralStations;
+import frc.robot.commands.drive.PointWheelsCommand;
 import frc.robot.commands.drive.Stop;
 import frc.robot.commands.drive.PathFindToPose.PathTarget;
 // import frc.robot.commands.drive.TestTurnCommand;
@@ -153,6 +154,7 @@ public class RobotContainer {
   public void teleopInit() {
     teleFirst = false;
     // new init(nc).schedule();
+     
     D.setDefaultCommand(
         new TelopSwerve(
             D,
@@ -160,6 +162,7 @@ public class RobotContainer {
             () -> driver.getRawAxis(Constants.JoystickConstants.LEFT_Y_AXIS),
             () -> -driver.getTwist(),
             () -> Slow.getAsBoolean()));
+             
   }
   @AutoLogOutput
   String noteString;
@@ -225,6 +228,8 @@ public class RobotContainer {
         .onTrue(new DriveTwoardsAprillTag(V, D));
       new JoystickButton(testing, JoystickConstants.YELLOW_BUTTON)
         .whileTrue(new Climb(nc));
+      new JoystickButton(testing, JoystickConstants.RED_BUTTON)
+        .whileTrue(new PointWheelsCommand(D));
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
         .whileTrue(new OzDown(g));
       new JoystickButton(operator, YELLOW_BUTTON)

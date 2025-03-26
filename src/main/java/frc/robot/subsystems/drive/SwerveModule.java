@@ -52,7 +52,7 @@ public class SwerveModule extends Command {
   // Gains are for example purposes only - must be determined for your own robot!
   private final ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(
-          16.5 ,//16.7 -- updated to 16.5
+          44,//16.7 -- updated to 16.5
           0,
           0,
           new TrapezoidProfile.Constraints(
@@ -133,12 +133,12 @@ switch (moduleNumber) {
   private double encoderValue () {
     var retVal = getRawAngle();
     //SmartDashboard.putNumber("[Swerve]module " + moduleNumber, retVal);
-    if(RobotState.isTest()){
-      SmartDashboard.putNumber("[Swerve]encoder raw " + moduleNumber, retVal);
 
-      SmartDashboard.putNumber("[Swerve]encoder " + moduleNumber, (retVal * 1000) / 1000.0);
-      SmartDashboard.putNumber("[Swerve]encoder degrees " + moduleNumber, (retVal *(180/Math.PI) * 1000) / 1000.0);
-    }
+    SmartDashboard.putNumber("[Swerve]encoder raw " + moduleNumber, retVal);
+
+    SmartDashboard.putNumber("[Swerve]encoder " + moduleNumber, (retVal * 1000) / 1000.0);
+    SmartDashboard.putNumber("[Swerve]encoder degrees " + moduleNumber, (retVal *(180/Math.PI) * 1000) / 1000.0);
+
     retVal = (retVal + encoderOffset) % (2.0 * Math.PI);    // apply offset for this encoder and map it back onto [0, 2pi]
       // might need this so we're in the same range as the pid controller is expecting.
 //    retVal = retVal - Math.PI;

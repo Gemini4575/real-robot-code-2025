@@ -79,7 +79,9 @@ public class OzzyGrabberSubsystem extends SubsystemBase{
     //     }
     // }
 
-    public void end() {
+    public void end() 
+    {
+        intake.stopMotor();
         Pose.stopMotor();
     }
 
