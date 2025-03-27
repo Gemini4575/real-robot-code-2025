@@ -160,8 +160,8 @@ private double rot_cur;
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> driveForPathPlanner(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(6, 0, 0.0), // Translation PID constants
-                    new PIDConstants(1.5, 0.0, 0.0) // Rotation PID constants
+                    new PIDConstants(13.5, 0, 0.0), // Translation PID constants
+                    new PIDConstants(3, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration
             () -> {
@@ -169,10 +169,10 @@ private double rot_cur;
               // This will flip the path being followed to the red side of the field.
               // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-              // var alliance = DriverStation.getAlliance();
-              // if (alliance.isPresent()) {
-              //   return alliance.get() == DriverStation.Alliance.Red;
-              // }
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
               return false;
             },
             this // Reference to this  subsystem to set requirements

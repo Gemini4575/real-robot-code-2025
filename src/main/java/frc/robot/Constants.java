@@ -479,12 +479,13 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         /* Ints */
             public final static int GrabberMotor = 16;
             public final static int PosetionMotor = 17;
-            public final static int BeamBreak = 8;
+            public final static int KickerMotor = 15;
+            public final static int Kicker = 5;
             public final static int Bottom = 3;
             public final static int top = 4;
         /* Doubles */
-            public final static double IntakeSpeed = 0.8;
-            public final static double OutakeSpeed = -0.8;
+            public final static double IntakeSpeed = 0.5;
+            public final static double OutakeSpeed = -0.5;
             public final static double UpSpeed = 0.4;
             public final static double DownSpeed = -0.4;
             public final static double MovmentLength = 12.5;
