@@ -23,7 +23,7 @@ public class AlineWheels2 extends Command{
     @Override
     public void execute() {
         d.drive(0, .02, 0, false);
-        if(timer.advanceIfElapsed(1)) {
+        if(timer.advanceIfElapsed(2)) {
             isFinished = true;
         }
     }

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.4610445205479445,
-        "y": 5.4674657534246585
+        "x": 6.000385604113111,
+        "y": 6.085282776349613
       },
       "isLocked": false,
       "linkedName": "NoNp algea"
     },
     {
       "anchor": {
-        "x": 5.138784246575342,
-        "y": 5.076797945205479
+        "x": 5.007840616966581,
+        "y": 5.047622107969151
       },
       "prevControl": {
-        "x": 5.76986301369863,
-        "y": 5.25710616438356
+        "x": 5.368766066838045,
+        "y": 5.318316195372749
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,8 +30,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 150.0
+      "waypointRelativePos": 0.2590361445783133,
+      "rotationDegrees": 170.0
     }
   ],
   "constraintZones": [
@@ -52,7 +52,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 2.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 300.0,
     "maxAngularAcceleration": 720.0,
@@ -61,7 +61,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 150.0
+    "rotation": 170.0
   },
   "reversed": false,
   "folder": "NoNP stuff",
@@ -69,5 +69,5 @@
     "velocity": 0.0,
     "rotation": 90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

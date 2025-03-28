@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.138784246575342,
-        "y": 5.076797945205479
+        "x": 5.007840616966581,
+        "y": 5.047622107969151
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.6375641025641015,
-        "y": 5.851730769230769
+        "x": 5.5066204729553405,
+        "y": 5.82255493199444
       },
       "isLocked": false,
       "linkedName": "P side 6"
@@ -48,7 +48,7 @@
   "folder": "NoNP stuff",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 150.0
+    "rotation": 170.0
   },
   "useDefaultConstraints": true
 }

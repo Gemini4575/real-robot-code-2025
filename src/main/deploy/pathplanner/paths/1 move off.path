@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.99280205655527,
-        "y": 2.836953727506426
+        "x": 5.72478595890411,
+        "y": 3.9648972602739723
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.286926955727748,
-        "y": 2.4920674824485007
+        "x": 6.72478595890411,
+        "y": 3.9648972602739723
       },
       "isLocked": false,
-      "linkedName": "Side 2"
+      "linkedName": "Side 1"
     },
     {
       "anchor": {
-        "x": 3.4684966216216213,
-        "y": 2.1869932432432426
+        "x": 6.57185089974293,
+        "y": 3.9648972602739723
       },
       "prevControl": {
-        "x": 3.6899997382482588,
-        "y": 2.3029085973801573
+        "x": 5.57185089974293,
+        "y": 3.9648972602739723
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Fans Dumb Idea1"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 300.0,
     "maxAngularAcceleration": 720.0,
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 2.0,
-    "rotation": 29.999999999999996
+    "velocity": 0,
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "Frans Dumb iDea",
+  "folder": "Center",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 29.999999999999996
+    "rotation": 90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
