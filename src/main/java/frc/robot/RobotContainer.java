@@ -30,6 +30,7 @@ import frc.robot.commands.TelopSwerve;
 import frc.robot.commands.Testing;
 import frc.robot.commands.algea.EXO.OzDown;
 import frc.robot.commands.algea.EXO.OzIntake;
+import frc.robot.commands.algea.EXO.OzKick;
 import frc.robot.commands.algea.EXO.OzOutake;
 import frc.robot.commands.algea.EXO.OzUp;
 import frc.robot.commands.climbing.Climb;
@@ -106,6 +107,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stop", new Stop(D));
     NamedCommands.registerCommand("Wheels", new AlineWheels(D));
     NamedCommands.registerCommand("Wheels long", new AlineWheels2(D));
+    NamedCommands.registerCommand("Kick", new OzKick(g));
 
     new EventTrigger("Drop Coral").onTrue(new LiAutoPlaceCoral(c));
     
@@ -238,13 +240,17 @@ public class RobotContainer {
         .whileTrue(new OzIntake(g));
       new JoystickButton(operator, RIGHT_BUMPER)
         .whileTrue(new OzOutake(g));
+      new JoystickButton(operator, GREEN_BUTTON)
+        .whileTrue(new OzKick(g));
     System.out.println("Ended configureBindings()");
   }
 
   public void teleopPeriodic() { 
     // c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
-    g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5) * 0.5);
+    g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5) * 1);
     // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.2));
+    nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
+    nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
     nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
     nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
   }

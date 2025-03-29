@@ -13,26 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center to 1"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Drop Coral"
-                }
-              }
-            ]
+            "pathName": "Wall To 3"
           }
         },
         {
@@ -40,15 +21,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "1 move off"
+                  "name": "Drop Coral"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Close Door"
+                  "name": "Stop"
                 }
               }
             ]
@@ -57,7 +38,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Stop"
+            "name": "Close Door"
           }
         }
       ]

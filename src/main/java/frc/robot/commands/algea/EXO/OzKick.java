@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.NickClimbingSubsystem;
 import frc.robot.subsystems.OzzyGrabberSubsystem;
 
-public class OzOutake extends Command{
+public class OzKick extends Command{
     private OzzyGrabberSubsystem climbing;
 
-    public OzOutake(OzzyGrabberSubsystem subsystem) {
+    public OzKick(OzzyGrabberSubsystem subsystem) {
         // Initialization code here
         climbing = subsystem;
         addRequirements(climbing);
@@ -27,11 +27,11 @@ public class OzOutake extends Command{
     @Override
     public void execute() {
         // Code to move the elevator
-        climbing.outake();
+        if(climbing.Kick()) {
+            isFinished = true;
+        }
     }
 
     @Override
-    public void end(boolean interrupted) {
-        climbing.end();
-    }
+    public void end(boolean interrupted) {}
 }
