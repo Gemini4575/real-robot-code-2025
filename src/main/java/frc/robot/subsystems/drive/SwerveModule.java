@@ -282,6 +282,7 @@ switch (moduleNumber) {
     
     private void configAngleMotor() {
     var turnConfig = new SparkMaxConfig();
+    turnConfig.smartCurrentLimit(40, 40);
     turnConfig.inverted(true);
     turnConfig.closedLoop.p(16.5);
     turnConfig.closedLoop.outputRange(-Math.PI, Math.PI);
@@ -291,6 +292,7 @@ switch (moduleNumber) {
 
   private void configDriveMotor() {
     var driveConfig = new SparkMaxConfig();
+    driveConfig.smartCurrentLimit(40, 40);
     driveConfig.inverted(true);
     driveConfig.encoder.positionConversionFactor(1); //Constants.SwerveConstants.driveConversionFactor);
     driveConfig.closedLoop.p(1);

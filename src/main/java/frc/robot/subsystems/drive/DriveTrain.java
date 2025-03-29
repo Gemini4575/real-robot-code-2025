@@ -169,10 +169,10 @@ private double rot_cur;
               // This will flip the path being followed to the red side of the field.
               // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-              // var alliance = DriverStation.getAlliance();
-              // if (alliance.isPresent()) {
-              //   return alliance.get() == DriverStation.Alliance.Red;
-              // }
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
               return false;
             },
             this // Reference to this  subsystem to set requirements
@@ -263,7 +263,7 @@ private double rot_cur;
     rot_cur = rot;
   }
 
-  public void setModuleStates(SwerveModuleState[] swerveModuleStates) {
+  private void setModuleStates(SwerveModuleState[] swerveModuleStates) {
     m_backLeft_0.setDesiredState(swerveModuleStates[0]);
     m_backRight_1.setDesiredState(swerveModuleStates[1]);
     m_frontRight_2.setDesiredState(swerveModuleStates[2]);

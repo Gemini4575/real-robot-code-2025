@@ -43,7 +43,7 @@ import frc.robot.commands.drive.AlineWheels2;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
 import frc.robot.commands.drive.PathFindToPose;
 import frc.robot.commands.drive.PatrolCoralStations;
-import frc.robot.commands.drive.PointWheelsCommand;
+// import frc.robot.commands.drive.PointWheelsCommand;
 import frc.robot.commands.drive.Stop;
 import frc.robot.commands.drive.PathFindToPose.PathTarget;
 // import frc.robot.commands.drive.TestTurnCommand;
@@ -228,8 +228,8 @@ public class RobotContainer {
         .onTrue(new DriveTwoardsAprillTag(V, D));
       new JoystickButton(testing, JoystickConstants.YELLOW_BUTTON)
         .whileTrue(new Climb(nc));
-      new JoystickButton(testing, JoystickConstants.RED_BUTTON)
-        .whileTrue(new PointWheelsCommand(D));
+      // new JoystickButton(testing, JoystickConstants.RED_BUTTON)
+      //   .whileTrue(new PointWheelsCommand(D));
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
         .whileTrue(new OzDown(g));
       new JoystickButton(operator, YELLOW_BUTTON)
@@ -245,8 +245,8 @@ public class RobotContainer {
     // c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
     g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5) * 0.5);
     // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.2));
-    nc.JoyClimb1(-MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
-    nc.JoyClimb2(-MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
+    nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
+    nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
   }
 
   public Command getAutonomousCommand() {

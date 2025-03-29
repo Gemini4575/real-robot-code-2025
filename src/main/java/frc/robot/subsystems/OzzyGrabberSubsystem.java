@@ -25,9 +25,9 @@ public class OzzyGrabberSubsystem extends SubsystemBase{
         Pose = new SparkMax(PosetionMotor, MotorType.kBrushed);
 
         timer = new Timer();
-
-        Top = new DigitalInput(top);
-        bottom = new DigitalInput(Bottom);
+        //these are right
+        Top = new DigitalInput(Bottom);
+        bottom = new DigitalInput(top);
     }
 
     private boolean top() {
@@ -85,13 +85,13 @@ public class OzzyGrabberSubsystem extends SubsystemBase{
         Pose.stopMotor();
     }
 
-    public void Up() {
+    public void down() {
         if(!top()){
             Pose.set(UpSpeed);
         }
     }
 
-    public void down() {
+    public void Up() {
         if(!bottom()){
             Pose.set(DownSpeed);
         }
