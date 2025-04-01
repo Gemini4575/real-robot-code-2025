@@ -233,26 +233,42 @@ public class RobotContainer {
       // new JoystickButton(testing, JoystickConstants.RED_BUTTON)
       //   .whileTrue(new PointWheelsCommand(D));
       new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-        .whileTrue(new OzDown(g));
-      new JoystickButton(operator, YELLOW_BUTTON)
         .whileTrue(new OzUp(g));
-      new JoystickButton(operator, LEFT_BUMPER)
-        .whileTrue(new OzIntake(g));
-      new JoystickButton(operator, RIGHT_BUMPER)
-        .whileTrue(new OzOutake(g));
+      new JoystickButton(operator, YELLOW_BUTTON)
+        .whileTrue(new OzDown(g));
+      // new JoystickButton(operator, LEFT_BUMPER)
+      //   .whileTrue(new OzIntake(g));
+      // new JoystickButton(operator, RIGHT_BUMPER)
+      //   .whileTrue(new OzOutake(g));
       new JoystickButton(operator, GREEN_BUTTON)
         .whileTrue(new OzKick(g));
     System.out.println("Ended configureBindings()");
   }
 
-  public void teleopPeriodic() { 
+  public void teleopPeriodic() {
+    if(operator.getRawButton(GREEN_BUTTON)) {
+      g.Up();
+    } else {
+      g.end();
+    }
+    if(operator.getRawButton(LEFT_BUMPER)){
+      g.intake();
+    } else if (operator.getRawButton(RIGHT_BUMPER)) {
+      g.outake();
+    } else {
+      g.stop();
+    }
     // c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
     g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5) * 1);
     // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.2));
-    nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
-    nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
-    nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
-    nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
+    if(climber.getRawButton(GREEN_BUTTON)) {
+      nc.JoyClimb1(-1, false);
+      nc.JoyClimb2(-1, false);
+    } else {
+      nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
+      nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
+    }// nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
+    // nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
   }
 
   public Command getAutonomousCommand() {

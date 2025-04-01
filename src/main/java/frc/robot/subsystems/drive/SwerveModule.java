@@ -110,16 +110,16 @@ public class SwerveModule extends Command {
 // hard coding the offset because its better?
 switch (moduleNumber) {
   case 0: 
-  encoderOffset = -4.14314315106254;
+  encoderOffset = -1.020057144401588;
   break;
   case 1: 
-  encoderOffset = -5.367816046689951;//0.922783865280067
+  encoderOffset = -1.450295970644589;//0.922783865280067
   break;
   case 2: 
-  encoderOffset = -5.020495976050146;//-13.00*Math.PI/180.00;
+  encoderOffset = -1.903437227196342;//-13.00*Math.PI/180.00;
   break;
   case 3: 
-  encoderOffset = -1.335690543981657;
+  encoderOffset = -4.41164894046481;
   break;
 }
     configAngleMotor();
@@ -133,8 +133,9 @@ switch (moduleNumber) {
   private double encoderValue () {
     var retVal = getRawAngle();
     //SmartDashboard.putNumber("[Swerve]module " + moduleNumber, retVal);
-
+    if(RobotState.isTest()) {
     SmartDashboard.putNumber("[Swerve]encoder raw " + moduleNumber, retVal);
+    }
 
     SmartDashboard.putNumber("[Swerve]encoder " + moduleNumber, (retVal * 1000) / 1000.0);
     SmartDashboard.putNumber("[Swerve]encoder degrees " + moduleNumber, (retVal *(180/Math.PI) * 1000) / 1000.0);

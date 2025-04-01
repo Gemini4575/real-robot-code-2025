@@ -29,8 +29,8 @@ public class OzzyGrabberSubsystem extends SubsystemBase{
 
         timer = new Timer();
         //these are right
-        Top = new DigitalInput(Bottom);
-        bottom = new DigitalInput(top);
+        Top = new DigitalInput(top);
+        bottom = new DigitalInput(Bottom);
     }
 
     private boolean top() {
@@ -92,16 +92,16 @@ public class OzzyGrabberSubsystem extends SubsystemBase{
         Pose.stopMotor();
     }
 
-    public void down() {
-        if(!top()){
+    public void Up() {
+        // if(!top()){
             Pose.set(UpSpeed);
-        }
+        // }
     }
 
-    public void Up() {
-        if(!bottom()){
+    public void down() {
+        // if(!bottom()){
             Pose.set(DownSpeed);
-        }
+        // }
     }
 
     public boolean Kick() {
@@ -129,6 +129,7 @@ public class OzzyGrabberSubsystem extends SubsystemBase{
     public void periodic() {
         SmartDashboard.putBoolean("Top", top());
         SmartDashboard.putBoolean("Bottom", bottom());
+        SmartDashboard.putNumber("Pose", Pose.get());
     }
 }
 
