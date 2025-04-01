@@ -204,6 +204,7 @@ public class RobotContainer {
         .onTrue(new DriveTwoardsAprillTag(V, D));
     new JoystickButton(testing, JoystickConstants.YELLOW_BUTTON)
         .whileTrue(new Climb(nc));
+<<<<<<< HEAD
     // new JoystickButton(testing, JoystickConstants.RED_BUTTON)
     // .whileTrue(new PointWheelsCommand(D));
     new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
@@ -214,40 +215,83 @@ public class RobotContainer {
     // .whileTrue(new OzIntake(g));
     // new JoystickButton(operator, RIGHT_BUMPER)
     // .whileTrue(new OzOutake(g));
-
+    new JoystickButton(operator, GREEN_BUTTON)
+=======
+      // new JoystickButton(testing, JoystickConstants.RED_BUTTON)
+      //   .whileTrue(new PointWheelsCommand(D));
+      new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
+        .whileTrue(new OzUp(g));
+      new JoystickButton(operator, YELLOW_BUTTON)
+        .whileTrue(new OzDown(g));
+      // new JoystickButton(operator, LEFT_BUMPER)
+      //   .whileTrue(new OzIntake(g));
+      // new JoystickButton(operator, RIGHT_BUMPER)
+      //   .whileTrue(new OzOutake(g));
+      new JoystickButton(operator, GREEN_BUTTON)
+>>>>>>> 10bae98 (from comp)
+        .whileTrue(new OzKick(g));
     System.out.println("Ended configureBindings()");
   }
 
   public void teleopPeriodic() {
+<<<<<<< HEAD
     if (operator.getRawButton(GREEN_BUTTON)) {
+=======
+    if(operator.getRawButton(GREEN_BUTTON)) {
+>>>>>>> 10bae98 (from comp)
       g.Up();
-    } else {
+    }else
+
+  {
       g.end();
-    }
-    if (operator.getRawButton(LEFT_BUMPER)) {
+    }<<<<<<<HEAD if(operator.getRawButton(LEFT_BUMPER))
+  {
+=======
+    if(operator.getRawButton(LEFT_BUMPER)){
+>>>>>>> 10bae98 (from comp)
       g.intake();
-    } else if (operator.getRawButton(RIGHT_BUMPER)) {
-      g.outake();
-    } else {
-      g.stop();
-    }
-    // c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
-    g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5) * 1);
-    // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
-    // 0.2));
-    if (climber.getRawButton(GREEN_BUTTON)) {
-      nc.JoyClimb1(-1, false);
-      nc.JoyClimb2(-1, false);
-    } else {
-      nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5),
-          climber.getRawButton(JoystickConstants.START_BUTTON));
-      nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5),
-          climber.getRawButton(JoystickConstants.BACK_BUTTON));
-    } // nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS),
-      // 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
-      // nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
-      // 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));
-    nc.Flipper(MathUtil.applyDeadband(testing.getRawAxis(LEFT_Y_AXIS), .2), false);
+    }else if(operator.getRawButton(RIGHT_BUMPER))
+
+  {
+    g.outake();
+  }else
+  {
+    g.stop();
+  }
+  // c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
+  g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS),0.5)*1);<<<<<<<HEAD
+  // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
+  // 0.2));
+  if(climber.getRawButton(GREEN_BUTTON))
+  {
+    nc.JoyClimb1(-1, false);
+    nc.JoyClimb2(-1, false);
+  }else
+  {
+    nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5),
+        climber.getRawButton(JoystickConstants.START_BUTTON));
+    nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5),
+        climber.getRawButton(JoystickConstants.BACK_BUTTON));
+  } // nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS),
+    // 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
+    // nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
+    // 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));
+  =======
+  // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
+  // 0.2));
+  if(climber.getRawButton(GREEN_BUTTON))
+  {
+    nc.JoyClimb1(-1, false);
+    nc.JoyClimb2(-1, false);
+  }else
+  {
+      nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
+      nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
+    }// nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS),
+   // 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
+   // nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
+   // 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));
+  >>>>>>>10bae98 (from comp)
   }
 
   public Command getAutonomousCommand() {
@@ -263,8 +307,6 @@ public class RobotContainer {
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -327,33 +369,32 @@ public class RobotContainer {
   Field2d visionPoseEstimate = new Field2d();
 
   /* Controllers */
-    private final Joystick driver = new Joystick(0);
-    private final Joystick operator = new Joystick(1);
-    private final Joystick climber = new Joystick(2);
-    private final Joystick testing = new Joystick(3);
+  private final Joystick driver = new Joystick(0);
+  private final Joystick operator = new Joystick(1);
+  private final Joystick climber = new Joystick(2);
+  private final Joystick testing = new Joystick(3);
 
   /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
-    private final Trigger Slow = new Trigger(new JoystickButton(driver, 7)
+  private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
+  private final Trigger Slow = new Trigger(new JoystickButton(driver, 7)
       .and(new JoystickButton(driver, 12)))
-        .or(new JoystickButton(operator, START_BUTTON));
+      .or(new JoystickButton(operator, START_BUTTON));
 
   /* Subsystems */
-    private final NickClimbingSubsystem nc = new NickClimbingSubsystem();
-    private final OzzyGrabberSubsystem g = new OzzyGrabberSubsystem();
-    private final LiliCoralSubystem c = new LiliCoralSubystem();
-    private final DriveTrain D = new DriveTrain();
-    private final Vision V = new Vision();
-    private final VisionSubsystem VS = new VisionSubsystem(V);
+  private final NickClimbingSubsystem nc = new NickClimbingSubsystem();
+  private final OzzyGrabberSubsystem g = new OzzyGrabberSubsystem();
+  private final LiliCoralSubystem c = new LiliCoralSubystem();
+  private final DriveTrain D = new DriveTrain();
+  private final Vision V = new Vision();
+  private final VisionSubsystem VS = new VisionSubsystem(V);
 
   /* Pathplanner stuff */
-    private final SendableChooser<Command> PathplannerautoChoosers;
-    private final SendableChooser<String> MyAutoChooser = new SendableChooser<>();
+  private final SendableChooser<Command> PathplannerautoChoosers;
+  private final SendableChooser<String> MyAutoChooser = new SendableChooser<>();
 
   private final Field2d autoRobotPose = new Field2d();
   private final Field2d autoTargetPose = new Field2d();
   private final Field2d autoPath = new Field2d();
-
 
   // private OzUp ozGrabberUpCommand = new OzUp(g);
 
@@ -370,15 +411,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("Kick", new OzKick(g));
 
     new EventTrigger("Drop Coral").onTrue(new LiAutoPlaceCoral(c));
-    
-
 
     configureBindings();
 
     PathplannerautoChoosers = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("[Robot]Auto Chosers", PathplannerautoChoosers);
     SmartDashboard.putString("[Robot]Note", "");
-
 
     configureLogging();
 
@@ -410,13 +448,13 @@ public class RobotContainer {
       autoPath.getObject("Path").setPoses(poses);
     });
   }
-  
+
   boolean teleFirst = false;
 
   public void teleopInit() {
     teleFirst = false;
     // new init(nc).schedule();
-     
+
     D.setDefaultCommand(
         new TelopSwerve(
             D,
@@ -424,24 +462,24 @@ public class RobotContainer {
             () -> driver.getRawAxis(Constants.JoystickConstants.LEFT_Y_AXIS),
             () -> -driver.getTwist(),
             () -> Slow.getAsBoolean()));
-             
+
   }
+
   @AutoLogOutput
   String noteString;
+
   public void periodic() {
     noteString = SmartDashboard.getString("[Robot]Note", "");
 
     SmartDashboard.putBoolean("[Robot]Is flipped?", AutoBuilder.shouldFlip());
 
-    if(driver.getRawButtonPressed(2)) {
+    if (driver.getRawButtonPressed(2)) {
       CommandScheduler.getInstance().cancelAll();
     }
 
-
-
-    //if (!RobotState.isAutonomous()) {
-      updateVisionEst();
-   // }
+    // if (!RobotState.isAutonomous()) {
+    updateVisionEst();
+    // }
   }
 
   private void updateVisionEst() {
@@ -463,16 +501,19 @@ public class RobotContainer {
           visionPoseEstimate.setRobotPose(est.estimatedPose.toPose2d());
         });
   }
+
   double autoFirst = 0.0;
+
   public void autonomousInit() {
     autoFirst = 0.0;
   }
 
   public void autonomousPeriodic() {
     // if(!DriverStation.isAutonomousEnabled()){}
-    // if (g.isHangingLoose() && !ozGrabberUpCommand.isScheduled() && ozGrabberUpCommand.isFinished()) {
-    //   System.out.println("Grabber is loose, fixing..");
-    //   //ozGrabberUpCommand.schedule();
+    // if (g.isHangingLoose() && !ozGrabberUpCommand.isScheduled() &&
+    // ozGrabberUpCommand.isFinished()) {
+    // System.out.println("Grabber is loose, fixing..");
+    // //ozGrabberUpCommand.schedule();
     // }
   }
 
@@ -480,38 +521,38 @@ public class RobotContainer {
     System.out.println("Starting configureBindings()");
 
     /* Driver Controls */
-      zeroGyro.onTrue(new InstantCommand(() -> D.ResetDrives()));
+    zeroGyro.onTrue(new InstantCommand(() -> D.ResetDrives()));
     /* Operator Controls */
-      new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)
+    new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)
         .onTrue(new LIPlaceCoral(c));
-      // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-      //     .whileTrue(new PathFindToPose(D, PathTarget.LEFT_HUMAN_STATION));
-      new JoystickButton(testing, JoystickConstants.BACK_BUTTON)
+    // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
+    // .whileTrue(new PathFindToPose(D, PathTarget.LEFT_HUMAN_STATION));
+    new JoystickButton(testing, JoystickConstants.BACK_BUTTON)
         .onTrue(new DriveTwoardsAprillTag(V, D));
-      new JoystickButton(testing, JoystickConstants.YELLOW_BUTTON)
+    new JoystickButton(testing, JoystickConstants.YELLOW_BUTTON)
         .whileTrue(new Climb(nc));
-      // new JoystickButton(testing, JoystickConstants.RED_BUTTON)
-      //   .whileTrue(new PointWheelsCommand(D));
-      new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
+    // new JoystickButton(testing, JoystickConstants.RED_BUTTON)
+    // .whileTrue(new PointWheelsCommand(D));
+    new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
         .whileTrue(new OzUp(g));
-      new JoystickButton(operator, YELLOW_BUTTON)
+    new JoystickButton(operator, YELLOW_BUTTON)
         .whileTrue(new OzDown(g));
-      // new JoystickButton(operator, LEFT_BUMPER)
-      //   .whileTrue(new OzIntake(g));
-      // new JoystickButton(operator, RIGHT_BUMPER)
-      //   .whileTrue(new OzOutake(g));
-      new JoystickButton(operator, GREEN_BUTTON)
+    // new JoystickButton(operator, LEFT_BUMPER)
+    // .whileTrue(new OzIntake(g));
+    // new JoystickButton(operator, RIGHT_BUMPER)
+    // .whileTrue(new OzOutake(g));
+    new JoystickButton(operator, GREEN_BUTTON)
         .whileTrue(new OzKick(g));
     System.out.println("Ended configureBindings()");
   }
 
   public void teleopPeriodic() {
-    if(operator.getRawButton(GREEN_BUTTON)) {
+    if (operator.getRawButton(GREEN_BUTTON)) {
       g.Up();
     } else {
       g.end();
     }
-    if(operator.getRawButton(LEFT_BUMPER)){
+    if (operator.getRawButton(LEFT_BUMPER)) {
       g.intake();
     } else if (operator.getRawButton(RIGHT_BUMPER)) {
       g.outake();
@@ -520,20 +561,26 @@ public class RobotContainer {
     }
     // c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
     g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5) * 1);
-    // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.2));
-    if(climber.getRawButton(GREEN_BUTTON)) {
+    // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
+    // 0.2));
+    if (climber.getRawButton(GREEN_BUTTON)) {
       nc.JoyClimb1(-1, false);
       nc.JoyClimb2(-1, false);
     } else {
-      nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
-      nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
-    }// nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
-    // nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
+      nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5),
+          climber.getRawButton(JoystickConstants.START_BUTTON));
+      nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5),
+          climber.getRawButton(JoystickConstants.BACK_BUTTON));
+    } // nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS),
+      // 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
+      // nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
+      // 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));
   }
 
   public Command getAutonomousCommand() {
     return PathplannerautoChoosers.getSelected();
   }
 
-  public void onDisable() {}
+  public void onDisable() {
+  }
 }
