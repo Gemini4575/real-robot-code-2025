@@ -43,6 +43,8 @@ import frc.robot.commands.coral.nora.L3;
 import frc.robot.commands.drive.AlineWheels;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
 import frc.robot.commands.drive.PathFindToPose;
+import frc.robot.commands.drive.PatrolCoralStations;
+// import frc.robot.commands.drive.PointWheelsCommand;
 import frc.robot.commands.drive.Stop;
 import frc.robot.commands.drive.PathFindToPose.PathTarget;
 // import frc.robot.commands.drive.TestTurnCommand;
@@ -231,131 +233,56 @@ public class RobotContainer {
 
     new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)
         .onTrue(new LIPlaceCoral(c));
-    // .and(g.BeamBreak())
-    // .onTrue(new Proceser(g, new JoystickButton(operator,
-    // JoystickConstants.BLUE_BUTTON)))
-    // .or(new JoystickButton(operator, JoystickConstants.BLUE_BUTTON))
-    // .and(g.FalseBeamnBreak())
-    // .onTrue(new IntakeAlgae(g));
-
-    // new JoystickButton(operator, 1).//JoystickConstants.GREEN_BUTTON).
-    // and(c.Coral()).
-    // onTrue(new LIPlaceCoral(c, s_swerve));
-
-    new JoystickButton(operator, JoystickConstants.RIGHT_BUMPER).onTrue(new Testing(T));
-
-    new JoystickButton(operator, JoystickConstants.YELLOW_BUTTON)
-        .onTrue(new OzDown(g));
-    new JoystickButton(driver, 9)
-        .onTrue(ozGrabberUpCommand);
-    new JoystickButton(driver, 10)
-        .onTrue(new OzIntake(g));
-    new JoystickButton(driver, 11)
-        .onTrue(new OzOutake(g));
-
-    new JoystickButton(operator, JoystickConstants.RED_BUTTON)
-        .onTrue(new Climb(nc));
-
+    // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
+    // .whileTrue(new PathFindToPose(D, PathTarget.LEFT_HUMAN_STATION));
+    new JoystickButton(testing, JoystickConstants.BACK_BUTTON)
+        .onTrue(new DriveTwoardsAprillTag(V, D));
+    new JoystickButton(testing, JoystickConstants.YELLOW_BUTTON)
+        .whileTrue(new Climb(nc));
+    // new JoystickButton(testing, JoystickConstants.RED_BUTTON)
+    // .whileTrue(new PointWheelsCommand(D));
     new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-        .onTrue(new PathFindToPose(D, PathTarget.ALGAE_INTAKE));
-
-    // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-    // .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new
-    // INtakeFromHuman(n, visionSubsystem)*/);
-
-    // new JoystickButton(operator, JoystickConstants.BACK_BUTTON)
-    // .onTrue(new DriveTwoardsAprillTag(V, D));
-    // new JoystickButton(operator, JoystickConstants.BACK_BUTTON).onTrue(new
-    // Turn(s_swerve));
-
-    // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-    // .onTrue(new
-    // StartMotionSequence(motionService,
-    // drive(1), turn(90), drive(1), turn(90),
-    // drive(1), turn(90), drive(1), turn(90)));
-
-    //
-    // new JoystickButton(driver, 10)
-    // .onTrue(new
-    // StartMotionSequence(motionService, turn(90)));
-
-    // new JoystickButton(driver, 11)
-    // .onTrue(new
-    // StartMotionSequence(motionService, turn(-90)));
-
-    new JoystickButton(driver, 12)
-        .onTrue(new StartMotionSequence(motionService, drive(1)));
-
-    new JoystickButton(operator, JoystickConstants.POV_DOWN)
-        .onTrue(new StartMotionSequence(motionService, apriltag()));
-
-    // new JoystickButton(operator, JoystickConstants.POV_LEFT)
-    // .onTrue(new StartMotionSequence(motionService, new
-    // MotionDirective(MotionType.CAMERA_STRAFE)));
-
-    // new JoystickButton(operator, JoystickConstants.POV_RIGHT)
-    // .onTrue(new StartMotionSequence(motionService, new
-    // MotionDirective(MotionType.CAMERA_ROTATE)));
-
-    // new JoystickButton(operator, JoystickConstants.POV_UP)
-    // .onTrue(new StartMotionSequence(motionService, new
-    // MotionDirective(MotionType.CAMERA_ALL)));
-
-    // Supplier<Pose2d> bestTargetSupplier = () -> {
-    // var target = vision.getTargets();
-    // if (target != null && kTagLayout.getTagPose(target.fiduc ialId).isPresent())
-    // {
-    // SmartDashboard.putString("Targeting tag",
-    // String.valueOf(target.getFiducialId()));
-    // return kTagLayout.getTagPose(target.fiducialId).get().toPose2d();
-    // }
-    // return null;
-    // };
-
-    // alternative option using PathPlanner - only if target is far enough
-    // new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)
-    // // //.and(() -> {
-    // // // return
-    // bestTargetSupplier.get().getTranslation().getDistance(s_swerve.getPose().getTranslation())
-    // > 2.0;
-    // // //})
-    // .onTrue(new PathFindToPose(s_swerve, bestTargetSupplier));
-
+        .whileTrue(new OzUp(g));
+    new JoystickButton(operator, YELLOW_BUTTON)
+        .whileTrue(new OzDown(g));
+    // new JoystickButton(operator, LEFT_BUMPER)
+    // .whileTrue(new OzIntake(g));
+    // new JoystickButton(operator, RIGHT_BUMPER)
+    // .whileTrue(new OzOutake(g));
+    new JoystickButton(operator, GREEN_BUTTON)
+        .whileTrue(new OzKick(g));
     System.out.println("Ended configureBindings()");
   }
 
   public void teleopPeriodic() {
-    c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
-    // nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS),
-    // testing.getRawButton(JoystickConstants.START_BUTTON));
-    // nc.JoyClimb2(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
-    // testing.getRawButton(JoystickConstants.BACK_BUTTON));
-
-    if (operator.getRawButtonPressed(JoystickConstants.POV_UP)) {
-      up++;
-      teleFirst = true;
+    if (operator.getRawButton(GREEN_BUTTON)) {
+      g.Up();
+    } else {
+      g.end();
     }
-    if (up == 1) {
-      if (teleFirst) {
-        up = 100;
-        teleFirst = false;
-        new L1(n).schedule();
-      }
-    } else if (up == 2) {
-      if (teleFirst) {
-        up = 100;
-        teleFirst = false;
-        new L2(n).schedule();
-      }
-    } else if (up == 3) {
-      if (teleFirst) {
-        up = 100;
-        teleFirst = false;
-        new L3(n).schedule();
-      }
-    } else if (up > 3) {
-      up = 0;
+    if (operator.getRawButton(LEFT_BUMPER)) {
+      g.intake();
+    } else if (operator.getRawButton(RIGHT_BUMPER)) {
+      g.outake();
+    } else {
+      g.stop();
     }
+    // c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
+    g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5) * 1);
+    // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
+    // 0.2));
+    if (climber.getRawButton(GREEN_BUTTON)) {
+      nc.JoyClimb1(-1, false);
+      nc.JoyClimb2(-1, false);
+    } else {
+      nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5),
+          climber.getRawButton(JoystickConstants.START_BUTTON));
+      nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5),
+          climber.getRawButton(JoystickConstants.BACK_BUTTON));
+    } // nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS),
+      // 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
+      // nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
+      // 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));
   }
 
   public Command getAutonomousCommand() {

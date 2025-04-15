@@ -116,16 +116,16 @@ public class SwerveModule extends Command {
     // hard coding the offset because its better?
     switch (moduleNumber) {
       case 0:
-        encoderOffset = -4.14314315106254;
+        encoderOffset = -1.020057144401588;
         break;
       case 1:
-        encoderOffset = -5.367816046689951;// 0.922783865280067
+        encoderOffset = -1.450295970644589;// 0.922783865280067
         break;
       case 2:
-        encoderOffset = -5.020495976050146;// -13.00*Math.PI/180.00;
+        encoderOffset = -1.903437227196342;// -13.00*Math.PI/180.00;
         break;
       case 3:
-        encoderOffset = -1.335690543981657;
+        encoderOffset = -4.41164894046481;
         break;
     }
     configAngleMotor();
@@ -139,8 +139,9 @@ public class SwerveModule extends Command {
   private double encoderValue() {
     var retVal = getRawAngle();
     // SmartDashboard.putNumber("[Swerve]module " + moduleNumber, retVal);
-
-    SmartDashboard.putNumber("[Swerve]encoder raw " + moduleNumber, retVal);
+    if (RobotState.isTest()) {
+      SmartDashboard.putNumber("[Swerve]encoder raw " + moduleNumber, retVal);
+    }
 
     SmartDashboard.putNumber("[Swerve]encoder " + moduleNumber, (retVal * 1000) / 1000.0);
     SmartDashboard.putNumber("[Swerve]encoder degrees " + moduleNumber, (retVal * (180 / Math.PI) * 1000) / 1000.0);
@@ -314,6 +315,7 @@ public class SwerveModule extends Command {
 
   private void configAngleMotor() {
     var turnConfig = new SparkMaxConfig();
+    turnConfig.smartCurrentLimit(40, 40);
     turnConfig.inverted(true);
     turnConfig.closedLoop.p(16.5);
     turnConfig.closedLoop.outputRange(-Math.PI, Math.PI);
@@ -323,6 +325,7 @@ public class SwerveModule extends Command {
 
   private void configDriveMotor() {
     var driveConfig = new SparkMaxConfig();
+    driveConfig.smartCurrentLimit(40, 40);
     driveConfig.inverted(true);
     driveConfig.encoder.positionConversionFactor(1); // Constants.SwerveConstants.driveConversionFactor);
     driveConfig.closedLoop.p(1);

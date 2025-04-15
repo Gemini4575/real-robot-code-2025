@@ -28,10 +28,9 @@ public class OzzyGrabberSubsystem extends SubsystemBase {
         kick = new SparkMax(KickerMotor, MotorType.kBrushed);
 
         timer = new Timer();
-
+        // these are right
         Top = new DigitalInput(top);
         bottom = new DigitalInput(Bottom);
-        kicker = new DigitalInput(Kicker);
     }
 
     private boolean top() {
@@ -64,15 +63,15 @@ public class OzzyGrabberSubsystem extends SubsystemBase {
     }
 
     public void Up() {
-        if (!top()) {
-            Pose.set(UpSpeed);
-        }
+        // if(!top()){
+        Pose.set(UpSpeed);
+        // }
     }
 
     public void down() {
-        if (!bottom()) {
-            Pose.set(DownSpeed);
-        }
+        // if(!bottom()){
+        Pose.set(DownSpeed);
+        // }
     }
 
     public boolean Kick() {
@@ -100,6 +99,7 @@ public class OzzyGrabberSubsystem extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putBoolean("Top", top());
         SmartDashboard.putBoolean("Bottom", bottom());
+        SmartDashboard.putNumber("Pose", Pose.get());
     }
 }
 
