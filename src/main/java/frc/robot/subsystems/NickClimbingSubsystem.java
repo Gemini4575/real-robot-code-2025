@@ -5,10 +5,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.epramotor.Motor;
-import frc.robot.Constants.NickClimbingConstanst;
+import static frc.robot.Constants.NickClimbingConstanst;
 
-public class NickClimbingSubsystem extends SubsystemBase{
-    
+public class NickClimbingSubsystem extends SubsystemBase {
+
     public Motor ClimbingMotor1;
     public Motor ClimbingMotor2;
 
@@ -20,35 +20,40 @@ public class NickClimbingSubsystem extends SubsystemBase{
 
     private boolean Climb1() {
         // Code to move the elevator
-        return ClimbingMotor1.SetIfBoolean(Math.abs(ClimbingMotor1.getPosition()) < (NickClimbingConstanst.ClimbingMotorPoseition), -NickClimbingConstanst.ClimbingSpeed);
+        return ClimbingMotor1.SetIfBoolean(
+                Math.abs(ClimbingMotor1.getPosition()) < (NickClimbingConstanst.ClimbingMotorPoseition),
+                -NickClimbingConstanst.ClimbingSpeed);
     }
-    
+
     private boolean Climb2() {
         // Code to move the elevator
-        return ClimbingMotor2.SetIfBoolean(Math.abs(ClimbingMotor2.getPosition()) < (NickClimbingConstanst.ClimbingMotorPoseition), NickClimbingConstanst.ClimbingSpeed);
+        return ClimbingMotor2.SetIfBoolean(
+                Math.abs(ClimbingMotor2.getPosition()) < (NickClimbingConstanst.ClimbingMotorPoseition),
+                NickClimbingConstanst.ClimbingSpeed);
     }
 
     public boolean init1() {
         // Code to move the elevator
-        if(ClimbingMotor1.getPosition() < Math.round(0)) {
+        if (ClimbingMotor1.getPosition() < Math.round(0)) {
             ClimbingMotor1.set(NickClimbingConstanst.ClimbingSpeed);
-            } else {
-                Stop();
+        } else {
+            Stop();
             return true;
-            }
-            return false;
+        }
+        return false;
     }
 
     public boolean init2() {
         // Code to move the elevator
-        if(ClimbingMotor2.getPosition() < Math.round(NickClimbingConstanst.ClimbingMotorPoseition)) {
+        if (ClimbingMotor2.getPosition() < Math.round(NickClimbingConstanst.ClimbingMotorPoseition)) {
             ClimbingMotor2.set(NickClimbingConstanst.ClimbingSpeed);
-            } else {
-                Stop();
+        } else {
+            Stop();
             return true;
-            }
-            return false;
+        }
+        return false;
     }
+
     public void Climb() {
         // Code to move the elevator
         ClimbingMotor1.set(-1);
@@ -59,8 +64,11 @@ public class NickClimbingSubsystem extends SubsystemBase{
         ClimbingMotor1.stop();
         ClimbingMotor2.stop();
     }
+
     /**
-     * Curently this is what we are using but after I get mesurments this should not be used 1/28
+     * Curently this is what we are using but after I get mesurments this should not
+     * be used 1/28
+     * 
      * @param Joy The joysitck that you are using
      */
     @Deprecated
@@ -78,7 +86,7 @@ public class NickClimbingSubsystem extends SubsystemBase{
             ClimbingMotor2.getEncoder().setPosition(0);
         }
     }
-    
+
     public void Stop() {
         // Code to stop the elevator
         ClimbingMotor1.stop();

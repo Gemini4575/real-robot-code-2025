@@ -4,133 +4,123 @@
 
 package frc.robot;
 
-
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
-import com.pathplanner.lib.events.EventTrigger;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Autos;
+import frc.robot.Constants.FieldLocations;
 import frc.robot.Constants.JoystickConstants;
+import frc.robot.commands.StartMotionSequence;
 import frc.robot.commands.TelopSwerve;
 import frc.robot.commands.Testing;
 import frc.robot.commands.algea.EXO.OzDown;
 import frc.robot.commands.algea.EXO.OzIntake;
-import frc.robot.commands.algea.EXO.OzKick;
 import frc.robot.commands.algea.EXO.OzOutake;
 import frc.robot.commands.algea.EXO.OzUp;
 import frc.robot.commands.climbing.Climb;
 import frc.robot.commands.coral.lili.AUTOCoral;
-import frc.robot.commands.coral.lili.AUTOCoralFalse;
 import frc.robot.commands.coral.lili.EXOCloseGateSlow;
 import frc.robot.commands.coral.lili.LIPlaceCoral;
 import frc.robot.commands.coral.lili.LiAutoPlaceCoral;
+//import frc.robot.commands.coral.nora.INtakeFromHuman;
+import frc.robot.commands.coral.nora.L1;
+import frc.robot.commands.coral.nora.L2;
+import frc.robot.commands.coral.nora.L3;
 import frc.robot.commands.drive.AlineWheels;
-import frc.robot.commands.drive.AlineWheels2;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
 import frc.robot.commands.drive.PathFindToPose;
-import frc.robot.commands.drive.PatrolCoralStations;
-import frc.robot.commands.drive.PointWheelsCommand;
 import frc.robot.commands.drive.Stop;
 import frc.robot.commands.drive.PathFindToPose.PathTarget;
 // import frc.robot.commands.drive.TestTurnCommand;
+import frc.robot.service.MotionService;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.DriveTrain;
 
 import static frc.robot.datamodel.MotionDirective.apriltag;
 import static frc.robot.datamodel.MotionDirective.drive;
 
-import static frc.robot.Constants.JoystickConstants.*;
-
-import java.util.Optional;
-
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.photonvision.EstimatedRobotPose;
-
 // @Component
 public class RobotContainer {
 
   Field2d visionPoseEstimate = new Field2d();
+  private double up = 0.0;
 
   /* Controllers */
-    private final Joystick driver = new Joystick(0);
-    private final Joystick operator = new Joystick(1);
-    private final Joystick climber = new Joystick(2);
-    private final Joystick testing = new Joystick(3);
+  private final Joystick driver = new Joystick(1);
+  private final Joystick operator = new Joystick(2);
+  private final Joystick testing = new Joystick(3);
 
   /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
-    private final Trigger Slow = new Trigger(new JoystickButton(driver, 7)
-      .and(new JoystickButton(driver, 12)))
-        .or(new JoystickButton(operator, START_BUTTON));
+  private final JoystickButton zeroGyro = new JoystickButton(driver, JoystickConstants.BACK_BUTTON);
 
   /* Subsystems */
-    private final NickClimbingSubsystem nc = new NickClimbingSubsystem();
-    private final OzzyGrabberSubsystem g = new OzzyGrabberSubsystem();
-    private final LiliCoralSubystem c = new LiliCoralSubystem();
-    private final DriveTrain D = new DriveTrain();
-    private final Vision V = new Vision();
-    private final VisionSubsystem VS = new VisionSubsystem(V);
+  private final NickClimbingSubsystem nc = new NickClimbingSubsystem();
+  private final OzzyGrabberSubsystem g = new OzzyGrabberSubsystem();
+  private final LiliCoralSubystem c = new LiliCoralSubystem();
+  private final NoraArmSubsystem n = new NoraArmSubsystem();
+  private final DriveTrain D = new DriveTrain();
+  private final Vision V = new Vision();
+  public final TestingSubsystem T = new TestingSubsystem(13);
+  private final VisionSubsystem VS = new VisionSubsystem(V);
 
   /* Pathplanner stuff */
-    private final SendableChooser<Command> PathplannerautoChoosers;
-    private final SendableChooser<String> MyAutoChooser = new SendableChooser<>();
+  private final SendableChooser<Command> PathplannerautoChoosers;
+  private final SendableChooser<String> MyAutoChooser = new SendableChooser<>();
+  private String MyAutoChooser_String;
+  private final String DriveAndDrop1 = "Drive And Drop1";
+  private final String Nothing = "Nothing";
+  private final String DriveAndDRop2 = " Drive And Drop2";
 
   private final Field2d autoRobotPose = new Field2d();
   private final Field2d autoTargetPose = new Field2d();
   private final Field2d autoPath = new Field2d();
 
+  private final MotionService motionService = new MotionService(D, c, VS);
 
-  // private OzUp ozGrabberUpCommand = new OzUp(g);
+  private OzUp ozGrabberUpCommand = new OzUp(g);
 
   public RobotContainer() {
     System.out.println("Starting RobotContainer()");
     NamedCommands.registerCommand("Drop Coral", new LiAutoPlaceCoral(c));
-    NamedCommands.registerCommand("Drop and Close Coral", new LIPlaceCoral(c));
-    NamedCommands.registerCommand("Close Door", new EXOCloseGateSlow(c));
+    NamedCommands.registerCommand("Close Door", new EXOCloseGateSlow(c).withTimeout(2));
     NamedCommands.registerCommand("Is there Coral", new AUTOCoral(c));
-    NamedCommands.registerCommand("Is there not Coral", new AUTOCoralFalse(c));
     NamedCommands.registerCommand("Stop", new Stop(D));
     NamedCommands.registerCommand("Wheels", new AlineWheels(D));
-    NamedCommands.registerCommand("Wheels long", new AlineWheels2(D));
-    NamedCommands.registerCommand("Kick", new OzKick(g));
-
-    new EventTrigger("Drop Coral").onTrue(new LiAutoPlaceCoral(c));
-    
-
-
     configureBindings();
 
     PathplannerautoChoosers = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("[Robot]Auto Chosers", PathplannerautoChoosers);
-    SmartDashboard.putString("[Robot]Note", "");
 
+    MyAutoChooser.addOption("Drive And Drop1", DriveAndDrop1);
+    MyAutoChooser.setDefaultOption("Nothing", Nothing);
+    MyAutoChooser.addOption(" Drive And Drop2", DriveAndDRop2);
+    SmartDashboard.putData(MyAutoChooser);
 
     configureLogging();
 
-    SmartDashboard.putData("[Robot]Vision Pose Estimate", visionPoseEstimate);
+    SmartDashboard.putData("Auto Chooser", PathplannerautoChoosers);
+    SmartDashboard.putData("Vision Pose Estimate", visionPoseEstimate);
     PathfindingCommand.warmupCommand().schedule();
     System.out.println("Ended RobotContainer()");
   }
 
   private void configureLogging() {
-    SmartDashboard.putData("[Robot]Auto Robot Pose", autoRobotPose);
-    SmartDashboard.putData("[Robot]Auto Target Pose", autoTargetPose);
-    SmartDashboard.putData("[Robot]Auto Path", autoPath);
+    SmartDashboard.putData("Auto Robot Pose", autoRobotPose);
+    SmartDashboard.putData("Auto Target Pose", autoTargetPose);
+    SmartDashboard.putData("Auto Path", autoPath);
 
     // Logging callback for current robot pose
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
@@ -150,48 +140,41 @@ public class RobotContainer {
       autoPath.getObject("Path").setPoses(poses);
     });
   }
-  
+
   boolean teleFirst = false;
 
   public void teleopInit() {
     teleFirst = false;
     // new init(nc).schedule();
-     
     D.setDefaultCommand(
         new TelopSwerve(
             D,
             () -> -driver.getRawAxis(Constants.JoystickConstants.LEFT_X_AXIS),
             () -> driver.getRawAxis(Constants.JoystickConstants.LEFT_Y_AXIS),
             () -> -driver.getTwist(),
-            () -> Slow.getAsBoolean()));
-             
+            () -> operator.getRawButton(JoystickConstants.START_BUTTON)));
   }
-  @AutoLogOutput
-  String noteString;
+
   public void periodic() {
-    noteString = SmartDashboard.getString("[Robot]Note", "");
 
-    SmartDashboard.putBoolean("[Robot]Is flipped?", AutoBuilder.shouldFlip());
+    SmartDashboard.putBoolean("Is flipped?", AutoBuilder.shouldFlip());
 
-    if(driver.getRawButtonPressed(2)) {
+    if (driver.getRawButtonPressed(2)) {
       CommandScheduler.getInstance().cancelAll();
     }
 
+    motionService.periodic();
 
+    SmartDashboard.putNumber("Encoder",
+        (nc.ClimbingMotor1.getEncoder().getPosition() + nc.ClimbingMotor2.getEncoder().getPosition()));
 
-    //if (!RobotState.isAutonomous()) {
+    if (!RobotState.isAutonomous()) {
       updateVisionEst();
-   // }
+    }
   }
 
   private void updateVisionEst() {
     var visionEst = V.getEstimatedGlobalPose();
-    updateLocationWithVision(visionEst);
-    var visionEstColor = V.getEstimatedGlobalPoseColor();
-    updateLocationWithVision(visionEstColor);
-  }
-
-  private void updateLocationWithVision(Optional<EstimatedRobotPose> visionEst) {
     visionEst.ifPresent(
         est -> {
           // Change our trust in the measurement based on the tags we can see
@@ -203,59 +186,183 @@ public class RobotContainer {
           visionPoseEstimate.setRobotPose(est.estimatedPose.toPose2d());
         });
   }
+
   double autoFirst = 0.0;
+
   public void autonomousInit() {
+    MyAutoChooser_String = MyAutoChooser.getSelected();
     autoFirst = 0.0;
   }
 
   public void autonomousPeriodic() {
-    // if(!DriverStation.isAutonomousEnabled()){}
-    // if (g.isHangingLoose() && !ozGrabberUpCommand.isScheduled() && ozGrabberUpCommand.isFinished()) {
-    //   System.out.println("Grabber is loose, fixing..");
-    //   //ozGrabberUpCommand.schedule();
-    // }
+    if (g.isHangingLoose() && !ozGrabberUpCommand.isScheduled() && ozGrabberUpCommand.isFinished()) {
+      System.out.println("Grabber is loose, fixing..");
+      // ozGrabberUpCommand.schedule();
+    }
+    if (autoFirst == 0) {
+      switch (MyAutoChooser_String) {
+        case DriveAndDrop1:
+          new StartMotionSequence(motionService, Autos.AUTO_CORAL1).schedule();
+          break;
+
+        case Nothing:
+
+          break;
+
+        case DriveAndDRop2:
+          new StartMotionSequence(motionService, Autos.AUTO_CORAL2).schedule();
+          break;
+        default:
+          new StartMotionSequence(motionService, Autos.AUTO_CORAL1).schedule();
+          break;
+      }
+      autoFirst++;
+    }
   }
 
   private void configureBindings() {
     System.out.println("Starting configureBindings()");
 
     /* Driver Controls */
-      zeroGyro.onTrue(new InstantCommand(() -> D.ResetDrives()));
+    zeroGyro.onTrue(new InstantCommand(() -> D.ResetDrives()));
     /* Operator Controls */
-      new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)
+    // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
+    // .onTrue(new DriveTwoardsAprillTag(vision, s_swerve));
+
+    new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)
         .onTrue(new LIPlaceCoral(c));
-      // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-      //     .whileTrue(new PathFindToPose(D, PathTarget.LEFT_HUMAN_STATION));
-      new JoystickButton(testing, JoystickConstants.BACK_BUTTON)
-        .onTrue(new DriveTwoardsAprillTag(V, D));
-      new JoystickButton(testing, JoystickConstants.YELLOW_BUTTON)
-        .whileTrue(new Climb(nc));
-      new JoystickButton(testing, JoystickConstants.RED_BUTTON)
-        .onTrue(new OzKick(g));
-      new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-        .whileTrue(new OzDown(g));
-      new JoystickButton(operator, YELLOW_BUTTON)
-        .whileTrue(new OzUp(g));
-      new JoystickButton(operator, LEFT_BUMPER)
-        .whileTrue(new OzIntake(g));
-      new JoystickButton(operator, RIGHT_BUMPER)
-        .whileTrue(new OzOutake(g));
-      new JoystickButton(operator, GREEN_BUTTON)
-        .whileTrue(new OzKick(g));
+    // .and(g.BeamBreak())
+    // .onTrue(new Proceser(g, new JoystickButton(operator,
+    // JoystickConstants.BLUE_BUTTON)))
+    // .or(new JoystickButton(operator, JoystickConstants.BLUE_BUTTON))
+    // .and(g.FalseBeamnBreak())
+    // .onTrue(new IntakeAlgae(g));
+
+    // new JoystickButton(operator, 1).//JoystickConstants.GREEN_BUTTON).
+    // and(c.Coral()).
+    // onTrue(new LIPlaceCoral(c, s_swerve));
+
+    new JoystickButton(operator, JoystickConstants.RIGHT_BUMPER).onTrue(new Testing(T));
+
+    new JoystickButton(operator, JoystickConstants.YELLOW_BUTTON)
+        .onTrue(new OzDown(g));
+    new JoystickButton(driver, 9)
+        .onTrue(ozGrabberUpCommand);
+    new JoystickButton(driver, 10)
+        .onTrue(new OzIntake(g));
+    new JoystickButton(driver, 11)
+        .onTrue(new OzOutake(g));
+
+    new JoystickButton(operator, JoystickConstants.RED_BUTTON)
+        .onTrue(new Climb(nc));
+
+    new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
+        .onTrue(new PathFindToPose(D, PathTarget.ALGAE_INTAKE));
+
+    // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
+    // .onTrue(new StartMotionSequence(motionService, Autos.AUTO_WITH_CAM)/*new
+    // INtakeFromHuman(n, visionSubsystem)*/);
+
+    // new JoystickButton(operator, JoystickConstants.BACK_BUTTON)
+    // .onTrue(new DriveTwoardsAprillTag(V, D));
+    // new JoystickButton(operator, JoystickConstants.BACK_BUTTON).onTrue(new
+    // Turn(s_swerve));
+
+    // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
+    // .onTrue(new
+    // StartMotionSequence(motionService,
+    // drive(1), turn(90), drive(1), turn(90),
+    // drive(1), turn(90), drive(1), turn(90)));
+
+    //
+    // new JoystickButton(driver, 10)
+    // .onTrue(new
+    // StartMotionSequence(motionService, turn(90)));
+
+    // new JoystickButton(driver, 11)
+    // .onTrue(new
+    // StartMotionSequence(motionService, turn(-90)));
+
+    new JoystickButton(driver, 12)
+        .onTrue(new StartMotionSequence(motionService, drive(1)));
+
+    new JoystickButton(operator, JoystickConstants.POV_DOWN)
+        .onTrue(new StartMotionSequence(motionService, apriltag()));
+
+    // new JoystickButton(operator, JoystickConstants.POV_LEFT)
+    // .onTrue(new StartMotionSequence(motionService, new
+    // MotionDirective(MotionType.CAMERA_STRAFE)));
+
+    // new JoystickButton(operator, JoystickConstants.POV_RIGHT)
+    // .onTrue(new StartMotionSequence(motionService, new
+    // MotionDirective(MotionType.CAMERA_ROTATE)));
+
+    // new JoystickButton(operator, JoystickConstants.POV_UP)
+    // .onTrue(new StartMotionSequence(motionService, new
+    // MotionDirective(MotionType.CAMERA_ALL)));
+
+    // Supplier<Pose2d> bestTargetSupplier = () -> {
+    // var target = vision.getTargets();
+    // if (target != null && kTagLayout.getTagPose(target.fiduc ialId).isPresent())
+    // {
+    // SmartDashboard.putString("Targeting tag",
+    // String.valueOf(target.getFiducialId()));
+    // return kTagLayout.getTagPose(target.fiducialId).get().toPose2d();
+    // }
+    // return null;
+    // };
+
+    // alternative option using PathPlanner - only if target is far enough
+    // new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)
+    // // //.and(() -> {
+    // // // return
+    // bestTargetSupplier.get().getTranslation().getDistance(s_swerve.getPose().getTranslation())
+    // > 2.0;
+    // // //})
+    // .onTrue(new PathFindToPose(s_swerve, bestTargetSupplier));
+
     System.out.println("Ended configureBindings()");
   }
 
-  public void teleopPeriodic() { 
-    // c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
-    g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5) * 1);
-    // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.2));
-    nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
-    nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
+  public void teleopPeriodic() {
+    c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
+    // nc.JoyClimb1(testing.getRawAxis(JoystickConstants.RIGHT_Y_AXIS),
+    // testing.getRawButton(JoystickConstants.START_BUTTON));
+    // nc.JoyClimb2(testing.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
+    // testing.getRawButton(JoystickConstants.BACK_BUTTON));
+
+    if (operator.getRawButtonPressed(JoystickConstants.POV_UP)) {
+      up++;
+      teleFirst = true;
+    }
+    if (up == 1) {
+      if (teleFirst) {
+        up = 100;
+        teleFirst = false;
+        new L1(n).schedule();
+      }
+    } else if (up == 2) {
+      if (teleFirst) {
+        up = 100;
+        teleFirst = false;
+        new L2(n).schedule();
+      }
+    } else if (up == 3) {
+      if (teleFirst) {
+        up = 100;
+        teleFirst = false;
+        new L3(n).schedule();
+      }
+    } else if (up > 3) {
+      up = 0;
+    }
   }
 
   public Command getAutonomousCommand() {
     return PathplannerautoChoosers.getSelected();
   }
 
-  public void onDisable() {}
+  public void onDisable() {
+    motionService.stop(true);
+  }
 }
