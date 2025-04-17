@@ -1,11 +1,8 @@
 package frc.robot.subsystems;
 
-import static frc.robot.datamodel.MotionDirective.turn;
-
-import java.util.function.BiPredicate;
 import java.util.function.BooleanSupplier;
 
-import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -14,7 +11,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.util.PoseTools;
 import frc.robot.Constants.LiliCoralConstants;
 
 public class LiliCoralSubystem extends SubsystemBase{
@@ -42,11 +38,10 @@ public class LiliCoralSubystem extends SubsystemBase{
     // private boolean top() {
     //     return top.get();
     // }
-
+    
     private boolean bottom() {
         return bottom.get();
     }
-
     private boolean coral() {
         return coral.get();
     }
@@ -97,67 +92,55 @@ public class LiliCoralSubystem extends SubsystemBase{
     //     }
     //     return false;
     // }
-    boolean pervois = false;
+    boolean previous = true;
     boolean first = true;
     private void start() {
         if(first) {
-            pervois = true;
+            previous = true;
             first = false;
         }
     }
     public void isInterupted() {
-        pervois = false;
+        previous = false;
         first = true;
     }
     
     public boolean DropGate() {
         start();
-        if(!pervois && bottom()) {
+        if(!previous && bottom()) {
             gate.stopMotor();
             first = true;
             return true;
         } else {
             gate.set(LiliCoralConstants.GateSpeed);
-            pervois = bottom();
+            previous = bottom();
         }
 
         return false;//!coral();
     }
 
-    public boolean CloseGate() {
-        start();
-        if((!pervois && bottom()) || coral()) {
-            gate.stopMotor();
-            first = true;
-            return true;
-        } else {
-            gate.set(-LiliCoralConstants.GateSpeed);
-            pervois = bottom();
-            return false;
-        }
-    }
-
     public boolean GetCoral() {
-        if((pervois && bottom()) || coral()) {
+        if((previous && bottom()) || coral()) {
             gate.stopMotor();
             first = true;
             return true;
         } else {
             gate.set(-LiliCoralConstants.GateSpeed);
-            pervois = bottom();
+            previous = bottom();
             return false;
         }
     }
 
     public boolean CloseGateSlow() {
         start();
-        if((!pervois && bottom()) || coral()) {
+        SmartDashboard.putString("previous", "" + previous + "," + first + "," + bottom());
+        if((!previous && bottom()) /* Mr.Fran Doesn't think we need to check for coral */) {
             gate.stopMotor();
             first = true;
             return true;
         } else {
-            gate.set(-LiliCoralConstants.GateSpeed);
-            pervois = bottom();
+            gate.set(-LiliCoralConstants.GateSpeed*.75);
+            previous = bottom();
             return false;
         }
     }
@@ -179,7 +162,11 @@ public class LiliCoralSubystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Gate", coral());
+       
+        SmartDashboard.putBoolean("Gate", bottom());
+        SmartDashboard.putBoolean("Coral", coral());
+        
+
         if(first) {
             if(bottom() && lastKnownState == State.CLOSED) {
                 

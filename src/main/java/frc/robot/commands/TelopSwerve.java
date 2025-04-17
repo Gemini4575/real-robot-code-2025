@@ -6,8 +6,8 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.drive.DriveTrain;
 
 
@@ -59,7 +59,9 @@ public class TelopSwerve extends Command {
         double strafeVal = MathUtil.applyDeadband(translationSup.getAsDouble(), 0.2) * -slowModeFactor;
         double translationVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), 0.3) * slowModeFactor;
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), 0.4) * slowModeFactor;
-
+        SmartDashboard.putNumber("strafeVal", strafeVal);
+        SmartDashboard.putNumber("translationVal", translationVal);
+        SmartDashboard.putNumber("rotationVal", rotationVal);
         /* Drive */
         if (!RobotState.isAutonomous()) {
             s_Swerve.drive(

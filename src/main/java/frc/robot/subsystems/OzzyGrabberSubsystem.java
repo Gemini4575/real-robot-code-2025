@@ -79,6 +79,10 @@ public class OzzyGrabberSubsystem extends SubsystemBase{
         return true;
     }
 
+    public boolean isHangingLoose() {
+        return PoseMotor.getEncoder().getPosition() > 0.15 * OzzyGrabberConstants.MovmentLength;
+    }
+
     public BooleanSupplier BeamBreak() {
         return () -> AlgeaSensor.get();
     }

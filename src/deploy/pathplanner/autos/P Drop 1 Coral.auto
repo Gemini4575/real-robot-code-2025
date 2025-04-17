@@ -1,0 +1,50 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Wheels"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P to side 2"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Drop Coral"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Close Door"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "1 Coral",
+  "choreoAuto": false
+}

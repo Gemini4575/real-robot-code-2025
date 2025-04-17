@@ -19,11 +19,9 @@ public class VisionSubsystem extends SubsystemBase {
     Rotation2d targetYaw;
     double targetRange = 0.0;
     private PoseTools translation3dToTranslation2d;
-    private Pose2dToSpeeds p;
 
     public VisionSubsystem(Vision vision) {
         this.vision = vision;
-        p = new Pose2dToSpeeds();
         translation3dToTranslation2d = new PoseTools();
     }
 
@@ -40,7 +38,6 @@ public class VisionSubsystem extends SubsystemBase {
 
         if (vision.getTagCamera().getLatestResult() == null) {
             var targetX = vision.getTagCamera().getLatestResult().getBestTarget().getAlternateCameraToTarget().getMeasureX();
-            ChassisSpeeds c = new ChassisSpeeds(0, targetX.magnitude() / 10, 0);
             SmartDashboard.putNumber("Range", targetX.baseUnitMagnitude());
         }
 

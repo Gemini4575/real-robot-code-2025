@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.epramotor.Motor;
 import frc.robot.Constants.NickClimbingConstanst;
@@ -19,12 +20,12 @@ public class NickClimbingSubsystem extends SubsystemBase{
 
     private boolean Climb1() {
         // Code to move the elevator
-        return ClimbingMotor1.SetIfBoolean(ClimbingMotor1.getPosition() < (NickClimbingConstanst.ClimbingMotorPoseition), NickClimbingConstanst.ClimbingSpeed);
+        return ClimbingMotor1.SetIfBoolean(Math.abs(ClimbingMotor1.getPosition()) < (NickClimbingConstanst.ClimbingMotorPoseition), -NickClimbingConstanst.ClimbingSpeed);
     }
     
     private boolean Climb2() {
         // Code to move the elevator
-        return ClimbingMotor2.SetIfBoolean((ClimbingMotor2.getPosition()) < (NickClimbingConstanst.ClimbingMotorPoseition), NickClimbingConstanst.ClimbingSpeed);
+        return ClimbingMotor2.SetIfBoolean(Math.abs(ClimbingMotor2.getPosition()) < (NickClimbingConstanst.ClimbingMotorPoseition), NickClimbingConstanst.ClimbingSpeed);
     }
 
     public boolean init1() {
@@ -80,6 +81,13 @@ public class NickClimbingSubsystem extends SubsystemBase{
         // Code to stop the elevator
         ClimbingMotor1.stop();
         ClimbingMotor2.stop();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("CimbEndcoder 1", ClimbingMotor1.getPosition());
+        SmartDashboard.putNumber("CimbEndcoder 2", ClimbingMotor2.getPosition());
+
     }
 
 }

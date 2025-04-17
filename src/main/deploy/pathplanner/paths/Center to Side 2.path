@@ -8,34 +8,66 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.759121621621622,
-        "y": 3.3728040540540536
+        "x": 7.287457191780821,
+        "y": 3.018279109589041
       },
       "isLocked": false,
-      "linkedName": "Center"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.758065878378378,
-        "y": 2.7206081081081073
+        "x": 5.063655821917808,
+        "y": 3.0333047945205482
       },
       "prevControl": {
-        "x": 5.973521959459459,
-        "y": 3.002238175675675
+        "x": 5.995248287671233,
+        "y": 2.236943493150685
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Side 2"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.42084168336673333,
+      "rotationDegrees": 37.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.9404761904761905,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.5,
+        "maxAngularVelocity": 594.38,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.880952380952381,
+      "maxWaypointRelativePos": 0.942857142857143,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 594.38,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 594.38,
+    "maxAngularVelocity": 300.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
@@ -45,10 +77,10 @@
     "rotation": 29.999999999999996
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Center",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

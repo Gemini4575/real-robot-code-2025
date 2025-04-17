@@ -7,9 +7,9 @@ import frc.robot.subsystems.LiliCoralSubystem;
 public class LIPlaceCoral extends SequentialCommandGroup{
     public LIPlaceCoral(LiliCoralSubystem c) {
         addCommands(
-            new EXODropGate(c),
-            new WaitCommand(1.25),
-            new EXOCloseGateSlow(c).withTimeout(6)
+            new EXODropGate(c).withTimeout(3),
+            new WaitCommand(1),
+            new EXOCloseGateSlow(c).withTimeout(2)
         );
     }
 }

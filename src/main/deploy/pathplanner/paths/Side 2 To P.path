@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.861824324324324,
+        "y": 3.1208192567567563
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.351051094421466,
+        "y": 2.221127893798149
+      },
+      "isLocked": false,
+      "linkedName": "P Side 2"
+    },
+    {
+      "anchor": {
+        "x": 6.0194230769230765,
+        "y": 0.7946794871794873
+      },
+      "prevControl": {
+        "x": 6.035121160425667,
+        "y": 1.622455550222674
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red Barge pass"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": "P stuff",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 29.999999999999996
+  },
+  "useDefaultConstraints": true
+}

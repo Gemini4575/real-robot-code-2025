@@ -33,32 +33,29 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.lib.math.MesurementToRoation;
 import frc.lib.util.SwerveModuleConstants;
 import frc.robot.datamodel.MotionDirective;
-import frc.robot.subsystems.drive.DriveTrain;
 
 public class Constants {
     public static MesurementToRoation rotationsToInch = new MesurementToRoation();
 
-    public enum RobotMode {
-        /**
-         * Running on a real robot.
-         */
-        REAL,
+    public static final Mode simMode = Mode.SIM;
+  public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
-        /**
-         * Running a physics simulator.
-         */
-        SIM,
+  public static enum Mode {
+    /** Running on a real robot. */
+    REAL,
 
-        /**
-         * Replaying from a log file.
-         */
-        REPLAY
-    }
+    /** Running a physics simulator. */
+    SIM,
 
-    public static final String ROBOT_NAME = "4575-2025-OffSeason";
+    /** Replaying from a log file. */
+    REPLAY
+  }
+
+    public static final String ROBOT_NAME = "4575-2025";
 
     // avoid typo errors
     public static final class LogConfigs {
@@ -291,11 +288,15 @@ public class Constants {
     
     public static final class Vision {
         public static final String kTagCameraName = "Arducam1";
+        public static final String kTagCameraColorName = "Arducam IMX179 Camera Module";
         public static final String kAlgaeCameraName = "ArducamColor";
-        public static final AprilTagFieldLayout kTagLayout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
+        public static final AprilTagFieldLayout kTagLayout = AprilTagFields.k2025ReefscapeWelded.loadAprilTagLayoutField();
         //TODO update with real value
         public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
+                new Transform3d(Units.inchesToMeters(1.25), Units.inchesToMeters(10.5), Units.inchesToMeters(17.75), new Rotation3d(0, 0, Math.PI/2));
+
+        public static final Transform3d kRobotToCamColor =
+                new Transform3d(Units.inchesToMeters(1.5), -Units.inchesToMeters(6.5), Units.inchesToMeters(17.25), new Rotation3d(0, 0, -Math.PI/2));
                 // The standard deviations of our vision estimated poses, which affect correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
@@ -342,17 +343,22 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         */
         // These number are for a 25 by 25 swerve
         // 0.33333
-        public static final Translation2d m_frontLeftLocation = new Translation2d(0.3333, 0.33333);
-        public static final Translation2d m_frontRightLocation = new Translation2d(0.33333, -0.33333);
-        public static final Translation2d m_backLeftLocation = new Translation2d(-0.33333, 0.33333);
-        public static final Translation2d m_backRightLocation = new Translation2d(-0.33333, -0.33333);
+        private static final double ROBOT_WIDTH = Units.inchesToMeters(25.0);
+        private static final double ROBOT_LENGTH = Units.inchesToMeters(25.0);
+        private static final double SWERVE_FROM_CORNER = Units.inchesToMeters(2.61);
+        private static final double MODULE_OFFSET_X = ROBOT_WIDTH/2 - SWERVE_FROM_CORNER;
+        private static final double MODULE_OFFSET_Y = ROBOT_LENGTH/2 - SWERVE_FROM_CORNER;
+        public static final Translation2d m_backLeftLocation = new Translation2d(-MODULE_OFFSET_X, MODULE_OFFSET_Y);
+        public static final Translation2d m_backRightLocation = new Translation2d(-MODULE_OFFSET_X, -MODULE_OFFSET_Y);
+        public static final Translation2d m_frontRightLocation = new Translation2d(MODULE_OFFSET_X, -MODULE_OFFSET_Y);
+        public static final Translation2d m_frontLeftLocation = new Translation2d(MODULE_OFFSET_X, MODULE_OFFSET_Y);
 
         /* Ints */
             public static final int kEncoderResolution = 4096;
         /* Doubles */
             public static final double MaxMetersPersecond = 4.47;//3.264903459; //4.47 This is calculated 5676rpm, 4in wheels, 6.75 gearbox
             public static final double kWheelRadius = 0.0508;
-            public static final double kModuleMaxAngularVelocity =  27.73816874; //This is calculated 5676rpm, 150/7:1 gearbox in radians
+            public static final double kModuleMaxAngularVelocity =  27.73816874; //This is calculated 5676rpm, 150/7:1 gearbox in radians. 594.380 deg/s in pathplanner
             public static final double kModuleMaxAngularAcceleration = 18.85;//4 * Math.PI; // radians per second squared
             // FWF - stole this from 6328's code, each gear reduction written out. Final is 6.75. 39.37 converts inches to meters so we can be european fancy
             //private final double driveAfterEncoderReduction = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
@@ -372,7 +378,7 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
             public static final int angleMotorID = 2;
             public static final int canCoderID = 0;
             public static final double angleOffset = 3.201315307;
-            public static final double speedAdjustmentFactor = 0.85;//1.798006206333298/4.0;//2.092980946810132;
+            public static final double speedAdjustmentFactor = 1;//1.798006206333298/4.0;//2.092980946810132;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, speedAdjustmentFactor);
         }
@@ -405,7 +411,7 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
             public static final int angleMotorID = 8;
             public static final int canCoderID = 3;
             public static final double angleOffset = 3.769512307;
-            public static final double speedAdjustmentFactor = 1.05;
+            public static final double speedAdjustmentFactor = 1;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, speedAdjustmentFactor);
         }
@@ -464,9 +470,9 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         /* Ints */
             public final static int ClimbingMotor1 = 14;
             public final static int ClimbingMotor2 = 13;
-            public final static double ClimbingMotorPoseition = 76;
+            public final static double ClimbingMotorPoseition = 65;
         /* Doubles */
-            public final static double ClimbingSpeed = 1;
+            public final static double ClimbingSpeed = 0.25;
     }
 
     public final static class OzzyGrabberConstants {
@@ -500,6 +506,10 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         GetCoral(), drive(-95), turn(-85), drive(170), strafe(-30), turn(-25), turn(75), strafe(35), 
         drive(25), wait2(1), GetCoral(), turn(180), strafe(175), dropCoral(), stop(), GetCoral()};//]\[], turn(-10), drive(-Units.inchesToMeters(90)), strafe(Units.inchesToMeters(230))};
         
+    }
+
+    public final static class FieldLocations {
+        public static Pose2d ALGAE_INTAKE = new Pose2d(6, 0.45, Rotation2d.fromDegrees(90));
     }
 
 }
