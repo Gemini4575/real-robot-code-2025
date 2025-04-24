@@ -43,8 +43,6 @@ import frc.robot.commands.coral.nora.L3;
 import frc.robot.commands.drive.AlineWheels;
 import frc.robot.commands.drive.DriveTwoardsAprillTag;
 import frc.robot.commands.drive.PathFindToPose;
-import frc.robot.commands.drive.PatrolCoralStations;
-// import frc.robot.commands.drive.PointWheelsCommand;
 import frc.robot.commands.drive.Stop;
 import frc.robot.commands.drive.PathFindToPose.PathTarget;
 // import frc.robot.commands.drive.TestTurnCommand;
@@ -62,30 +60,28 @@ public class RobotContainer {
   private double up = 0.0;
 
   /* Controllers */
-  private final Joystick driver = new Joystick(1);
-  private final Joystick operator = new Joystick(2);
+  private final Joystick driver = new Joystick(0);
+  private final Joystick operator = new Joystick(1);
+  private final Joystick climber = new Joystick(2);
   private final Joystick testing = new Joystick(3);
 
   /* Driver Buttons */
-  private final JoystickButton zeroGyro = new JoystickButton(driver, JoystickConstants.BACK_BUTTON);
+  private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
+  private final Trigger Slow = new Trigger(new JoystickButton(driver, 7)
+      .and(new JoystickButton(driver, 12)))
+      .or(new JoystickButton(operator, START_BUTTON));
 
   /* Subsystems */
   private final NickClimbingSubsystem nc = new NickClimbingSubsystem();
   private final OzzyGrabberSubsystem g = new OzzyGrabberSubsystem();
   private final LiliCoralSubystem c = new LiliCoralSubystem();
-  private final NoraArmSubsystem n = new NoraArmSubsystem();
   private final DriveTrain D = new DriveTrain();
   private final Vision V = new Vision();
-  public final TestingSubsystem T = new TestingSubsystem(13);
   private final VisionSubsystem VS = new VisionSubsystem(V);
 
   /* Pathplanner stuff */
   private final SendableChooser<Command> PathplannerautoChoosers;
   private final SendableChooser<String> MyAutoChooser = new SendableChooser<>();
-  private String MyAutoChooser_String;
-  private final String DriveAndDrop1 = "Drive And Drop1";
-  private final String Nothing = "Nothing";
-  private final String DriveAndDRop2 = " Drive And Drop2";
 
   private final Field2d autoRobotPose = new Field2d();
   private final Field2d autoTargetPose = new Field2d();
@@ -148,6 +144,7 @@ public class RobotContainer {
   public void teleopInit() {
     teleFirst = false;
     // new init(nc).schedule();
+
     D.setDefaultCommand(
         new TelopSwerve(
             D,
@@ -166,9 +163,6 @@ public class RobotContainer {
     }
 
     motionService.periodic();
-
-    SmartDashboard.putNumber("Encoder",
-        (nc.ClimbingMotor1.getEncoder().getPosition() + nc.ClimbingMotor2.getEncoder().getPosition()));
 
     if (!RobotState.isAutonomous()) {
       updateVisionEst();
@@ -197,29 +191,12 @@ public class RobotContainer {
   }
 
   public void autonomousPeriodic() {
-    if (g.isHangingLoose() && !ozGrabberUpCommand.isScheduled() && ozGrabberUpCommand.isFinished()) {
-      System.out.println("Grabber is loose, fixing..");
-      // ozGrabberUpCommand.schedule();
-    }
-    if (autoFirst == 0) {
-      switch (MyAutoChooser_String) {
-        case DriveAndDrop1:
-          new StartMotionSequence(motionService, Autos.AUTO_CORAL1).schedule();
-          break;
-
-        case Nothing:
-
-          break;
-
-        case DriveAndDRop2:
-          new StartMotionSequence(motionService, Autos.AUTO_CORAL2).schedule();
-          break;
-        default:
-          new StartMotionSequence(motionService, Autos.AUTO_CORAL1).schedule();
-          break;
-      }
-      autoFirst++;
-    }
+    // if(!DriverStation.isAutonomousEnabled()){}
+    // if (g.isHangingLoose() && !ozGrabberUpCommand.isScheduled() &&
+    // ozGrabberUpCommand.isFinished()) {
+    // System.out.println("Grabber is loose, fixing..");
+    // //ozGrabberUpCommand.schedule();
+    // }
   }
 
   private void configureBindings() {
@@ -228,9 +205,6 @@ public class RobotContainer {
     /* Driver Controls */
     zeroGyro.onTrue(new InstantCommand(() -> D.ResetDrives()));
     /* Operator Controls */
-    // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-    // .onTrue(new DriveTwoardsAprillTag(vision, s_swerve));
-
     new JoystickButton(operator, JoystickConstants.BLUE_BUTTON)
         .onTrue(new LIPlaceCoral(c));
     // new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
@@ -239,7 +213,6 @@ public class RobotContainer {
         .onTrue(new DriveTwoardsAprillTag(V, D));
     new JoystickButton(testing, JoystickConstants.YELLOW_BUTTON)
         .whileTrue(new Climb(nc));
-<<<<<<< HEAD
     // new JoystickButton(testing, JoystickConstants.RED_BUTTON)
     // .whileTrue(new PointWheelsCommand(D));
     new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
@@ -251,38 +224,17 @@ public class RobotContainer {
     // new JoystickButton(operator, RIGHT_BUMPER)
     // .whileTrue(new OzOutake(g));
     new JoystickButton(operator, GREEN_BUTTON)
-=======
-      // new JoystickButton(testing, JoystickConstants.RED_BUTTON)
-      //   .whileTrue(new PointWheelsCommand(D));
-      new JoystickButton(operator, JoystickConstants.GREEN_BUTTON)
-        .whileTrue(new OzUp(g));
-      new JoystickButton(operator, YELLOW_BUTTON)
-        .whileTrue(new OzDown(g));
-      // new JoystickButton(operator, LEFT_BUMPER)
-      //   .whileTrue(new OzIntake(g));
-      // new JoystickButton(operator, RIGHT_BUMPER)
-      //   .whileTrue(new OzOutake(g));
-      new JoystickButton(operator, GREEN_BUTTON)
->>>>>>> 10bae98 (from comp)
         .whileTrue(new OzKick(g));
     System.out.println("Ended configureBindings()");
   }
 
   public void teleopPeriodic() {
-<<<<<<< HEAD
     if (operator.getRawButton(GREEN_BUTTON)) {
-=======
-    if(operator.getRawButton(GREEN_BUTTON)) {
->>>>>>> 10bae98 (from comp)
       g.Up();
     } else {
       g.end();
     }
-<<<<<<< HEAD
     if (operator.getRawButton(LEFT_BUMPER)) {
-=======
-    if(operator.getRawButton(LEFT_BUMPER)){
->>>>>>> 10bae98 (from comp)
       g.intake();
     } else if (operator.getRawButton(RIGHT_BUMPER)) {
       g.outake();
@@ -291,7 +243,6 @@ public class RobotContainer {
     }
     // c.JoyControll(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS));
     g.joy(MathUtil.applyDeadband(operator.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5) * 1);
-<<<<<<< HEAD
     // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
     // 0.2));
     if (climber.getRawButton(GREEN_BUTTON)) {
@@ -306,17 +257,6 @@ public class RobotContainer {
       // 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
       // nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
       // 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));
-=======
-    // g.joy1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.2));
-    if(climber.getRawButton(GREEN_BUTTON)) {
-      nc.JoyClimb1(-1, false);
-      nc.JoyClimb2(-1, false);
-    } else {
-      nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
-      nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
-    }// nc.JoyClimb1(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.RIGHT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
-    // nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS), 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));    
->>>>>>> 10bae98 (from comp)
   }
 
   public Command getAutonomousCommand() {
