@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
@@ -21,10 +22,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Autos;
 import frc.robot.Constants.FieldLocations;
 import frc.robot.Constants.JoystickConstants;
-import frc.robot.commands.StartMotionSequence;
 import frc.robot.commands.TelopSwerve;
 import frc.robot.commands.Testing;
 import frc.robot.commands.algea.EXO.OzDown;
@@ -46,12 +47,12 @@ import frc.robot.commands.drive.PathFindToPose;
 import frc.robot.commands.drive.Stop;
 import frc.robot.commands.drive.PathFindToPose.PathTarget;
 // import frc.robot.commands.drive.TestTurnCommand;
-import frc.robot.service.MotionService;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.DriveTrain;
 
 import static frc.robot.datamodel.MotionDirective.apriltag;
 import static frc.robot.datamodel.MotionDirective.drive;
+import static frc.robot.Constants.JoystickConstants.*;
 
 // @Component
 public class RobotContainer {
@@ -87,8 +88,6 @@ public class RobotContainer {
   private final Field2d autoTargetPose = new Field2d();
   private final Field2d autoPath = new Field2d();
 
-  private final MotionService motionService = new MotionService(D, c, VS);
-
   private OzUp ozGrabberUpCommand = new OzUp(g);
 
   public RobotContainer() {
@@ -101,11 +100,6 @@ public class RobotContainer {
     configureBindings();
 
     PathplannerautoChoosers = AutoBuilder.buildAutoChooser();
-
-    MyAutoChooser.addOption("Drive And Drop1", DriveAndDrop1);
-    MyAutoChooser.setDefaultOption("Nothing", Nothing);
-    MyAutoChooser.addOption(" Drive And Drop2", DriveAndDRop2);
-    SmartDashboard.putData(MyAutoChooser);
 
     configureLogging();
 
@@ -162,8 +156,6 @@ public class RobotContainer {
       CommandScheduler.getInstance().cancelAll();
     }
 
-    motionService.periodic();
-
     if (!RobotState.isAutonomous()) {
       updateVisionEst();
     }
@@ -186,7 +178,6 @@ public class RobotContainer {
   double autoFirst = 0.0;
 
   public void autonomousInit() {
-    MyAutoChooser_String = MyAutoChooser.getSelected();
     autoFirst = 0.0;
   }
 
@@ -223,8 +214,7 @@ public class RobotContainer {
     // .whileTrue(new OzIntake(g));
     // new JoystickButton(operator, RIGHT_BUMPER)
     // .whileTrue(new OzOutake(g));
-    new JoystickButton(operator, GREEN_BUTTON)
-        .whileTrue(new OzKick(g));
+
     System.out.println("Ended configureBindings()");
   }
 
@@ -257,6 +247,7 @@ public class RobotContainer {
       // 0.5), climber.getRawButton(JoystickConstants.START_BUTTON));
       // nc.JoyClimb2(MathUtil.applyDeadband(climber.getRawAxis(JoystickConstants.LEFT_Y_AXIS),
       // 0.5), climber.getRawButton(JoystickConstants.BACK_BUTTON));
+    nc.Flipper(MathUtil.applyDeadband(testing.getRawAxis(LEFT_Y_AXIS), .2), false);
   }
 
   public Command getAutonomousCommand() {
@@ -264,6 +255,5 @@ public class RobotContainer {
   }
 
   public void onDisable() {
-    motionService.stop(true);
   }
 }

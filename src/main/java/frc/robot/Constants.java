@@ -514,7 +514,9 @@ public class Constants {
                 /* Ints */
                 public final static int GrabberMotor = 21;
                 public final static int PosetionMotor = 17;
-                public final static int BeamBreak = 8;
+                public final static int top = 8;
+                public final static int Bottom = 10;
+
                 /* Doubles */
                 public final static double IntakeSpeed = -0.3;
                 public final static double OutakeSpeed = 0.5;
