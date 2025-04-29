@@ -105,23 +105,24 @@ public class SwerveModule extends Command {
     // to be continuous.
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-        // load the encoder offset
-//    encoderOffset = Preferences.getDouble("encoder" + moduleNumber, encoderOffset);
-// hard coding the offset because its better?
-switch (moduleNumber) {
-  case 0: 
-  encoderOffset = -1.020057144401588;
-  break;
-  case 1: 
-  encoderOffset = -1.450295970644589;//0.922783865280067
-  break;
-  case 2: 
-  encoderOffset = -1.903437227196342;//-13.00*Math.PI/180.00;
-  break;
-  case 3: 
-  encoderOffset = -4.41164894046481;
-  break;
-}
+    // load the encoder offset
+    // encoderOffset = Preferences.getDouble("encoder" + moduleNumber,
+    // encoderOffset);
+    // hard coding the offset because its better?
+    switch (moduleNumber) {
+      case 0:
+        encoderOffset = -5.691417291787231;
+        break;
+      case 1:
+        encoderOffset = -1.978900462971036;// 0.922783865280067
+        break;
+      case 2:
+        encoderOffset = -4.720274076974988;// -13.00*Math.PI/180.00;
+        break;
+      case 3:
+        encoderOffset = -2.958972019276596;
+        break;
+    }
     configAngleMotor();
     configDriveMotor();
   }

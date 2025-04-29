@@ -1,26 +1,32 @@
 /*
- * MIT License
- *
- * Copyright (c) PhotonVision
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+* MIT License
+*
+* Copyright (c) PhotonVision
+*
+* Permission is hereby granted, free of charge, to any person obtaining a
+copy
+* of this software and associated documentation files (the "Software"), to
+deal
+* in the Software without restriction, including without limitation the
+rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE
+* SOFTWARE.
+*/
 
 package frc.robot.subsystems;
 
@@ -48,6 +54,8 @@ import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import static frc.robot.Constants.Vision.*;
+
 public class Vision extends SubsystemBase {
     private final PhotonCamera tagCamera;
     private final PhotonCamera tagCameraColor;
@@ -67,12 +75,14 @@ public class Vision extends SubsystemBase {
     public Vision() {
         super();
         tagCamera = new PhotonCamera(kTagCameraName);
-        tagCameraColor = new PhotonCamera(kTagCameraColorName);
+        tagCameraColor = new PhotonCamera("s");
 
-        photonEstimator = new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, kRobotToCam);
+        photonEstimator = new PhotonPoseEstimator(kTagLayout,
+                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, kRobotToCam);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
-        photonEstimatorColor = new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, kRobotToCamColor);
+        photonEstimatorColor = new PhotonPoseEstimator(kTagLayout,
+                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, kRobotToCam);
         photonEstimatorColor.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         algaeCamera = new PhotonCamera(kAlgaeCameraName);
@@ -80,7 +90,8 @@ public class Vision extends SubsystemBase {
 
         // ----- Simulation
         if (Robot.isSimulation()) {
-            // Create the vision system simulation which handles cameras and targets on the
+            // Create the vision system simulation which handles cameras and targets on
+            // the
             // field.
             visionSim = new VisionSystemSim("main");
             // Add all the AprilTags inside the tag layout as visible targets to this
@@ -94,7 +105,8 @@ public class Vision extends SubsystemBase {
             cameraProp.setFPS(15);
             cameraProp.setAvgLatencyMs(50);
             cameraProp.setLatencyStdDevMs(15);
-            // Create a PhotonCameraSim which will update the linked PhotonCamera's values
+            // Create a PhotonCameraSim which will update the linked PhotonCamera's
+            // values
             // with visible
             // targets.
             cameraSim = new PhotonCameraSim(tagCamera, cameraProp);
@@ -112,7 +124,7 @@ public class Vision extends SubsystemBase {
     public PhotonTrackedTarget getTagTarget() {
         return currentTagTarget;
         // if (tagCamera.getLatestResult().hasTargets()) {
-        //     return tagCamera.getLatestResult().getBestTarget();
+        // return tagCamera.getLatestResult().getBestTarget();
         // }
         // return null;
     }
@@ -127,7 +139,8 @@ public class Vision extends SubsystemBase {
      * only be called once per loop.
      *
      * <p>
-     * Also includes updates for the standard deviations, which can (optionally) be
+     * Also includes updates for the standard deviations, which can (optionally)
+     * be
      * retrieved with
      * {@link getEstimationStdDevs}
      *
@@ -138,10 +151,11 @@ public class Vision extends SubsystemBase {
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
         return getEstimatedGlobalPose(tagCamera);
     }
-    
+
     public Optional<EstimatedRobotPose> getEstimatedGlobalPoseColor() {
         return getEstimatedGlobalPose(tagCameraColor);
     }
+
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(PhotonCamera cam) {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (var change : cam.getAllUnreadResults()) {
@@ -163,7 +177,8 @@ public class Vision extends SubsystemBase {
     }
 
     /**
-     * Calculates new standard deviations This algorithm is a heuristic that creates
+     * Calculates new standard deviations This algorithm is a heuristic that
+     * creates
      * dynamic standard
      * deviations based on number of tags, estimation strategy, and distance from
      * the tags.
@@ -208,7 +223,8 @@ public class Vision extends SubsystemBase {
                     estStdDevs = kMultiTagStdDevs;
                 // Increase std devs based on (average) distance
                 if (numTags == 1 && avgDist > 4)
-                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE,
+                            Double.MAX_VALUE);
                 else
                     estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
                 curStdDevs = estStdDevs;
@@ -250,7 +266,7 @@ public class Vision extends SubsystemBase {
     public void periodic() {
         var newResults = tagCamera.getAllUnreadResults();
         if (newResults != null && !newResults.isEmpty()) {
-            currentTagTarget = newResults.get(newResults.size()-1).getBestTarget();
+            currentTagTarget = newResults.get(newResults.size() - 1).getBestTarget();
             lastTagUpdate = System.currentTimeMillis();
         } else {
             if (System.currentTimeMillis() > lastTagUpdate + 1000) {

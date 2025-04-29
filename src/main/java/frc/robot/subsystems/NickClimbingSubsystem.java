@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,11 +12,16 @@ public class NickClimbingSubsystem extends SubsystemBase{
     
     public Motor ClimbingMotor1;
     public Motor ClimbingMotor2;
+    private Motor Flipper;
 
     public NickClimbingSubsystem() {
         // Initialization code here
         ClimbingMotor1 = new Motor(14, MotorType.kBrushless);
         ClimbingMotor2 = new Motor(13, MotorType.kBrushless);
+        Flipper = new Motor(22, MotorType.kBrushed);
+        var c = new SparkMaxConfig();
+        c.secondaryCurrentLimit(30);
+
     }
 
     private boolean Climb1() {
