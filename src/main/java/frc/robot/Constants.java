@@ -428,7 +428,7 @@ private final Translation2d m_backRightLocation = new Translation2d(-0.45085, -0
         public final static int LEFT_X_AXIS = 0;
         public final static int RIGHT_X_AXIS = 4;
         public final static int RIGHT_Y_AXIS = 5;
-    
+
         public final static int GREEN_BUTTON = 1;
         public final static int RED_BUTTON = 2;
         public final static int YELLOW_BUTTON = 4;
