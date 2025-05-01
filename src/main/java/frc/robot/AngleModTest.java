@@ -2,7 +2,7 @@ package frc.robot;
 public class AngleModTest {
 
     public static void main(String args[]) {
-        var angle = 0;
+        var angle = 249230;
         var offset = -5.01234;
 
         var result = (angle + offset) % (2* Math.PI);

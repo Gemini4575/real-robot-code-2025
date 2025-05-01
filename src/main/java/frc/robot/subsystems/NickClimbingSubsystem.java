@@ -91,14 +91,6 @@ public class NickClimbingSubsystem extends SubsystemBase {
         }
     }
 
-    @Deprecated
-    public void Flipper(double Joy, boolean btuon) {
-        Flipper.set(Joy);
-        if (btuon) {
-            Flipper.getEncoder().setPosition(0);
-        }
-    }
-
     public void Stop() {
         // Code to stop the elevator
         ClimbingMotor1.stop();

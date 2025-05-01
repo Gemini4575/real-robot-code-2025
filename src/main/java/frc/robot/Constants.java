@@ -40,24 +40,21 @@ import frc.robot.datamodel.MotionDirective;
 public class Constants {
         public static MesurementToRoation rotationsToInch = new MesurementToRoation();
 
-        public enum RobotMode {
-                /**
-                 * Running on a real robot.
-                 */
+        public static final Mode simMode = Mode.SIM;
+        public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+
+        public static enum Mode {
+                /** Running on a real robot. */
                 REAL,
 
-                /**
-                 * Running a physics simulator.
-                 */
+                /** Running a physics simulator. */
                 SIM,
 
-                /**
-                 * Replaying from a log file.
-                 */
+                /** Replaying from a log file. */
                 REPLAY
         }
 
-        public static final String ROBOT_NAME = "4575-2025-OffSeason";
+        public static final String ROBOT_NAME = "4575-2025";
 
         // avoid typo errors
         public static final class LogConfigs {
@@ -305,12 +302,18 @@ public class Constants {
 
         public static final class Vision {
                 public static final String kTagCameraName = "Arducam1";
+                public static final String kTagCameraColorName = "Arducam IMX179 Camera Module";
                 public static final String kAlgaeCameraName = "ArducamColor";
-                public static final AprilTagFieldLayout kTagLayout = AprilTagFields.k2025ReefscapeAndyMark
+                public static final AprilTagFieldLayout kTagLayout = AprilTagFields.k2025ReefscapeWelded
                                 .loadAprilTagLayoutField();
                 // TODO update with real value
-                public static final Transform3d kRobotToCam = new Transform3d(
-                                new Translation3d(0.5, 0.0, Units.inchesToMeters(18.5)), new Rotation3d(0, 0, 0));
+                public static final Transform3d kRobotToCam = new Transform3d(Units.inchesToMeters(1.25),
+                                Units.inchesToMeters(10.5), Units.inchesToMeters(17.75),
+                                new Rotation3d(0, 0, Math.PI / 2));
+
+                public static final Transform3d kRobotToCamColor = new Transform3d(Units.inchesToMeters(1.5),
+                                -Units.inchesToMeters(6.5), Units.inchesToMeters(17.25),
+                                new Rotation3d(0, 0, -Math.PI / 2));
                 // The standard deviations of our vision estimated poses, which affect
                 // correction rate
                 // (Fake values. Experiment and determine estimation noise on an actual robot.)
@@ -477,7 +480,7 @@ public class Constants {
                         public static final int angleMotorID = 8;
                         public static final int canCoderID = 3;
                         public static final double angleOffset = 3.769512307;
-                        public static final double speedAdjustmentFactor = 1.05;
+                        public static final double speedAdjustmentFactor = 1;
                         public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID,
                                         angleMotorID, canCoderID, speedAdjustmentFactor);
                 }
