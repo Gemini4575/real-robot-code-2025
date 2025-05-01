@@ -70,14 +70,14 @@ public class DriveTrain extends SubsystemBase {
   SendableChooser<Pose2d> ahhhhhh;
 
   private final Translation2d m_backLeftLocation = Constants.SwerveConstants.m_backLeftLocation;
-  private final Translation2d m_backRightLocation = Constants.SwerveConstants.m_backRightLocation;
-  private final Translation2d m_frontRightLocation = Constants.SwerveConstants.m_frontRightLocation;
   private final Translation2d m_frontLeftLocation = Constants.SwerveConstants.m_frontLeftLocation;
+  private final Translation2d m_frontRightLocation = Constants.SwerveConstants.m_frontRightLocation;
+  private final Translation2d m_backRightLocation = Constants.SwerveConstants.m_backRightLocation;
 
   private final SwerveModule m_backLeft_0 = new SwerveModule(Constants.SwerveConstants.Mod0.constants);
-  private final SwerveModule m_backRight_1 = new SwerveModule(Constants.SwerveConstants.Mod1.constants);
+  private final SwerveModule m_frontLeft_1 = new SwerveModule(Constants.SwerveConstants.Mod1.constants);
   private final SwerveModule m_frontRight_2 = new SwerveModule(Constants.SwerveConstants.Mod2.constants);
-  private final SwerveModule m_frontLeft_3 = new SwerveModule(Constants.SwerveConstants.Mod3.constants);
+  private final SwerveModule m_backRight_3 = new SwerveModule(Constants.SwerveConstants.Mod3.constants);
 
   // private final Gyro_EPRA m_gyro = new Gyro_EPRA()
   private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI, NavXUpdateRate.k100Hz);
@@ -91,8 +91,15 @@ public class DriveTrain extends SubsystemBase {
   private double xSpeed_cur;
   private double ySpeed_cur;
   private double rot_cur;
-  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_backLeftLocation, m_backRightLocation,
-      m_frontRightLocation, m_frontLeftLocation);
+  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_backLeftLocation, m_frontLeftLocation,
+      m_frontRightLocation, m_backRightLocation);
+
+  // this is test, should probably be deleted?
+  /*
+   * private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+   * m_backRightLocation, m_frontRightLocation,
+   * m_frontLeftLocation, m_backLeftLocation);
+   */
   // m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation,
   // m_backRightLocation); //Changed the order
 
@@ -264,9 +271,6 @@ public class DriveTrain extends SubsystemBase {
 
     Logger.recordOutput("SwerveStates", swerveModuleStates);
 
-    // if(RobotState.isTest()) {
-
-    // }
     xSpeed_cur = xSpeed;
     ySpeed_cur = ySpeed;
     rot_cur = rot;
@@ -274,16 +278,16 @@ public class DriveTrain extends SubsystemBase {
 
   private void setModuleStates(SwerveModuleState[] swerveModuleStates) {
     m_backLeft_0.setDesiredState(swerveModuleStates[0]);
-    m_backRight_1.setDesiredState(swerveModuleStates[1]);
+    m_frontLeft_1.setDesiredState(swerveModuleStates[1]);
     m_frontRight_2.setDesiredState(swerveModuleStates[2]);
-    m_frontLeft_3.setDesiredState(swerveModuleStates[3]);
+    m_backRight_3.setDesiredState(swerveModuleStates[3]);
   }
 
   public void stop() {
     m_backLeft_0.stop();
-    m_backRight_1.stop();
+    m_frontLeft_1.stop();
     m_frontRight_2.stop();
-    m_frontLeft_3.stop();
+    m_backRight_3.stop();
     xSpeed_cur = 0;
     ySpeed_cur = 0;
     rot_cur = 0;
@@ -302,9 +306,9 @@ public class DriveTrain extends SubsystemBase {
   private SwerveModuleState[] getModuleStates() {
     return new SwerveModuleState[] {
         m_backLeft_0.getState(),
-        m_backRight_1.getState(),
+        m_frontLeft_1.getState(),
         m_frontRight_2.getState(),
-        m_frontLeft_3.getState()
+        m_backRight_3.getState()
     };
   }
 
@@ -318,9 +322,9 @@ public class DriveTrain extends SubsystemBase {
   public SwerveModulePosition[] getModulePositions() {
     return new SwerveModulePosition[] {
         m_backLeft_0.getPosition(),
-        m_backRight_1.getPosition(),
+        m_frontLeft_1.getPosition(),
         m_frontRight_2.getPosition(),
-        m_frontLeft_3.getPosition()
+        m_backRight_3.getPosition()
     };
   }
 

@@ -32,6 +32,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.MesurementToRoation;
 import frc.lib.util.SwerveModuleConstants;
 import frc.robot.datamodel.MotionDirective;
@@ -375,10 +376,37 @@ public class Constants {
                  */
                 // These number are for a 25 by 25 swerve
                 // 0.33333
-                public static final Translation2d m_backLeftLocation = new Translation2d(-0.33333, 0.33333);
-                public static final Translation2d m_backRightLocation = new Translation2d(-0.33333, -0.33333);
-                public static final Translation2d m_frontRightLocation = new Translation2d(0.33333, -0.33333);
-                public static final Translation2d m_frontLeftLocation = new Translation2d(0.3333, 0.33333);
+                /*
+                 * public static final Translation2d m_backLeftLocation = new
+                 * Translation2d(-0.33333, 0.33333);
+                 * public static final Translation2d m_backRightLocation = new
+                 * Translation2d(-0.33333, -0.33333);
+                 * public static final Translation2d m_frontRightLocation = new
+                 * Translation2d(0.33333, -0.33333);
+                 * public static final Translation2d m_frontLeftLocation = new
+                 * Translation2d(0.3333, 0.33333);
+                 */
+                /*
+                 * The locations for the modules must be relative to the center of the robot.
+                 * Positive x values represent moving toward the front of the robot whereas
+                 * positive y values represent moving toward the left of the robot.
+                 * 
+                 * We think the y values are positive going right.
+                 */
+                private static final double ROBOT_WIDTH = Units.inchesToMeters(25.0);
+                private static final double ROBOT_LENGTH = Units.inchesToMeters(25.0);
+                private static final double SWERVE_FROM_CORNER = Units.inchesToMeters(2.61);
+                private static final double MODULE_OFFSET_X = (ROBOT_WIDTH / 2.0) - SWERVE_FROM_CORNER;
+                private static final double MODULE_OFFSET_Y = (ROBOT_LENGTH / 2.0) - SWERVE_FROM_CORNER;
+
+                public static final Translation2d m_backLeftLocation = new Translation2d(-MODULE_OFFSET_X,
+                                -MODULE_OFFSET_Y);
+                public static final Translation2d m_frontLeftLocation = new Translation2d(MODULE_OFFSET_X,
+                                -MODULE_OFFSET_Y);
+                public static final Translation2d m_frontRightLocation = new Translation2d(MODULE_OFFSET_X,
+                                MODULE_OFFSET_Y);
+                public static final Translation2d m_backRightLocation = new Translation2d(-MODULE_OFFSET_X,
+                                MODULE_OFFSET_Y);
 
                 /* Ints */
                 public static final int kEncoderResolution = 4096;
@@ -408,6 +436,9 @@ public class Constants {
                  */
                 public static final double wheeldiameter = Units.inchesToMeters(4.0);
 
+                /**
+                 * m_backLeft_0
+                 */
                 public static final class Mod0 {
                         public static final int driveMotorID = 1;
                         public static final int angleMotorID = 2;
@@ -503,8 +534,9 @@ public class Constants {
 
         public final static class NickClimbingConstanst {
                 /* Ints */
-                public final static int ClimbingMotor1 = 14;
-                public final static int ClimbingMotor2 = 13;
+                public final static int ClimbingMotor1_CANID = 14;
+                public final static int ClimbingMotor2_CANID = 13;
+                public final static int Flipper_CANID = 22;
                 public final static double ClimbingMotorPoseition = 65;
                 /* Doubles */
                 public final static double ClimbingSpeed = 0.25;

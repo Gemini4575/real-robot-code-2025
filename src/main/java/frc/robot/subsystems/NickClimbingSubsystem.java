@@ -6,7 +6,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.epramotor.Motor;
-import static frc.robot.Constants.NickClimbingConstanst;
+import static frc.robot.Constants.NickClimbingConstanst.*;
 
 public class NickClimbingSubsystem extends SubsystemBase {
 
@@ -16,32 +16,30 @@ public class NickClimbingSubsystem extends SubsystemBase {
 
     public NickClimbingSubsystem() {
         // Initialization code here
-        ClimbingMotor1 = new Motor(14, MotorType.kBrushless);
-        ClimbingMotor2 = new Motor(13, MotorType.kBrushless);
-        Flipper = new Motor(22, MotorType.kBrushed);
-        var c = new SparkMaxConfig();
-        c.secondaryCurrentLimit(30);
+        ClimbingMotor1 = new Motor(ClimbingMotor1_CANID, MotorType.kBrushless);
+        ClimbingMotor2 = new Motor(ClimbingMotor2_CANID, MotorType.kBrushless);
+        Flipper = new Motor(Flipper_CANID, MotorType.kBrushed);
 
     }
 
     private boolean Climb1() {
         // Code to move the elevator
         return ClimbingMotor1.SetIfBoolean(
-                Math.abs(ClimbingMotor1.getPosition()) < (NickClimbingConstanst.ClimbingMotorPoseition),
-                -NickClimbingConstanst.ClimbingSpeed);
+                Math.abs(ClimbingMotor1.getPosition()) < (ClimbingMotorPoseition),
+                -ClimbingSpeed);
     }
 
     private boolean Climb2() {
         // Code to move the elevator
         return ClimbingMotor2.SetIfBoolean(
-                Math.abs(ClimbingMotor2.getPosition()) < (NickClimbingConstanst.ClimbingMotorPoseition),
-                NickClimbingConstanst.ClimbingSpeed);
+                Math.abs(ClimbingMotor2.getPosition()) < (ClimbingMotorPoseition),
+                ClimbingSpeed);
     }
 
     public boolean init1() {
         // Code to move the elevator
         if (ClimbingMotor1.getPosition() < Math.round(0)) {
-            ClimbingMotor1.set(NickClimbingConstanst.ClimbingSpeed);
+            ClimbingMotor1.set(ClimbingSpeed);
         } else {
             Stop();
             return true;
@@ -51,8 +49,8 @@ public class NickClimbingSubsystem extends SubsystemBase {
 
     public boolean init2() {
         // Code to move the elevator
-        if (ClimbingMotor2.getPosition() < Math.round(NickClimbingConstanst.ClimbingMotorPoseition)) {
-            ClimbingMotor2.set(NickClimbingConstanst.ClimbingSpeed);
+        if (ClimbingMotor2.getPosition() < Math.round(ClimbingMotorPoseition)) {
+            ClimbingMotor2.set(ClimbingSpeed);
         } else {
             Stop();
             return true;

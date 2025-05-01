@@ -119,13 +119,13 @@ public class SwerveModule extends Command {
         encoderOffset = -5.691417291787231;
         break;
       case 1:
-        encoderOffset = -1.978900462971036;// 0.922783865280067
+        encoderOffset = -2.958972019276596;
         break;
       case 2:
         encoderOffset = -4.720274076974988;// -13.00*Math.PI/180.00;
         break;
       case 3:
-        encoderOffset = -2.958972019276596;
+        encoderOffset = -1.978900462971036;// 0.922783865280067
         break;
     }
     configAngleMotor();
@@ -211,12 +211,23 @@ public class SwerveModule extends Command {
     return new SwerveModulePosition(retVal, new Rotation2d(encoderValue()));
   }
 
+  private Rotation2d X(int moduleNumber) {
+    if (moduleNumber == 0 || moduleNumber == 2) {
+      return new Rotation2d(45);
+    } else {
+      return new Rotation2d(45 + 270 + 90);
+    }
+  }
+
   /**
    * Sets the desired state for the module.
    *
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
+    // if (desiredState.speedMetersPerSecond == 0) {
+    // desiredState.angle = X(moduleNumber);
+    // }
     SmartDashboard.putNumber("[Swerve]Pre Optimize angle target degrees " + moduleNumber,
         desiredState.angle.getDegrees());
     // Optimize the reference state to avoid spinning further than 90 degrees
