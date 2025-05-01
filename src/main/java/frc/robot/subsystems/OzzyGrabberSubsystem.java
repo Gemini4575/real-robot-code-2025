@@ -91,21 +91,13 @@ public class OzzyGrabberSubsystem extends SubsystemBase {
 
     public void Up() {
         // if(!top()){
-<<<<<<< HEAD
         Pose.set(UpSpeed);
-=======
-            Pose.set(UpSpeed);
->>>>>>> 10bae98 (from comp)
         // }
     }
 
     public void down() {
         // if(!bottom()){
-<<<<<<< HEAD
         Pose.set(DownSpeed);
-=======
-            Pose.set(DownSpeed);
->>>>>>> 10bae98 (from comp)
         // }
     }
 
